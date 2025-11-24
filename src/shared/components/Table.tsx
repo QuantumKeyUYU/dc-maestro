@@ -10,15 +10,15 @@ export function Table<T = unknown>({ children, className, onRowClick, isRowClick
     <TableContext.Provider value={{ onRowClick: onRowClick as (row: unknown) => void, isRowClickable }}>
       <div
         className={clsx(
-          'overflow-x-auto scrollbar-thin',
+          'overflow-x-auto scrollbar-thin rounded-xl',
           framed
-            ? 'rounded-2xl border border-white/5 bg-gradient-to-b from-bg-surface/95 to-bg-surfaceSoft/92 shadow-[0_10px_28px_rgba(0,0,0,0.55),inset_0_0_0_1px_rgba(255,255,255,0.03)] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.03),transparent_70%)] px-4 py-4'
-            : 'rounded-2xl px-4 py-4',
+            ? 'border border-[rgba(255,255,255,0.05)] bg-[#0f1825] shadow-[0_18px_40px_rgba(0,0,0,0.6)] px-4 py-4'
+            : 'px-4 py-4',
           className
         )}
       >
         <table
-          className="min-w-full text-[13px] text-text-primary border-collapse [&>thead>tr>th]:py-3 [&>thead>tr>th]:px-4 [&>thead>tr>th]:text-[12px] [&>thead>tr>th]:font-medium [&>thead>tr>th]:tracking-[0.16em] [&>thead]:uppercase [&>thead]:text-white/70 [&>thead]:sticky [&>thead]:top-0 [&>thead]:bg-bg-surface/88 [&>thead]:backdrop-blur-xl [&>thead]:z-10 [&>tbody>tr]:border-b [&>tbody>tr]:border-white/5 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-3 [&>tbody>tr>td]:px-4 [&>tbody>tr>td]:align-middle [&>tbody>tr:nth-child(odd)]:bg-white/[0.015] [&>tbody>tr:nth-child(even)]:bg-white/[0.03] [&>tbody>tr:hover]:bg-white/5 [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150"
+          className="min-w-full text-[13px] text-[#dce2e8] border-collapse [&>thead>tr>th]:py-3 [&>thead>tr>th]:px-4 [&>thead>tr>th]:text-[12px] [&>thead>tr>th]:font-semibold [&>thead]:text-[#dce2e8] [&>thead]:bg-[#0f1825] [&>tbody>tr]:border-b [&>tbody>tr]:border-white/6 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-3 [&>tbody>tr>td]:px-4 [&>tbody>tr>td]:align-middle [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-white/4"
         >
           {children}
         </table>
@@ -38,9 +38,7 @@ export function TableRow<T = unknown>({ row, className, children }: TableRowProp
       onClick={() => clickable && onRowClick?.(row)}
       className={clsx(
         'transition-colors duration-200',
-        clickable
-          ? 'cursor-pointer hover:bg-white/6 hover:shadow-[inset_0_0_0_1px_rgba(62,236,226,0.12)]'
-          : 'hover:bg-white/5 hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]',
+        clickable ? 'cursor-pointer hover:bg-white/4' : 'hover:bg-white/5',
         className
       )}
     >

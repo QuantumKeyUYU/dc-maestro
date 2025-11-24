@@ -32,8 +32,7 @@ const pageMeta: PageMeta[] = [
   {
     match: /^\/$/,
     title: strings.dashboard.title,
-    subtitle: strings.dashboard.subtitle,
-    label: strings.headers.dashboardLabel
+    subtitle: strings.dashboard.subtitle
   },
   { match: /^\/sites(\/.*)?$/, title: strings.sites.title, subtitle: strings.sites.subtitle, label: undefined },
   {
@@ -144,56 +143,54 @@ export default function App() {
   const osiToneDisplay = hasOsiData ? osiTone : 'neutral';
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0b1220] via-[#0b1220] to-[#0d121a] text-text-primary relative">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(62,236,226,0.08),transparent_30%),radial-gradient(circle_at_80%_0%,rgba(124,140,251,0.08),transparent_32%)]" />
+    <div className="min-h-screen bg-[#0b111a] text-text-primary relative">
       <div className="flex h-screen overflow-hidden relative">
-          <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-gradient-to-b from-bg-surface/98 to-bg-surfaceSoft/95 border-r border-white/6 p-6 flex flex-col gap-7 shadow-[0_16px_42px_rgba(0,0,0,0.55)] backdrop-blur-xl relative z-10 overflow-hidden">
+          <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[#0d141f] border-r border-[rgba(255,255,255,0.05)] p-6 flex flex-col gap-7 shadow-[0_10px_26px_rgba(0,0,0,0.5)]">
             <NavLink
               to="/"
               className={({ isActive }) =>
                 clsx(
-                  'block -mx-2 px-3 py-2 rounded-xl transition text-left space-y-1.5 shadow-ambient/40 border border-white/8 bg-bg-surfaceSoft/80 backdrop-blur',
-                  'hover:shadow-lifted hover:border-white/12 hover:bg-bg-surfaceSoft/90 cursor-pointer',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent',
-                  isActive && 'shadow-ambient/22 border-white/7'
+                  'block -mx-2 px-3 py-2 rounded-[14px] transition text-left space-y-1 border border-[rgba(255,255,255,0.07)] bg-[#0f1825]',
+                  'hover:bg-[#111b29] hover:border-[rgba(255,255,255,0.08)] cursor-pointer',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/25 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent',
+                  isActive && 'border-[rgba(255,255,255,0.1)]'
                 )
               }
             >
-              <div className="text-2xl font-semibold text-text-primary drop-shadow-sm">{strings.headers.appTitle}</div>
-              <div className="text-[11px] tracking-[0.12em] text-text-dim">Кокпит руководителя эксплуатации ЦОД</div>
-            </NavLink>
-          <nav className="flex flex-col gap-[0.35rem] text-[15px]">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
+              <div className="text-2xl font-semibold text-[#dce2e8]">{strings.headers.appTitle}</div>
+              <div className="text-[12px] text-text-muted">Кокпит руководителя эксплуатации ЦОД</div>
+              </NavLink>
+            <nav className="flex flex-col gap-1 text-[15px]">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
                 <NavLink
                   key={item.to}
                   to={item.to}
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative group flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors border border-transparent backdrop-blur-sm overflow-hidden shadow-[0_12px_24px_rgba(0,0,0,0.22)]',
-                      'hover:bg-white/4 hover:text-text-primary hover:border-white/8',
+                      'relative flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium transition-colors border border-transparent',
                       isActive
-                        ? 'bg-white/6 text-text-primary shadow-[0_8px_18px_rgba(0,0,0,0.45)] border-white/10'
-                        : 'text-text-muted'
+                        ? 'bg-white/5 text-text-primary border-[rgba(255,255,255,0.08)]'
+                        : 'text-text-muted hover:bg-white/4 hover:border-[rgba(255,255,255,0.06)] hover:text-text-primary'
                     )
                   }
-                >
-                  {({ isActive }) => (
-                    <>
-                      <Icon className="w-[18px] h-[18px] text-transparent bg-clip-text bg-gradient-to-br from-accent-primary to-accent-muted" />
-                      <span className="flex-1 min-w-0 text-left leading-tight text-text-primary relative truncate">{item.label}</span>
-                      {item.badge ? (
-                        <span
-                          className={clsx(
-                            'ml-2 inline-grid h-5 min-w-[24px] shrink-0 place-items-center rounded-full px-2 text-[11px] font-semibold leading-none tracking-tight text-cyan-50/90 backdrop-blur-sm bg-[rgba(62,236,226,0.16)] border border-[rgba(62,236,226,0.25)] shadow-[0_4px_10px_rgba(62,236,226,0.14)_inset,0_0_0_1px_rgba(62,236,226,0.2)] [@media(forced-colors:active)]:border-[ButtonText] [@media(forced-colors:active)]:text-[CanvasText] [@media(forced-colors:active)]:bg-[Canvas]',
-                            isActive && 'text-cyan-50 shadow-[0_4px_12px_rgba(62,236,226,0.18)_inset,0_0_0_1px_rgba(62,236,226,0.32)] bg-[rgba(62,236,226,0.2)]'
-                          )}
-                        >
-                          {item.badge.value}
-                        </span>
-                      ) : null}
+                  >
+                    {({ isActive }) => (
+                      <>
+                          <Icon className="w-[18px] h-[18px] text-current" />
+                          <span className="flex-1 min-w-0 text-left leading-tight text-current relative truncate">{item.label}</span>
+                        {item.badge ? (
+                          <span
+                            className={clsx(
+                              'ml-2 inline-grid h-5 min-w-[24px] shrink-0 place-items-center rounded-full px-2 text-[11px] font-semibold leading-none tracking-tight text-emerald-50/90 bg-[rgba(20,125,98,0.22)] border border-[rgba(20,125,98,0.36)] [@media(forced-colors:active)]:border-[ButtonText] [@media(forced-colors:active)]:text-[CanvasText] [@media(forced-colors:active)]:bg-[Canvas]',
+                              isActive && 'text-emerald-50 bg-[rgba(20,125,98,0.28)] border-[rgba(20,125,98,0.42)]'
+                            )}
+                          >
+                            {item.badge.value}
+                          </span>
+                        ) : null}
                     </>
                   )}
                 </NavLink>
@@ -203,7 +200,7 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-gradient-to-r from-bg-app/92 via-bg-app/84 to-bg-surface/80 backdrop-blur-2xl border-b border-white/5 px-8 py-4 max-[800px]:py-4 flex flex-col gap-6 max-[800px]:gap-5 lg:flex-row lg:items-start lg:justify-between shadow-ambient">
+          <header className="sticky top-0 z-10 bg-[#0b111a]/98 border-b border-[rgba(255,255,255,0.05)] px-8 py-4 max-[800px]:py-4 flex flex-col gap-6 max-[800px]:gap-5 lg:flex-row lg:items-start lg:justify-between">
             <SectionHeader
               as="h1"
               label={currentPage.label ?? undefined}

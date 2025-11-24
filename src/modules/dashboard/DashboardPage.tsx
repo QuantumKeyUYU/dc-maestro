@@ -236,15 +236,15 @@ export function DashboardPage() {
         </div>
       </Card>
 
-      <Card className="border-none bg-gradient-to-br from-[#102037]/90 via-[#0e1a2d]/85 to-[#0c1323]/80 shadow-glow">
+      <Card className="bg-bg-surface/92">
         <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div className="space-y-3 max-w-2xl">
-            <p className="text-sm uppercase tracking-[0.18em] text-text-dim">Главная панель мониторинга</p>
-            <h3 className="text-3xl font-semibold text-text-primary drop-shadow">Обзор надёжности и нагрузки сети ЦОД</h3>
+            <p className="text-sm font-medium text-text-muted">Главная панель мониторинга</p>
+            <h3 className="text-3xl font-semibold text-text-primary">Обзор надёжности и нагрузки сети ЦОД</h3>
             <ul className="space-y-2 text-text-muted">
               {statusBullets.map((item) => (
                 <li key={item.label} className="flex items-center gap-3">
-                  <span className="h-2 w-2 rounded-full bg-accent-primary shadow-[0_0_0_3px_rgba(62,236,226,0.12)]" />
+                  <span className="h-2 w-2 rounded-full bg-accent-primary/70" />
                   <span className="font-semibold text-text-primary">{item.label}:</span>
                   <span>{item.value}</span>
                 </li>
@@ -253,7 +253,7 @@ export function DashboardPage() {
           </div>
           <div className="flex flex-col items-start md:items-end gap-3 text-right">
             <StatusPill label={networkStatusText} tone={networkTone} />
-            <div className="text-lg font-semibold text-text-primary drop-shadow-sm">Средний аптайм сети: {networkUptime.toFixed(2)}%</div>
+            <div className="text-lg font-semibold text-text-primary">Средний аптайм сети: {networkUptime.toFixed(2)}%</div>
             <p className="text-xs text-text-muted">Сигналы SLA и эксплуатационных рисков</p>
           </div>
         </div>
@@ -280,11 +280,11 @@ export function DashboardPage() {
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={16}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="name" tick={{ fill: '#c7d2e9', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
-                <YAxis tick={{ fill: '#c7d2e9', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
-                <Tooltip contentStyle={{ background: '#0f1828', border: '1px solid rgba(62,236,226,0.3)', borderRadius: 12, color: '#e5eaf3', boxShadow: '0 20px 50px -30px rgba(0,0,0,0.7)' }} cursor={{ fill: 'rgba(62,236,226,0.06)' }} />
-                <Bar dataKey="uptime" fill="#3eece2" stroke="#25cfc6" strokeWidth={1.5} radius={[10, 10, 6, 6]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                <XAxis dataKey="name" tick={{ fill: '#cbd5e1', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
+                <YAxis tick={{ fill: '#cbd5e1', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
+                <Tooltip contentStyle={{ background: '#0d1421', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, color: '#e5eaf3', boxShadow: '0 20px 45px -28px rgba(0,0,0,0.65)' }} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+                <Bar dataKey="uptime" fill="#73d7cd" stroke="#6bc7c0" strokeWidth={1.2} radius={[10, 10, 6, 6]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -301,7 +301,7 @@ export function DashboardPage() {
             </thead>
             <tbody>
               {worstSites.map((site) => (
-                <tr key={site.id} className="border-t border-border-subtle/40">
+                <tr key={site.id}>
                   <td className="pr-4">
                     <div className="font-medium text-text-primary">{site.name}</div>
                     <div className="text-xs text-text-muted">{site.region}</div>
@@ -323,7 +323,7 @@ export function DashboardPage() {
             <div className="flex items-center justify-between mb-3">
               {alertFilter ? (
                 <div className="flex items-center gap-3">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-text-primary shadow-inner">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white/6 px-3 py-1 text-xs text-[#dce2e8] border border-white/10">
                     {alertFilterLabels[alertFilter]}
                   </span>
                   <button
@@ -350,7 +350,7 @@ export function DashboardPage() {
               </thead>
               <tbody>
                 {filteredAlerts.map((alert) => (
-                  <TableRow key={`${alert.type}-${alert.id}`} row={alert} className="border-t border-border-subtle/40">
+                  <TableRow key={`${alert.type}-${alert.id}`} row={alert}>
                     <td className="pr-4 font-medium text-text-primary">{alert.type}</td>
                     <td className="pr-4 text-text-primary">{alert.description}</td>
                     <td className="pr-4 text-text-muted">{alert.siteId}</td>
