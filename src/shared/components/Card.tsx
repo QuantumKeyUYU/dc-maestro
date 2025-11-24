@@ -5,10 +5,10 @@ type CardProps = PropsWithChildren<{ className?: string; title?: string; subtitl
 
 export function Card({ children, className, title, subtitle }: CardProps) {
   return (
-    <div className={clsx('bg-surface/80 border border-gray-800 rounded-xl p-4 shadow-lg', className)}>
+    <div className={clsx('bg-surface/80 border border-gray-800 rounded-2xl p-6 shadow-lg backdrop-blur', className)}>
       {(title || subtitle) && (
-        <div className="mb-3">
-          {title && <div className="text-lg font-semibold text-gray-100">{title}</div>}
+        <div className="mb-4">
+          {title && <div className="text-xl font-semibold text-gray-100">{title}</div>}
           {subtitle && <div className="text-sm text-gray-400">{subtitle}</div>}
         </div>
       )}

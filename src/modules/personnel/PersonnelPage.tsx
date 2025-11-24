@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Card } from '../../shared/components/Card';
 import { SectionHeader } from '../../shared/components/SectionHeader';
 import { Table } from '../../shared/components/Table';
@@ -7,17 +7,41 @@ import { shifts } from '../../shared/data/shifts';
 import { sites } from '../../shared/data/sites';
 import { opsLoadIndex } from '../../shared/lib/kpi';
 import { StatusPill } from '../../shared/components/StatusPill';
+import { strings } from '../../shared/lib/strings';
+import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
+import { useLocation } from 'react-router-dom';
+import { InfoTooltip } from '../../shared/components/InfoTooltip';
 
-const roles = ['all', 'technician', 'engineer', 'shift_lead', 'manager'] as const;
+const roles = [
+  { key: 'all', label: 'Все' },
+  { key: 'technician', label: 'Техник' },
+  { key: 'engineer', label: 'Инженер' },
+  { key: 'shift_lead', label: 'Старший смены' },
+  { key: 'manager', label: 'Менеджер' }
+] as const;
 
 export function PersonnelPage() {
-  const [roleFilter, setRoleFilter] = useState<(typeof roles)[number]>('all');
-  const [selectedSite, setSelectedSite] = useState<string>('msk-1');
+  const location = useLocation();
+  const locationState = location.state as { siteId?: string } | undefined;
+  const [roleFilter, setRoleFilter] = useState<(typeof roles)[number]['key']>('all');
+  const [selectedSite, setSelectedSite] = useState<string>(locationState?.siteId ?? 'msk-1');
 
-  const filteredStaff = useMemo(
+  const filteredByRole = useMemo(
     () => staffMembers.filter((member) => roleFilter === 'all' || member.role === roleFilter),
     [roleFilter]
   );
+
+  const { sortedAndFiltered, requestSort, sortConfig, searchQuery, setSearchQuery } = useTableSortAndFilter(
+    filteredByRole,
+    ['fullName', 'role', 'grade'],
+    'fullName'
+  );
+
+  useEffect(() => {
+    if (locationState?.siteId) {
+      setSelectedSite(locationState.siteId);
+    }
+  }, [locationState?.siteId]);
 
   const siteShifts = shifts.filter((shift) => shift.siteId === selectedSite);
   const site = sites.find((s) => s.id === selectedSite) ?? sites[0];
@@ -25,34 +49,48 @@ export function PersonnelPage() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader title="Personnel" description="Роли, смены и загрузка" />
+      <SectionHeader title={strings.personnel.title} description={strings.personnel.description} />
 
-      <Card title="Сотрудники" subtitle="Фильтр по роли">
-        <div className="flex gap-2 mb-3 flex-wrap">
-          {roles.map((role) => (
-            <button
-              key={role}
-              onClick={() => setRoleFilter(role)}
-              className={`px-3 py-1 rounded-full text-sm border ${
-                roleFilter === role ? 'border-sky-500 bg-sky-900/40 text-sky-100' : 'border-gray-700 bg-gray-900/60'
-              }`}
-            >
-              {role}
-            </button>
-          ))}
+      <Card title="Персонал" subtitle="Фильтры и поиск по людям">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
+          <div className="flex gap-2 flex-wrap">
+            {roles.map((role) => (
+              <button
+                key={role.key}
+                onClick={() => setRoleFilter(role.key)}
+                className={`px-3 py-1 rounded-full text-sm border ${
+                  roleFilter === role.key ? 'border-primary/60 bg-primary/10 text-primary' : 'border-gray-700 bg-gray-900/60'
+                }`}
+              >
+                {role.label}
+              </button>
+            ))}
+          </div>
+          <input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Поиск по имени, роли, грейду"
+            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary/60"
+          />
         </div>
         <Table>
           <thead className="text-xs uppercase text-gray-400">
             <tr>
-              <th className="text-left py-2">Name</th>
-              <th className="text-left py-2">Role</th>
-              <th className="text-left py-2">Grade</th>
-              <th className="text-left py-2">Sites</th>
-              <th className="text-left py-2">Rate</th>
+              <th className="text-left py-2 cursor-pointer" onClick={() => requestSort('fullName')}>
+                Имя {sortConfig.key === 'fullName' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+              </th>
+              <th className="text-left py-2 cursor-pointer" onClick={() => requestSort('role')}>
+                Роль {sortConfig.key === 'role' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+              </th>
+              <th className="text-left py-2 cursor-pointer" onClick={() => requestSort('grade')}>
+                Грейд {sortConfig.key === 'grade' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+              </th>
+              <th className="text-left py-2">Площадки</th>
+              <th className="text-left py-2">Ставка</th>
             </tr>
           </thead>
           <tbody>
-            {filteredStaff.map((member) => (
+            {sortedAndFiltered.map((member) => (
               <tr key={member.id} className="border-t border-gray-800">
                 <td className="py-2 pr-4">{member.fullName}</td>
                 <td className="py-2 pr-4 text-gray-300">{member.role}</td>
@@ -67,15 +105,15 @@ export function PersonnelPage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <Card className="xl:col-span-2" title="Смены">
-          <div className="flex gap-3 mb-3">
+          <div className="flex gap-3 mb-3 flex-wrap">
             <select
               value={selectedSite}
               onChange={(e) => setSelectedSite(e.target.value)}
               className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm"
             >
-              {sites.map((site) => (
-                <option key={site.id} value={site.id}>
-                  {site.name}
+              {sites.map((siteItem) => (
+                <option key={siteItem.id} value={siteItem.id}>
+                  {siteItem.name}
                 </option>
               ))}
             </select>
@@ -83,12 +121,12 @@ export function PersonnelPage() {
           <Table>
             <thead className="text-xs uppercase text-gray-400">
               <tr>
-                <th className="text-left py-2">Date</th>
-                <th className="text-left py-2">Start</th>
-                <th className="text-left py-2">End</th>
-                <th className="text-left py-2">Planned</th>
-                <th className="text-left py-2">Actual</th>
-                <th className="text-left py-2">Overtime</th>
+                <th className="text-left py-2">Дата</th>
+                <th className="text-left py-2">Начало</th>
+                <th className="text-left py-2">Конец</th>
+                <th className="text-left py-2">План</th>
+                <th className="text-left py-2">Факт</th>
+                <th className="text-left py-2">Переработка</th>
               </tr>
             </thead>
             <tbody>
@@ -109,10 +147,12 @@ export function PersonnelPage() {
           <div className="flex flex-col gap-3">
             <div className="text-4xl font-bold">{opsIndex.toFixed(1)}</div>
             <StatusPill
-              label={opsIndex > 80 ? 'High load' : opsIndex > 60 ? 'Elevated' : 'Comfortable'}
+              label={opsIndex > 80 ? 'Высокая нагрузка' : opsIndex > 60 ? 'Повышенная' : 'Комфортно'}
               tone={opsIndex > 80 ? 'danger' : opsIndex > 60 ? 'warning' : 'success'}
             />
-            <p className="text-sm text-gray-400">Расчет по плановым/фактическим часам и переработке.</p>
+            <InfoTooltip label="Ops Load Index: плановые vs фактические часы смен + переработка">
+              <p className="text-sm text-gray-400">Расчёт по плановым/фактическим часам и переработке.</p>
+            </InfoTooltip>
           </div>
         </Card>
       </div>

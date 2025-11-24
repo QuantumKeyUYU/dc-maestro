@@ -8,14 +8,14 @@ interface StatusPillProps {
 export function StatusPill({ label, tone = 'neutral' }: StatusPillProps) {
   const toneClass = {
     neutral: 'bg-gray-800 text-gray-200 border-gray-700',
-    success: 'bg-green-900/60 text-green-100 border-green-700',
-    warning: 'bg-amber-900/60 text-amber-100 border-amber-700',
-    danger: 'bg-red-900/60 text-red-100 border-red-700',
-    info: 'bg-sky-900/60 text-sky-100 border-sky-700'
+    success: 'bg-success/15 text-success border-success/50',
+    warning: 'bg-warning/20 text-warning border-warning/60',
+    danger: 'bg-danger/20 text-danger border-danger/50',
+    info: 'bg-primary/15 text-primary border-primary/40'
   }[tone];
 
   return (
-    <span className={clsx('px-3 py-1 rounded-full text-xs font-semibold border', toneClass)}>
+    <span className={clsx('px-3 py-1 rounded-full text-xs font-semibold border shadow-sm', toneClass)}>
       {label}
     </span>
   );

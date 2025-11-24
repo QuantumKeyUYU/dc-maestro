@@ -4,22 +4,23 @@ import { Table } from '../../shared/components/Table';
 import { safetyEvents } from '../../shared/data/safetyEvents';
 import { staffMembers } from '../../shared/data/staff';
 import { StatusPill } from '../../shared/components/StatusPill';
+import { strings } from '../../shared/lib/strings';
 
 export function SafetyPage() {
   return (
     <div className="space-y-6">
-      <SectionHeader title="Safety" description="Инциденты, тренировки и инспекции" />
+      <SectionHeader title={strings.safety.title} description={strings.safety.description} />
 
-      <Card title="Safety Events">
+      <Card title="События безопасности">
         <Table>
           <thead className="text-xs uppercase text-gray-400">
             <tr>
-              <th className="text-left py-2">Type</th>
-              <th className="text-left py-2">Title</th>
-              <th className="text-left py-2">Site</th>
-              <th className="text-left py-2">Date</th>
-              <th className="text-left py-2">Status</th>
-              <th className="text-left py-2">Responsible</th>
+              <th className="text-left py-2">Тип</th>
+              <th className="text-left py-2">Заголовок</th>
+              <th className="text-left py-2">Площадка</th>
+              <th className="text-left py-2">Дата</th>
+              <th className="text-left py-2">Статус</th>
+              <th className="text-left py-2">Ответственный</th>
             </tr>
           </thead>
           <tbody>
@@ -34,7 +35,7 @@ export function SafetyPage() {
                   <td className="py-2 pr-4">{new Date(event.date).toLocaleDateString('ru-RU')}</td>
                   <td className="py-2 pr-4">
                     <StatusPill
-                      label={event.status}
+                      label={event.status === 'overdue' ? 'Просрочено' : event.status === 'scheduled' ? 'Запланировано' : 'Завершено'}
                       tone={event.status === 'overdue' ? 'danger' : event.status === 'scheduled' ? 'warning' : 'success'}
                     />
                   </td>
