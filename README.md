@@ -38,6 +38,9 @@ DC Maestro — локально запускаемое SPA-приложение-
 - `src/shared/hooks/useTableSortAndFilter.ts` — сортировка и поиск по таблицам
 - `src/shared/components` — общие элементы UI (Card, Table, KpiBadge, InfoTooltip и др.)
 
+### Мета и заголовки
+- Заголовок вкладки браузера автоматически подставляет название активного модуля, а meta description синхронизирован с подзаголовком страницы.
+
 ## Запуск
 ```bash
 npm install
