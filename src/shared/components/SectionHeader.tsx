@@ -24,7 +24,7 @@ export function SectionHeader({
   return (
     <div className={clsx('flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between', className)}>
       <div className="space-y-2 max-w-4xl">
-        <p className="text-[11px] uppercase tracking-[0.18em] text-text-dim">{label}</p>
+        <p className="whitespace-nowrap text-[10px] uppercase tracking-[0.14em] text-text-dim sm:text-[11px] sm:tracking-[0.16em]">{label}</p>
         <div className="flex items-center gap-3">
           <span className="block h-10 w-1 rounded-full bg-gradient-to-b from-accent-primary/80 via-accent-primary/45 to-transparent shadow-[0_0_18px_rgba(62,236,226,0.5)]" />
           <div className="flex flex-wrap items-center gap-3">
