@@ -16,7 +16,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { InfoTooltip } from '../../shared/components/InfoTooltip';
 import { shifts } from '../../shared/data/shifts';
 import { financialRecords } from '../../shared/data/financialRecords';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '../../shared/icons';
 
 const chartData = sites.map((site) => ({ name: site.name, uptime: Number(uptimePercent(site).toFixed(2)) }));
 
@@ -62,7 +62,7 @@ export function DashboardPage() {
       .reduce((sum, r) => sum + r.amountRub, 0);
   }, []);
 
-  const summaryCards = [
+  const summaryCards: { label: string; value: number; tone: 'neutral' | 'success' | 'warning' | 'danger' | 'info' }[] = [
     {
       label: 'Критических инцидентов',
       value: incidents.filter((i) => i.severity === 'critical' && !i.resolvedAt).length,
@@ -157,19 +157,25 @@ export function DashboardPage() {
     <div className="space-y-8">
       <SectionHeader title={strings.dashboard.title} description={strings.dashboard.description} />
 
-      <Card className="border border-accent-muted/20 bg-gradient-to-br from-bg-surface to-bg-surfaceSoft/80 shadow-lifted">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="space-y-2">
-            <p className="text-sm text-text-dim">DC Maestro / Кокпит эксплуатации ЦОД</p>
-            <h3 className="text-2xl font-semibold text-text-primary">Главная панель мониторинга</h3>
-            <p className="text-sm text-text-muted max-w-2xl">
-              Быстрый взгляд на аптайм, инциденты и нагрузку. Все ключевые показатели сведены в блоки ниже, чтобы команда могла
-              реагировать быстрее.
-            </p>
+      <Card className="border-none bg-gradient-to-br from-[#102037]/90 via-[#0e1a2d]/85 to-[#0c1323]/80 shadow-glow">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="space-y-3 max-w-2xl">
+            <p className="text-sm uppercase tracking-[0.18em] text-text-dim">DC Maestro / Operations Cockpit</p>
+            <div className="flex items-center gap-3">
+              <span className="block h-12 w-1 rounded-full bg-gradient-to-b from-accent-primary via-accent-muted/80 to-transparent shadow-[0_0_22px_rgba(62,236,226,0.65)]" />
+              <div>
+                <h3 className="text-3xl font-semibold text-text-primary drop-shadow">Главная панель мониторинга</h3>
+                <p className="text-sm text-text-muted mt-2 leading-relaxed">
+                  Быстрый взгляд на аптайм, инциденты и нагрузку. Обновлённая визуализация с глубокими оттенками и стеклянными блоками
+                  помогает быстрее почувствовать обстановку по сети.
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col items-start md:items-end gap-2">
+          <div className="flex flex-col items-start md:items-end gap-3 text-right">
             <StatusPill label={networkStatusText} tone={networkTone} />
-            <p className="text-sm text-text-muted">Средний аптайм сети: {networkUptime.toFixed(2)}%</p>
+            <div className="text-lg font-semibold text-text-primary drop-shadow-sm">Средний аптайм сети: {networkUptime.toFixed(2)}%</div>
+            <p className="text-xs text-text-muted">Подсветка по всему периметру ЦОД</p>
           </div>
         </div>
       </Card>
@@ -190,7 +196,7 @@ export function DashboardPage() {
         >
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             {roleShortcuts.map((role) => (
-              <Card key={role.title} interactive className="p-4 bg-bg-surfaceSoft/60 border-border-subtle">
+              <Card key={role.title} interactive className="bg-white/5">
                 <div className="space-y-2">
                   <div className="text-lg font-semibold text-text-primary">{role.title}</div>
                   <p className="text-sm text-text-muted">{role.metric}</p>
@@ -211,11 +217,11 @@ export function DashboardPage() {
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={16}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1f2b3f" />
-                <XAxis dataKey="name" tick={{ fill: '#b5c0d8', fontSize: 12 }} />
-                <YAxis tick={{ fill: '#b5c0d8', fontSize: 12 }} domain={[90, 100]} />
-                <Tooltip contentStyle={{ background: '#0f192b', border: '1px solid #1f2b3f', color: '#e5eaf3' }} />
-                <Bar dataKey="uptime" fill="#5de4c7" radius={[8, 8, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="name" tick={{ fill: '#c7d2e9', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
+                <YAxis tick={{ fill: '#c7d2e9', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
+                <Tooltip contentStyle={{ background: '#0f1828', border: '1px solid rgba(62,236,226,0.3)', borderRadius: 12, color: '#e5eaf3', boxShadow: '0 20px 50px -30px rgba(0,0,0,0.7)' }} cursor={{ fill: 'rgba(62,236,226,0.06)' }} />
+                <Bar dataKey="uptime" fill="#3eece2" stroke="#25cfc6" strokeWidth={1.5} radius={[10, 10, 6, 6]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

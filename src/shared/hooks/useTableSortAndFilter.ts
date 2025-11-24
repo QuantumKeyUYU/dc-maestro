@@ -7,11 +7,7 @@ type SortConfig<T> = {
   direction: SortDirection;
 };
 
-export function useTableSortAndFilter<T extends Record<string, unknown>>(
-  data: T[],
-  searchFields: (keyof T)[],
-  initialKey: keyof T | null = null
-) {
+export function useTableSortAndFilter<T>(data: T[], searchFields: (keyof T)[], initialKey: keyof T | null = null) {
   const [sortConfig, setSortConfig] = useState<SortConfig<T>>({ key: initialKey, direction: 'asc' });
   const [searchQuery, setSearchQuery] = useState('');
 

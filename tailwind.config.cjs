@@ -6,15 +6,15 @@ module.exports = {
     extend: {
       colors: {
         bg: {
-          app: '#0b1224',
-          surface: '#0f192b',
-          surfaceSoft: '#16233a'
+          app: '#0b1220',
+          surface: '#0d121a',
+          surfaceSoft: '#121c2c'
         },
         border: {
-          subtle: '#1f2b3f'
+          subtle: '#1b2537'
         },
         accent: {
-          primary: '#5de4c7',
+          primary: '#3eece2',
           muted: '#7c8cfb'
         },
         status: {
@@ -30,9 +30,11 @@ module.exports = {
         }
       },
       boxShadow: {
-        soft: '0 12px 40px -24px rgba(0, 0, 0, 0.65)',
-        lifted: '0 16px 60px -30px rgba(0, 0, 0, 0.7)',
-        focus: '0 0 0 1px rgba(93, 228, 199, 0.25), 0 10px 40px -24px rgba(124, 140, 251, 0.45)'
+        soft: '0 16px 60px -30px rgba(0, 0, 0, 0.78)',
+        lifted: '0 28px 70px -32px rgba(0, 0, 0, 0.8)',
+        ambient: '0 25px 80px -48px rgba(0, 0, 0, 0.9), 0 1px 0 0 rgba(255, 255, 255, 0.02)',
+        glow: '0 18px 50px -26px rgba(62, 236, 226, 0.5)',
+        focus: '0 0 0 1px rgba(62, 236, 226, 0.35), 0 10px 40px -24px rgba(124, 140, 251, 0.45)'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif']
