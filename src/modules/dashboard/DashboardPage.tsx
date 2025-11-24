@@ -4,7 +4,7 @@ import { Card } from '../../shared/components/Card';
 import { SectionHeader } from '../../shared/components/SectionHeader';
 import { StatusPill } from '../../shared/components/StatusPill';
 import { KpiBadge } from '../../shared/components/KpiBadge';
-import { Table } from '../../shared/components/Table';
+import { Table, TableRow } from '../../shared/components/Table';
 import { sites } from '../../shared/data/sites';
 import { reliabilityScore, capacityLoadIndex, uptimePercent, opsLoadIndex } from '../../shared/lib/kpi';
 import { incidents } from '../../shared/data/incidents';
@@ -17,6 +17,7 @@ import { InfoTooltip } from '../../shared/components/InfoTooltip';
 import { shifts } from '../../shared/data/shifts';
 import { financialRecords } from '../../shared/data/financialRecords';
 import { ArrowRight } from '../../shared/icons';
+import { getStatusLabel, getStatusTone } from '../../shared/lib/status';
 
 const chartData = sites.map((site) => ({ name: site.name, uptime: Number(uptimePercent(site).toFixed(2)) }));
 
@@ -53,6 +54,8 @@ export function DashboardPage() {
         ? 'Сеть в целом: Предупреждение'
         : 'Сеть в целом: Критично';
 
+  const problemSites = sites.filter((site) => site.status !== 'healthy').length;
+
   const overdueWorkOrders = workOrders.filter((wo) => wo.status !== 'done' && wo.dueDate && wo.dueDate < today).length;
   const monthlyOpex = useMemo(() => {
     const lastMonth = new Date();
@@ -87,7 +90,16 @@ export function DashboardPage() {
 
   const worstSites = [...withScores].sort((a, b) => a.reliability - b.reliability).slice(0, 3);
 
-  const alerts = [
+  type AlertRow = {
+    id: string;
+    type: string;
+    description: string;
+    siteId: string;
+    priority: string;
+    link?: () => void;
+  };
+
+  const alerts: AlertRow[] = [
     ...incidents
       .filter((i) => i.severity === 'critical' && !i.resolvedAt)
       .map((i) => ({
@@ -153,66 +165,68 @@ export function DashboardPage() {
     }
   ];
 
+  const statusBullets = [
+    { label: 'SLA по сети', value: `${networkUptime.toFixed(2)}%` },
+    { label: 'Проблемных площадок', value: problemSites },
+    { label: 'Просроченных заявок ТО', value: overdueWorkOrders }
+  ];
+
   return (
-    <div className="space-y-8">
-      <SectionHeader title={strings.dashboard.title} description={strings.dashboard.description} />
+    <div className="space-y-10">
+      <SectionHeader title={strings.dashboard.title} subtitle={strings.dashboard.subtitle} />
+
+      <Card title={strings.dashboard.todayReport} className="pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {summaryCards.map((card) => (
+            <KpiBadge key={card.label} label={card.label} value={card.value} tone={card.tone} />
+          ))}
+        </div>
+      </Card>
 
       <Card className="border-none bg-gradient-to-br from-[#102037]/90 via-[#0e1a2d]/85 to-[#0c1323]/80 shadow-glow">
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div className="space-y-3 max-w-2xl">
-            <p className="text-sm uppercase tracking-[0.18em] text-text-dim">DC Maestro / Operations Cockpit</p>
-            <div className="flex items-center gap-3">
-              <span className="block h-12 w-1 rounded-full bg-gradient-to-b from-accent-primary via-accent-muted/80 to-transparent shadow-[0_0_22px_rgba(62,236,226,0.65)]" />
-              <div>
-                <h3 className="text-3xl font-semibold text-text-primary drop-shadow">Главная панель мониторинга</h3>
-                <p className="text-sm text-text-muted mt-2 leading-relaxed">
-                  Быстрый взгляд на аптайм, инциденты и нагрузку. Обновлённая визуализация с глубокими оттенками и стеклянными блоками
-                  помогает быстрее почувствовать обстановку по сети.
-                </p>
-              </div>
-            </div>
+            <p className="text-sm uppercase tracking-[0.18em] text-text-dim">Главная панель мониторинга</p>
+            <h3 className="text-3xl font-semibold text-text-primary drop-shadow">Обзор надёжности и нагрузки</h3>
+            <ul className="space-y-2 text-text-muted">
+              {statusBullets.map((item) => (
+                <li key={item.label} className="flex items-center gap-3">
+                  <span className="h-2 w-2 rounded-full bg-accent-primary shadow-[0_0_0_3px_rgba(62,236,226,0.12)]" />
+                  <span className="font-semibold text-text-primary">{item.label}:</span>
+                  <span>{item.value}</span>
+                </li>
+              ))}
+            </ul>
           </div>
           <div className="flex flex-col items-start md:items-end gap-3 text-right">
             <StatusPill label={networkStatusText} tone={networkTone} />
             <div className="text-lg font-semibold text-text-primary drop-shadow-sm">Средний аптайм сети: {networkUptime.toFixed(2)}%</div>
-            <p className="text-xs text-text-muted">Подсветка по всему периметру ЦОД</p>
+            <p className="text-xs text-text-muted">Сигналы SLA и эксплуатационных рисков</p>
           </div>
         </div>
       </Card>
 
-      <div className="grid gap-6 xl:grid-cols-[2fr,1fr]">
-        <Card className="xl:col-span-2" title={strings.dashboard.todayReport}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {summaryCards.map((card) => (
-              <KpiBadge key={card.label} label={card.label} value={card.value} tone={card.tone} />
-            ))}
-          </div>
-        </Card>
+      <Card title="Быстрый переход по ролям" subtitle="Shortcut-туры под собеседование для Вис Энергия" className="mt-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {roleShortcuts.map((role) => (
+            <Card key={role.title} interactive className="bg-white/5">
+              <div className="space-y-2">
+                <div className="text-lg font-semibold text-text-primary">{role.title}</div>
+                <p className="text-sm text-text-muted">{role.metric}</p>
+              </div>
+              <Link
+                to={role.to}
+                className="inline-flex items-center gap-2 text-accent-primary font-medium text-sm mt-3 transition-transform hover:translate-x-0.5"
+              >
+                Перейти
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Card>
+          ))}
+        </div>
+      </Card>
 
-        <Card
-          className="xl:col-span-2"
-          title="Быстрый переход по ролям"
-          subtitle="Shortcut-туры под собеседование для Вис Энергия"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            {roleShortcuts.map((role) => (
-              <Card key={role.title} interactive className="bg-white/5">
-                <div className="space-y-2">
-                  <div className="text-lg font-semibold text-text-primary">{role.title}</div>
-                  <p className="text-sm text-text-muted">{role.metric}</p>
-                </div>
-                <Link
-                  to={role.to}
-                  className="inline-flex items-center gap-2 text-accent-primary font-medium text-sm mt-3 transition-transform hover:translate-x-0.5"
-                >
-                  Перейти
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </Card>
-            ))}
-          </div>
-        </Card>
-
+      <div className="grid gap-8 xl:grid-cols-[2fr,1fr] items-start">
         <Card className="xl:col-span-1" title="Состояние сети" subtitle="Uptime по площадкам">
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
@@ -245,10 +259,7 @@ export function DashboardPage() {
                   </td>
                   <td className="text-right">{site.reliability.toFixed(1)}</td>
                   <td className="text-right">
-                    <StatusPill
-                      label={site.status === 'healthy' ? 'Стабильно' : site.status === 'warning' ? 'Предупреждение' : 'Критично'}
-                      tone={site.status === 'healthy' ? 'success' : site.status === 'warning' ? 'warning' : 'danger'}
-                    />
+                    <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} />
                   </td>
                 </tr>
               ))}
@@ -257,76 +268,78 @@ export function DashboardPage() {
         </Card>
       </div>
 
-      <Card title="Текущие предупреждения" subtitle="Инциденты, ТО, склад и безопасность" className="xl:col-span-2">
-        <Table>
-          <thead>
-            <tr>
-              <th className="text-left">Тип</th>
-              <th className="text-left">Описание</th>
-              <th className="text-left">Площадка</th>
-              <th className="text-left">Приоритет</th>
-              <th className="text-left">Действие</th>
-            </tr>
-          </thead>
-          <tbody>
-            {alerts.map((alert) => (
-              <tr key={`${alert.type}-${alert.id}`} className="border-t border-border-subtle/40">
-                <td className="pr-4 font-medium text-text-primary">{alert.type}</td>
-                <td className="pr-4 text-text-primary">{alert.description}</td>
-                <td className="pr-4 text-text-muted">{alert.siteId}</td>
-                <td className="pr-4">
-                  <StatusPill
-                    label={alert.priority}
-                    tone={alert.priority.includes('Крит') ? 'danger' : alert.priority.includes('Проср') ? 'warning' : 'warning'}
-                  />
-                </td>
-                <td className="pr-4">
-                  <button
-                    onClick={alert.link}
-                    className="text-accent-primary hover:text-accent-muted text-sm inline-flex items-center gap-2 transition-transform hover:translate-x-0.5"
-                  >
-                    Перейти <ArrowRight className="w-4 h-4" aria-hidden />
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {alerts.length === 0 && (
+      <div className="space-y-6">
+        <Card title="Текущие предупреждения" subtitle="Инциденты, ТО, склад и безопасность" className="xl:col-span-2">
+          <Table<AlertRow> isRowClickable onRowClick={(alert) => alert.link?.()}>
+            <thead>
               <tr>
-                <td className="pr-4 text-text-muted" colSpan={5}>
-                  Нет предупреждений на сегодня.
-                </td>
+                <th className="text-left">Тип</th>
+                <th className="text-left">Описание</th>
+                <th className="text-left">Площадка</th>
+                <th className="text-left">Приоритет</th>
+                <th className="text-left">Действие</th>
               </tr>
-            )}
-          </tbody>
-        </Table>
-      </Card>
+            </thead>
+            <tbody>
+              {alerts.map((alert) => (
+                <TableRow key={`${alert.type}-${alert.id}`} row={alert} className="border-t border-border-subtle/40">
+                  <td className="pr-4 font-medium text-text-primary">{alert.type}</td>
+                  <td className="pr-4 text-text-primary">{alert.description}</td>
+                  <td className="pr-4 text-text-muted">{alert.siteId}</td>
+                  <td className="pr-4">
+                    <StatusPill
+                      label={alert.priority}
+                      tone={alert.priority.includes('Крит') ? 'danger' : alert.priority.includes('Проср') ? 'warning' : 'warning'}
+                    />
+                  </td>
+                  <td className="pr-4">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        alert.link?.();
+                      }}
+                      className="text-accent-primary hover:text-accent-muted text-sm inline-flex items-center gap-2 transition-transform hover:translate-x-0.5"
+                    >
+                      Перейти <ArrowRight className="w-4 h-4" aria-hidden />
+                    </button>
+                  </td>
+                </TableRow>
+              ))}
+              {alerts.length === 0 && (
+                <tr>
+                  <td className="pr-4 text-text-muted" colSpan={5}>
+                    Нет предупреждений на сегодня.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {withScores.map((site) => (
-          <Card key={site.id} interactive>
-            <div className="flex items-start justify-between">
-              <div className="space-y-1">
-                <div className="text-lg font-semibold text-text-primary">{site.name}</div>
-                <div className="text-sm text-text-muted">{site.region}</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {withScores.map((site) => (
+            <Card key={site.id} interactive>
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <div className="text-lg font-semibold text-text-primary">{site.name}</div>
+                  <div className="text-sm text-text-muted">{site.region}</div>
+                </div>
+                <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} />
               </div>
-              <StatusPill
-                label={site.status === 'healthy' ? 'Стабильно' : site.status === 'warning' ? 'Предупреждение' : 'Критично'}
-                tone={site.status === 'healthy' ? 'success' : site.status === 'warning' ? 'warning' : 'danger'}
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-3 mt-4">
-              <InfoTooltip label="Uptime за период мониторинга площадки">
-                <KpiBadge label="Uptime" value={`${site.uptime.toFixed(2)}%`} tone="info" />
-              </InfoTooltip>
-              <InfoTooltip label="Индекс надёжности: сочетает аптайм и среднее время восстановления. Чем ближе к 100, тем лучше.">
-                <KpiBadge label="Reliability" value={`${site.reliability.toFixed(1)}`} tone="success" />
-              </InfoTooltip>
-              <InfoTooltip label="Индекс загрузки мощностей и стоек">
-                <KpiBadge label="Capacity" value={`${site.capacity.toFixed(1)}%`} tone="warning" />
-              </InfoTooltip>
-            </div>
-          </Card>
-        ))}
+              <div className="grid grid-cols-3 gap-3 mt-4">
+                <InfoTooltip label="Uptime за период мониторинга площадки">
+                  <KpiBadge label="Uptime" value={`${site.uptime.toFixed(2)}%`} tone="info" />
+                </InfoTooltip>
+                <InfoTooltip label="Индекс надёжности: сочетает аптайм и среднее время восстановления. Чем ближе к 100, тем лучше.">
+                  <KpiBadge label="Reliability" value={`${site.reliability.toFixed(1)}`} tone="success" />
+                </InfoTooltip>
+                <InfoTooltip label="Индекс загрузки мощностей и стоек">
+                  <KpiBadge label="Capacity" value={`${site.capacity.toFixed(1)}%`} tone="warning" />
+                </InfoTooltip>
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );

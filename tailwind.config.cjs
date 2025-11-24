@@ -25,8 +25,8 @@ module.exports = {
         },
         text: {
           primary: '#e5eaf3',
-          muted: '#b5c0d8',
-          dim: '#7b87a1'
+          muted: '#cdd6e8',
+          dim: '#93a2bd'
         }
       },
       boxShadow: {

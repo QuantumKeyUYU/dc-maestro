@@ -5,15 +5,16 @@ import { safetyEvents } from '../../shared/data/safetyEvents';
 import { staffMembers } from '../../shared/data/staff';
 import { StatusPill } from '../../shared/components/StatusPill';
 import { strings } from '../../shared/lib/strings';
+import { getStatusLabel, getStatusTone } from '../../shared/lib/status';
 
 export function SafetyPage() {
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.safety.title} description={strings.safety.description} />
+      <SectionHeader title={strings.safety.title} subtitle={strings.safety.subtitle} />
 
       <Card title="События безопасности">
         <Table>
-          <thead className="text-xs uppercase text-gray-400">
+          <thead>
             <tr>
               <th className="text-left py-2">Тип</th>
               <th className="text-left py-2">Заголовок</th>
@@ -26,20 +27,16 @@ export function SafetyPage() {
           <tbody>
             {safetyEvents.map((event) => {
               const staff = staffMembers.find((s) => s.id === event.responsibleStaffId);
-              const overdue = event.status === 'overdue';
               return (
-                <tr key={event.id} className={`border-t border-gray-800 ${overdue ? 'bg-red-900/20' : ''}`}>
-                  <td className="py-2 pr-4">{event.type}</td>
-                  <td className="py-2 pr-4 text-gray-300">{event.title}</td>
-                  <td className="py-2 pr-4">{event.siteId ?? 'Общий'}</td>
-                  <td className="py-2 pr-4">{new Date(event.date).toLocaleDateString('ru-RU')}</td>
+                <tr key={event.id} className="border-t border-border-subtle/40">
+                  <td className="py-2 pr-4 text-text-muted">{event.type}</td>
+                  <td className="py-2 pr-4 text-text-primary">{event.title}</td>
+                  <td className="py-2 pr-4 text-text-muted">{event.siteId ?? 'Общий'}</td>
+                  <td className="py-2 pr-4 text-text-muted">{new Date(event.date).toLocaleDateString('ru-RU')}</td>
                   <td className="py-2 pr-4">
-                    <StatusPill
-                      label={event.status === 'overdue' ? 'Просрочено' : event.status === 'scheduled' ? 'Запланировано' : 'Завершено'}
-                      tone={event.status === 'overdue' ? 'danger' : event.status === 'scheduled' ? 'warning' : 'success'}
-                    />
+                    <StatusPill label={getStatusLabel(event.status)} tone={getStatusTone(event.status)} />
                   </td>
-                  <td className="py-2 pr-4 text-gray-300">{staff?.fullName ?? '—'}</td>
+                  <td className="py-2 pr-4 text-text-primary">{staff?.fullName ?? '—'}</td>
                 </tr>
               );
             })}

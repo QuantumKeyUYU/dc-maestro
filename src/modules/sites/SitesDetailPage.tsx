@@ -14,6 +14,7 @@ import { KpiBadge } from '../../shared/components/KpiBadge';
 import { Pie, PieChart, ResponsiveContainer, Tooltip, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { InfoTooltip } from '../../shared/components/InfoTooltip';
 import { strings } from '../../shared/lib/strings';
+import { getStatusLabel, getStatusTone } from '../../shared/lib/status';
 
 const CAPACITY_COLORS = ['#38bdf8', '#0ea5e9'];
 const FINANCE_COLORS = ['#22c55e', '#f97316', '#a855f7', '#f59e0b', '#f43f5e'];
@@ -76,7 +77,7 @@ export function SitesDetailPage() {
       </div>
       <SectionHeader
         title={`${site.name}: детализация`}
-        description="Полный контекст по площадке: инциденты, активы, финансы"
+        subtitle="Полный контекст по площадке: инциденты, активы, финансы"
         action={
           <button
             onClick={() => navigate('/sites')}
@@ -93,10 +94,7 @@ export function SitesDetailPage() {
             <div className="text-2xl font-semibold text-text-primary drop-shadow-sm">{site.name}</div>
             <div className="text-sm text-text-muted">{site.region}</div>
           </div>
-          <StatusPill
-            label={site.status === 'healthy' ? 'Стабильно' : site.status === 'warning' ? 'Предупреждение' : 'Критично'}
-            tone={site.status === 'healthy' ? 'success' : site.status === 'warning' ? 'warning' : 'danger'}
-          />
+          <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} />
         </div>
         <div className="flex gap-3 mt-6">
           {tabs.map((t) => (

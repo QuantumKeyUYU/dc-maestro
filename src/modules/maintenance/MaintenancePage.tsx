@@ -8,6 +8,7 @@ import { StatusPill } from '../../shared/components/StatusPill';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 import { useLocation } from 'react-router-dom';
+import { getStatusLabel, getStatusTone } from '../../shared/lib/status';
 
 const types = ['all', 'UPS', 'Generator', 'CRAC', 'PDU', 'Rack', 'FireSystem', 'Other'] as const;
 const criticalities = ['all', 1, 2, 3] as const;
@@ -38,7 +39,7 @@ export function MaintenancePage() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.maintenance.title} description={strings.maintenance.description} />
+      <SectionHeader title={strings.maintenance.title} subtitle={strings.maintenance.subtitle} />
 
       <Card title="Активы">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
@@ -142,18 +143,7 @@ export function MaintenancePage() {
                   <td className="py-2 pr-4">{wo.id}</td>
                   <td className="py-2 pr-4 text-text-muted">{wo.type}</td>
                   <td className="py-2 pr-4">
-                    <StatusPill
-                      label={wo.status === 'done' ? 'Завершено' : wo.status === 'in_progress' ? 'В работе' : isOverdue ? 'Просрочено' : 'Открыто'}
-                      tone={
-                        wo.status === 'done'
-                          ? 'success'
-                          : wo.status === 'in_progress'
-                            ? 'info'
-                            : isOverdue
-                              ? 'danger'
-                              : 'warning'
-                      }
-                    />
+                    <StatusPill label={getStatusLabel(isOverdue ? 'overdue' : wo.status)} tone={getStatusTone(isOverdue ? 'overdue' : wo.status)} />
                   </td>
                   <td className="py-2 pr-4">{wo.priority}</td>
                   <td className="py-2 pr-4 text-text-muted">{wo.assetId}</td>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card } from '../../shared/components/Card';
 import { SectionHeader } from '../../shared/components/SectionHeader';
-import { Table } from '../../shared/components/Table';
+import { Table, TableRow } from '../../shared/components/Table';
 import { StatusPill } from '../../shared/components/StatusPill';
 import { sites } from '../../shared/data/sites';
 import { capacityLoadIndex, reliabilityScore, uptimePercent } from '../../shared/lib/kpi';
@@ -10,6 +10,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 import { KpiBadge } from '../../shared/components/KpiBadge';
 import { InfoTooltip } from '../../shared/components/InfoTooltip';
+import { DataCenterSite } from '../../shared/models/DataCenterSite';
+import { getStatusLabel, getStatusTone } from '../../shared/lib/status';
 
 export function SitesPage() {
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ export function SitesPage() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.sites.title} description={strings.sites.description} />
+      <SectionHeader title={strings.sites.title} subtitle={strings.sites.subtitle} />
 
       <Card title={strings.sites.allSites} subtitle="Кликните по строке, чтобы раскрыть детализацию площадки">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
@@ -47,7 +49,7 @@ export function SitesPage() {
             <InfoTooltip label="Capacity — загрузка мощностей и стоек" />
           </div>
         </div>
-        <Table>
+        <Table<DataCenterSite> isRowClickable onRowClick={(row) => navigate(`/sites/${row.id}`)}>
           <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => requestSort('name')}>
@@ -66,12 +68,12 @@ export function SitesPage() {
           </thead>
           <tbody>
             {sortedAndFiltered.map((site) => (
-              <tr
+              <TableRow
                 key={site.id}
-                className={`border-t border-border-subtle/40 cursor-pointer transition ${
-                  focusedSiteId === site.id ? 'bg-accent-muted/5 border-accent-primary/40' : 'hover:bg-bg-surfaceSoft/70'
-                }`}
-                onClick={() => navigate(`/sites/${site.id}`)}
+                row={site}
+                className={
+                  focusedSiteId === site.id ? 'bg-accent-muted/5 border-accent-primary/40' : 'border-t border-border-subtle/40'
+                }
               >
                 <td className="py-3 pr-4">{site.name}</td>
                 <td className="py-3 pr-4 text-text-muted">{site.region}</td>
@@ -79,12 +81,9 @@ export function SitesPage() {
                 <td className="py-3 text-right">{reliabilityScore(site).toFixed(1)}</td>
                 <td className="py-3 text-right">{capacityLoadIndex(site).toFixed(1)}%</td>
                 <td className="py-3 text-right">
-                  <StatusPill
-                    label={site.status === 'healthy' ? 'Стабильно' : site.status === 'warning' ? 'Предупреждение' : 'Критично'}
-                    tone={site.status === 'healthy' ? 'success' : site.status === 'warning' ? 'warning' : 'danger'}
-                  />
+                  <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} />
                 </td>
-              </tr>
+              </TableRow>
             ))}
           </tbody>
         </Table>
