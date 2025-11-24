@@ -5,13 +5,13 @@ export const strings = {
     personnel: 'Персонал',
     maintenance: 'ТО и активы',
     inventory: 'Запасы',
-    finance: 'Финансы',
+    finance: 'Финансовая сводка',
     safety: 'Охрана труда',
     about: 'Вакансия / Demo'
   },
   headers: {
     appTitle: 'DC Maestro',
-    appSubtitle: 'Кокпит руководителя эксплуатации ЦОД',
+    appSubtitle: 'Operations cockpit',
     osiTooltip:
       'Operational Strain Index — агрегированный индекс нагрузки на сеть ЦОД (надёжность, загрузка смен, частота инцидентов).'
   },
@@ -23,18 +23,22 @@ export const strings = {
     in_progress: 'В работе',
     open: 'Открыто',
     scheduled: 'Запланировано',
-    overdue: 'Просрочено'
+    overdue: 'Просрочено',
+    draft: 'Черновик',
+    sent: 'Отправлено',
+    received: 'Получено',
+    in_transit: 'В пути'
   },
   dashboard: {
     title: 'Дашборд',
-    description: 'Сводка ключевых метрик по сети ЦОД',
+    subtitle: 'Кокпит руководителя эксплуатации ЦОД',
     todayReport: 'Краткий отчёт за сегодня',
     alerts: 'Текущие предупреждения',
     worstSites: 'Проблемные площадки'
   },
   sites: {
     title: 'Площадки ЦОД',
-    description: 'Обзор площадок и инцидентов',
+    subtitle: 'Обзор площадок и инцидентов',
     allSites: 'Все площадки',
     overviewTab: 'Обзор',
     incidentsTab: 'Инциденты',
@@ -43,22 +47,22 @@ export const strings = {
   },
   personnel: {
     title: 'Персонал',
-    description: 'Роли, смены и загрузка'
+    subtitle: 'Роли, смены и загрузка'
   },
   maintenance: {
     title: 'ТО и активы',
-    description: 'Активы и заявки'
+    subtitle: 'Активы и заявки'
   },
   inventory: {
     title: 'Запасы',
-    description: 'Остатки и закупки'
+    subtitle: 'Остатки и закупки'
   },
   finance: {
     title: 'Финансовая сводка',
-    description: 'OPEX/CAPEX и структура затрат'
+    subtitle: 'OPEX/CAPEX и структура затрат'
   },
   safety: {
     title: 'Охрана труда и безопасность',
-    description: 'Инциденты, тренировки и инспекции'
+    subtitle: 'Инциденты, тренировки и инспекции'
   }
 };

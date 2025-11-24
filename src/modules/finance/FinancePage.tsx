@@ -37,7 +37,7 @@ export function FinancePage() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.finance.title} description={strings.finance.description} />
+      <SectionHeader title={strings.finance.title} subtitle={strings.finance.subtitle} />
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <Card className="xl:col-span-2" title="Финансовые записи">

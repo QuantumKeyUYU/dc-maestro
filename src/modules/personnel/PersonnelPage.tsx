@@ -49,7 +49,7 @@ export function PersonnelPage() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.personnel.title} description={strings.personnel.description} />
+      <SectionHeader title={strings.personnel.title} subtitle={strings.personnel.subtitle} />
 
       <Card title="Персонал" subtitle="Фильтры и поиск по людям">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
