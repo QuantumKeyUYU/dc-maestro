@@ -81,27 +81,37 @@ export default function App() {
   const osiState = osi.category === 'critical' ? 'Критично' : osi.category === 'watch' ? 'Повышенная нагрузка' : 'Стабильно';
   const osiTrend = osi.category === 'critical' ? 'Требуется реакция' : osi.category === 'watch' ? 'Рост нагрузки' : 'Контроль тренда';
   const osiDescriptor = `Нагрузка сети · ${osiState} / ${osiTrend}`;
+  const osiRange = osi.category === 'critical' ? 'критического напряжения' : osi.category === 'watch' ? 'повышенной нагрузки' : 'стабильной нагрузки';
+  const osiRisk = osi.category === 'critical' ? 'высокий' : osi.category === 'watch' ? 'умеренный' : 'низкий';
+  const hasOsiData = Number.isFinite(osi.value);
+  const osiValueDisplay = hasOsiData ? osi.value.toFixed(1) : '—';
+  const osiExplainer = hasOsiData
+    ? `${osiValueDisplay} — диапазон ${osiRange}. Риск перегрузки ${osiRisk}.`
+    : 'Нет данных по показателю OSI за выбранный период.';
+  const osiStateDisplay = hasOsiData ? osiState : 'Нет данных';
+  const osiToneDisplay = hasOsiData ? osiTone : 'neutral';
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0b1220] via-[#0b1220] to-[#0d121a] text-text-primary relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-[#0b1220] via-[#0b1220] to-[#0d121a] text-text-primary relative">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(62,236,226,0.08),transparent_30%),radial-gradient(circle_at_80%_0%,rgba(124,140,251,0.08),transparent_32%)]" />
       <div className="flex h-screen overflow-hidden relative">
-          <aside className="w-64 md:w-60 sm:w-56 bg-gradient-to-b from-bg-surface/95 to-bg-surfaceSoft/90 border-r border-white/5 p-6 flex flex-col gap-8 shadow-ambient backdrop-blur-xl relative z-10">
+          <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-gradient-to-b from-bg-surface/95 to-bg-surfaceSoft/90 border-r border-white/5 p-6 flex flex-col gap-8 shadow-ambient backdrop-blur-xl relative z-10">
             <div className="space-y-1">
               <div className="text-2xl font-semibold text-text-primary drop-shadow-sm">{strings.headers.appTitle}</div>
               <div className="text-xs uppercase tracking-[0.22em] text-text-dim">Кокпит руководителя эксплуатации ЦОД</div>
             </div>
-          <nav className="flex flex-col gap-2 text-sm">
+          <nav className="flex flex-col gap-1.5 text-[15px]">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
                 <NavLink
                   key={item.to}
                   to={item.to}
+                  title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
                       'relative group flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-all border border-transparent backdrop-blur-sm',
-                      'hover:bg-white/4 hover:text-text-primary hover:translate-x-[1px] hover:shadow-glow',
+                      'hover:bg-white/5 hover:text-text-primary hover:translate-x-[1px] hover:shadow-glow',
                       isActive
                         ? 'bg-white/8 text-text-primary shadow-glow border-white/10'
                         : 'text-text-muted'
@@ -110,9 +120,9 @@ export default function App() {
                 >
                   {({ isActive }) => (
                     <>
-                      <span className="absolute bottom-1.5 left-3 right-3 h-px rounded-full bg-accent-primary/70 blur-sm opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
-                      <Icon className="w-4 h-4 scale-[1.05] text-transparent bg-clip-text bg-gradient-to-br from-accent-primary to-accent-muted" />
-                      <span className="truncate relative">
+                      <span className="absolute bottom-1.5 left-3 right-3 h-px rounded-full bg-accent-primary/60 blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+                      <Icon className="w-[18px] h-[18px] text-transparent bg-clip-text bg-gradient-to-br from-accent-primary to-accent-muted" />
+                      <span className="flex-1 min-w-0 text-left leading-tight text-text-primary relative">
                         {item.label}
                         <span
                           className={clsx(
@@ -122,16 +132,14 @@ export default function App() {
                         />
                       </span>
                       {item.badge ? (
-                        <InfoTooltip label={item.badge.tooltip}>
-                          <span
-                            className={clsx(
-                              'ml-auto inline-flex min-w-[26px] h-6 items-center justify-center rounded-full border px-2 text-xs font-semibold shadow-[0_0_0_1px_rgba(62,236,226,0.18)] bg-bg-surfaceSoft text-accent-primary',
-                              isActive && 'opacity-80 bg-bg-surface'
-                            )}
-                          >
-                            {item.badge.value}
-                          </span>
-                        </InfoTooltip>
+                        <span
+                          className={clsx(
+                            'ml-3 inline-flex h-[22px] min-w-[28px] shrink-0 items-center justify-center rounded-full border px-2.5 text-[11px] font-medium tracking-tight text-cyan-50/85 backdrop-blur-sm bg-[rgba(54,211,211,0.16)] border-[rgba(54,211,211,0.46)] shadow-[0_0_0_1px_rgba(62,236,226,0.12)]',
+                            isActive && 'text-cyan-50 border-[rgba(62,236,226,0.6)]'
+                          )}
+                        >
+                          {item.badge.value}
+                        </span>
                       ) : null}
                     </>
                   )}
@@ -152,15 +160,18 @@ export default function App() {
             />
             <div className="flex items-start gap-4">
               <div className="glass-shell self-start">
-                <div className="glass-inner flex items-center gap-4 py-3 px-4">
+                <div className="glass-inner flex flex-col gap-3 py-3 px-4 lg:flex-row lg:items-center lg:justify-between">
                   <div className="space-y-1 text-left">
                     <div className="text-[11px] uppercase tracking-[0.18em] text-text-dim">Operational Strain Index</div>
-                    <div className="text-3xl font-bold text-text-primary">{osi.value.toFixed(1)}</div>
+                    <div className="text-3xl font-bold text-text-primary">{osiValueDisplay}</div>
                     <div className="text-sm text-text-muted">{osiDescriptor}</div>
                   </div>
-                  <InfoTooltip label={strings.headers.osiTooltip}>
-                    <StatusPill label={osiState} tone={osiTone} />
-                  </InfoTooltip>
+                  <div className="flex flex-col items-start gap-2 lg:items-end">
+                    <div className="flex items-center gap-2">
+                      <StatusPill label={osiStateDisplay} tone={osiToneDisplay} size="sm" />
+                      <InfoTooltip label={hasOsiData ? osiExplainer : 'Нет данных по показателю OSI за выбранный период.'} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
