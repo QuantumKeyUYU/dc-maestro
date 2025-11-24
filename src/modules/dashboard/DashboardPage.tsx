@@ -6,14 +6,16 @@ import { StatusPill } from '../../shared/components/StatusPill';
 import { KpiBadge } from '../../shared/components/KpiBadge';
 import { Table } from '../../shared/components/Table';
 import { sites } from '../../shared/data/sites';
-import { reliabilityScore, capacityLoadIndex, uptimePercent } from '../../shared/lib/kpi';
+import { reliabilityScore, capacityLoadIndex, uptimePercent, opsLoadIndex } from '../../shared/lib/kpi';
 import { incidents } from '../../shared/data/incidents';
 import { workOrders } from '../../shared/data/workOrders';
 import { inventoryItems } from '../../shared/data/inventory';
 import { safetyEvents } from '../../shared/data/safetyEvents';
 import { strings } from '../../shared/lib/strings';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { InfoTooltip } from '../../shared/components/InfoTooltip';
+import { shifts } from '../../shared/data/shifts';
+import { financialRecords } from '../../shared/data/financialRecords';
 
 const chartData = sites.map((site) => ({ name: site.name, uptime: Number(uptimePercent(site).toFixed(2)) }));
 
@@ -31,6 +33,25 @@ export function DashboardPage() {
       })),
     []
   );
+
+  const networkUptime = useMemo(
+    () => withScores.reduce((sum, site) => sum + site.uptime, 0) / Math.max(withScores.length, 1),
+    [withScores]
+  );
+
+  const avgOpsLoad = useMemo(
+    () => sites.reduce((sum, site) => sum + opsLoadIndex(site, shifts), 0) / Math.max(sites.length, 1),
+    []
+  );
+
+  const overdueWorkOrders = workOrders.filter((wo) => wo.status !== 'done' && wo.dueDate && wo.dueDate < today).length;
+  const monthlyOpex = useMemo(() => {
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    return financialRecords
+      .filter((r) => r.type === 'opex' && r.date >= lastMonth)
+      .reduce((sum, r) => sum + r.amountRub, 0);
+  }, []);
 
   const summaryCards = [
     {
@@ -100,6 +121,29 @@ export function DashboardPage() {
       }))
   ];
 
+  const roleShortcuts = [
+    {
+      title: 'Надёжность и аптайм (SLA)',
+      metric: `Средний uptime сети: ${networkUptime.toFixed(2)}%`,
+      to: '/sites'
+    },
+    {
+      title: 'Люди и смены',
+      metric: `Ops load index: ${avgOpsLoad.toFixed(1)} / 100`,
+      to: '/personnel'
+    },
+    {
+      title: 'ТО и активы',
+      metric: `Открытых заявок: ${workOrders.filter((wo) => wo.status !== 'done').length}, просрочено: ${overdueWorkOrders}`,
+      to: '/maintenance'
+    },
+    {
+      title: 'Финансы и расходы',
+      metric: `OPEX за месяц: ₽${monthlyOpex.toLocaleString('ru-RU')}`,
+      to: '/finance'
+    }
+  ];
+
   return (
     <div className="space-y-8">
       <SectionHeader title={strings.dashboard.title} description={strings.dashboard.description} />
@@ -108,6 +152,29 @@ export function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {summaryCards.map((card) => (
             <KpiBadge key={card.label} label={card.label} value={card.value} tone={card.tone} />
+          ))}
+        </div>
+      </Card>
+
+      <Card title="Быстрый переход по ролям" subtitle="Shortcut-туры под собеседование для Вис Энергия">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {roleShortcuts.map((role) => (
+            <div
+              key={role.title}
+              className="rounded-xl border border-gray-800 bg-gray-900/60 p-4 flex flex-col gap-3 hover:border-primary/40 transition"
+            >
+              <div>
+                <div className="font-semibold text-gray-100">{role.title}</div>
+                <p className="text-sm text-gray-400 mt-1">{role.metric}</p>
+              </div>
+              <Link
+                to={role.to}
+                className="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:text-primary/80 transition"
+              >
+                Перейти
+                <span aria-hidden className="text-base">↗</span>
+              </Link>
+            </div>
           ))}
         </div>
       </Card>
@@ -182,8 +249,11 @@ export function DashboardPage() {
                     />
                   </td>
                   <td className="py-3 pr-4">
-                    <button onClick={alert.link} className="text-primary hover:underline text-sm">
-                      Перейти
+                    <button
+                      onClick={alert.link}
+                      className="text-primary hover:text-primary/80 text-sm inline-flex items-center gap-1 transition"
+                    >
+                      Перейти <span aria-hidden>↗</span>
                     </button>
                   </td>
                 </tr>

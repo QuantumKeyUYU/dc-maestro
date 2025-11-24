@@ -64,6 +64,16 @@ export function SitesDetailPage() {
 
   return (
     <div className="space-y-6">
+      <div className="text-sm text-gray-400 flex items-center gap-2">
+        <button
+          onClick={() => navigate('/sites')}
+          className="hover:text-primary transition inline-flex items-center gap-1"
+        >
+          Площадки ЦОД
+        </button>
+        <span className="text-gray-600">/</span>
+        <span className="text-gray-200">{site.name}</span>
+      </div>
       <SectionHeader
         title={`${site.name}: детализация`}
         description="Полный контекст по площадке: инциденты, активы, финансы"

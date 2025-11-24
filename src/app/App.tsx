@@ -15,6 +15,7 @@ import { StatusPill } from '../shared/components/StatusPill';
 import { strings } from '../shared/lib/strings';
 import { InfoTooltip } from '../shared/components/InfoTooltip';
 import { SitesDetailPage } from '../modules/sites/SitesDetailPage';
+import { AboutPage } from '../modules/about/AboutPage';
 
 const navItems = [
   { to: '/', label: strings.nav.dashboard },
@@ -23,7 +24,8 @@ const navItems = [
   { to: '/maintenance', label: strings.nav.maintenance },
   { to: '/inventory', label: strings.nav.inventory },
   { to: '/finance', label: strings.nav.finance },
-  { to: '/safety', label: strings.nav.safety }
+  { to: '/safety', label: strings.nav.safety },
+  { to: '/about', label: strings.nav.about }
 ];
 
 export default function App() {
@@ -82,6 +84,7 @@ export default function App() {
               <Route path="/inventory" element={<InventoryPage />} />
               <Route path="/finance" element={<FinancePage />} />
               <Route path="/safety" element={<SafetyPage />} />
+              <Route path="/about" element={<AboutPage />} />
             </Routes>
           </div>
         </main>
