@@ -38,7 +38,7 @@ export function SitesPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по названию, региону или статусу"
-            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition backdrop-blur"
+            className="bg-bg-surface/90 border border-border-subtle rounded-[12px] px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/50 focus:shadow-[0_0_0_1px_rgba(79,183,173,0.35)] transition"
           />
           <div className="flex gap-2 text-xs text-gray-400">
             <InfoTooltip label="Uptime — доступность за период мониторинга" />
