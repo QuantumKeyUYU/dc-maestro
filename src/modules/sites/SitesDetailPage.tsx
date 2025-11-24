@@ -16,8 +16,8 @@ import { InfoTooltip } from '../../shared/components/InfoTooltip';
 import { strings } from '../../shared/lib/strings';
 import { getStatusLabel, getStatusTone } from '../../shared/lib/status';
 
-const CAPACITY_COLORS = ['#38bdf8', '#0ea5e9'];
-const FINANCE_COLORS = ['#22c55e', '#f97316', '#a855f7', '#f59e0b', '#f43f5e'];
+const CAPACITY_COLORS = ['#4fb7ad', '#506684'];
+const FINANCE_COLORS = ['#2f8f76', '#c4833a', '#7f6fb8', '#b27c34', '#a65862'];
 
 type TabKey = 'overview' | 'incidents' | 'maintenance' | 'finance';
 

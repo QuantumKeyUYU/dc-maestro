@@ -6,35 +6,35 @@ module.exports = {
     extend: {
       colors: {
         bg: {
-          app: '#080c12',
-          surface: '#0b1118',
-          surfaceSoft: '#0f1622'
+          shell: '#0b111a',
+          surface: '#101720',
+          surfaceSoft: '#131c26',
+          surfaceMuted: '#19232e'
         },
         border: {
-          subtle: '#111826'
+          subtle: 'rgba(255,255,255,0.07)',
+          muted: 'rgba(255,255,255,0.05)'
         },
         accent: {
-          primary: '#3fb1a5',
-          muted: '#6f7fbf'
+          primary: '#4fae8c',
+          muted: '#6c88cb'
         },
         status: {
-          success: '#2a8f73',
-          warning: '#c99a46',
-          danger: '#a84f59',
-          info: '#4d8ccf'
+          ok: '#4fae8c',
+          warning: '#d1a048',
+          danger: '#b95a5a',
+          neutral: '#6c88cb'
         },
         text: {
-          primary: '#d2dae6',
-          muted: '#b7c3d4',
-          dim: '#8691a7'
+          primary: '#dfe6f2',
+          muted: '#b4becf',
+          dim: '#8a95ab'
         }
       },
       boxShadow: {
-        soft: '0 12px 30px -18px rgba(0, 0, 0, 0.55)',
-        lifted: '0 20px 50px -28px rgba(0, 0, 0, 0.6)',
-        ambient: '0 18px 48px -30px rgba(0, 0, 0, 0.7), 0 1px 0 0 rgba(255, 255, 255, 0.02)',
-        glow: '0 12px 32px -20px rgba(63, 177, 165, 0.35)',
-        focus: '0 0 0 1px rgba(63, 177, 165, 0.35), 0 8px 32px -24px rgba(79, 140, 207, 0.35)'
+        soft: '0 1px 3px rgba(0,0,0,0.25)',
+        ambient: '0 2px 8px -2px rgba(0,0,0,0.32)',
+        focus: '0 0 0 1px rgba(79,174,140,0.4)'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif']

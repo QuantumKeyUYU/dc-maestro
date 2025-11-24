@@ -143,53 +143,59 @@ export default function App() {
   const osiToneDisplay = hasOsiData ? osiTone : 'neutral';
 
   return (
-    <div className="min-h-screen bg-bg-app text-text-primary relative">
+    <div className="min-h-screen bg-bg-shell text-text-primary relative">
       <div className="flex h-screen overflow-hidden relative">
-          <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[#0b1118] border-r border-[rgba(255,255,255,0.05)] p-6 flex flex-col gap-7">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                clsx(
-                  'block -mx-2 px-3 py-2 rounded-[8px] transition text-left space-y-1 border border-[rgba(255,255,255,0.05)] bg-[#0d141c]',
-                  'hover:bg-white/[0.03] hover:border-[rgba(255,255,255,0.08)] cursor-pointer',
-                  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/25 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent',
-                  isActive && 'border-[rgba(255,255,255,0.1)] bg-white/[0.03]'
-                )
-              }
-            >
-              <div className="text-xl font-semibold text-text-primary">{strings.headers.appTitle}</div>
-            </NavLink>
-            <nav className="flex flex-col gap-1 text-[15px]">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                return (
+        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-bg-shell border-r border-border-subtle px-6 py-6 flex flex-col gap-6">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              clsx(
+                'block -mx-2 px-3 py-3 rounded-[10px] transition text-left space-y-1 border border-border-subtle bg-bg-surface/80 shadow-soft',
+                'hover:bg-white/[0.04] hover:border-border-subtle cursor-pointer',
+                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/35 focus-visible:ring-offset-0'
+              )
+            }
+          >
+            <div className="text-xl font-semibold text-text-primary leading-tight">{strings.headers.appTitle}</div>
+          </NavLink>
+          <nav className="flex flex-col gap-1.5 text-[15px]">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
                 <NavLink
                   key={item.to}
                   to={item.to}
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative flex items-center gap-3 px-3 py-2.5 rounded-[8px] font-medium transition-colors border border-transparent',
+                      'relative flex items-center gap-3 px-3 py-2.5 rounded-[10px] font-medium transition-colors border border-transparent',
                       isActive
-                        ? 'bg-white/[0.05] text-text-primary border-[rgba(255,255,255,0.08)]'
-                        : 'text-text-muted hover:bg-white/[0.03] hover:border-[rgba(255,255,255,0.06)] hover:text-text-primary'
+                        ? 'bg-bg-surface/80 text-text-primary border-border-subtle'
+                        : 'text-text-muted hover:bg-white/[0.04] hover:border-border-subtle/70 hover:text-text-primary'
                     )
                   }
-                  >
-                    {({ isActive }) => (
-                      <>
-                          <Icon className="w-[18px] h-[18px] text-current" />
-                          <span className="flex-1 min-w-0 text-left leading-tight text-current relative truncate">{item.label}</span>
-                        {item.badge ? (
-                          <span
-                            className={clsx(
-                              'ml-2 inline-grid h-5 min-w-[24px] shrink-0 place-items-center rounded-full px-2 text-[11px] font-semibold leading-none tracking-tight text-[#8fc7b7] bg-[rgba(42,143,115,0.18)] border border-[rgba(63,177,165,0.32)] [@media(forced-colors:active)]:border-[ButtonText] [@media(forced-colors:active)]:text-[CanvasText] [@media(forced-colors:active)]:bg-[Canvas]',
-                              isActive && 'text-[#a6d9c9] bg-[rgba(42,143,115,0.24)] border-[rgba(63,177,165,0.38)]'
-                            )}
-                          >
-                            {item.badge.value}
-                          </span>
-                        ) : null}
+                >
+                  {({ isActive }) => (
+                    <>
+                      <span
+                        className={clsx(
+                          'absolute left-0 top-2 bottom-2 w-[3px] rounded-full transition',
+                          isActive ? 'bg-accent-primary/70' : 'bg-transparent'
+                        )}
+                        aria-hidden
+                      />
+                      <Icon className="w-[18px] h-[18px] text-current" />
+                      <span className="flex-1 min-w-0 text-left leading-tight text-current relative truncate">{item.label}</span>
+                      {item.badge ? (
+                        <span
+                          className={clsx(
+                            'ml-2 inline-grid h-6 min-w-[26px] shrink-0 place-items-center rounded-[6px] px-2 text-[12px] font-semibold leading-none tracking-tight text-[#c9e7d7] bg-status-ok/12 border border-status-ok/35',
+                            isActive && 'text-[#e4f6eb] bg-status-ok/18 border-status-ok/45'
+                          )}
+                        >
+                          {item.badge.value}
+                        </span>
+                      ) : null}
                     </>
                   )}
                 </NavLink>
@@ -199,39 +205,35 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-[#0a1015]/95 border-b border-[rgba(255,255,255,0.06)] px-8 py-3 max-[800px]:py-3 flex flex-col gap-4 max-[800px]:gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <header className="sticky top-0 z-10 bg-bg-shell/92 backdrop-blur border-b border-border-subtle px-7 py-3.5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <SectionHeader
               as="h1"
               label={currentPage.label ?? undefined}
               title={currentPage.title}
               subtitle={currentPage.subtitle}
-              className="mb-0"
-            />
-            <div className="flex items-start gap-4">
-              <InfoTooltip
-                label={hasOsiData ? osiExplainer : 'Нет данных по показателю OSI за выбранный период.'}
-                triggerArea="container"
-                className="self-start w-full max-w-xl"
-                resetKey={pathname}
-              >
-                <div className="relative overflow-hidden rounded-[8px] border border-[rgba(255,255,255,0.06)] bg-[#0b1118] px-4 py-3 shadow-[0_6px_18px_rgba(0,0,0,0.24)] flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                  <div className="space-y-1 text-left">
-                    <div className="text-[11px] uppercase tracking-[0.18em] text-text-dim">Operational Strain Index</div>
-                    <div className="text-2xl font-semibold text-text-primary">{osiValueDisplay}</div>
-                    <div className="text-sm text-text-muted">{osiDescriptor}</div>
-                  </div>
-                  <div className="flex flex-col items-start gap-2 lg:items-end">
-                    <div className="flex items-center gap-2">
+              framed={false}
+              className="mb-0 px-0 py-0"
+              action={
+                <InfoTooltip
+                  label={hasOsiData ? osiExplainer : 'Нет данных по показателю OSI за выбранный период.'}
+                  triggerArea="container"
+                  className="self-start w-full"
+                  resetKey={pathname}
+                >
+                  <div className="relative overflow-hidden rounded-[10px] border border-border-subtle bg-bg-surface px-4 py-3 shadow-soft flex flex-col gap-2">
+                    <div className="text-[11px] uppercase tracking-[0.14em] text-text-dim">Operational Strain Index</div>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-2xl font-semibold text-text-primary">{osiValueDisplay}</div>
                       <StatusPill label={osiStateDisplay} tone={osiToneDisplay} size="sm" />
-                      <span className="text-[11px] text-text-muted hidden sm:inline">Наведи, чтобы узнать подробнее</span>
                     </div>
+                    <div className="text-sm text-text-muted leading-snug">{osiDescriptor}</div>
                   </div>
-                </div>
-              </InfoTooltip>
-            </div>
+                </InfoTooltip>
+              }
+            />
           </header>
 
-          <div className="px-8 pt-6 max-[800px]:pt-5 pb-8 space-y-8">
+          <div className="px-8 pt-6 max-[800px]:pt-5 pb-10 space-y-8">
             <Routes>
               <Route path="/" element={<DashboardPage />} />
               <Route path="/sites" element={<SitesPage />} />
