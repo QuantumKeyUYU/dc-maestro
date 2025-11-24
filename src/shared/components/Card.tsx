@@ -7,8 +7,8 @@ export function Card({ children, className, title, subtitle, interactive = false
   return (
     <div
       className={clsx(
-        'group relative overflow-hidden rounded-xl border border-border-subtle/80 bg-bg-surface shadow-[0_8px_20px_rgba(0,0,0,0.35)] transition duration-150 p-6',
-        interactive && 'hover:bg-white/[0.03] cursor-pointer hover:shadow-[0_10px_26px_rgba(0,0,0,0.38)]',
+        'group relative overflow-hidden rounded-[12px] border border-border-subtle bg-bg-surface/95 shadow-soft transition duration-150 p-6',
+        interactive && 'hover:bg-white/[0.03] cursor-pointer hover:shadow-lifted',
         className
       )}
     >

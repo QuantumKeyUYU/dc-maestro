@@ -145,21 +145,21 @@ export default function App() {
   return (
     <div className="min-h-screen bg-bg-shell text-text-primary relative">
       <div className="flex h-screen overflow-hidden relative">
-        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-bg-shell border-r border-border-subtle/80 px-6 py-6 flex flex-col gap-7">
+        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-bg-shell/95 border-r border-border-subtle px-6 py-6 flex flex-col gap-6">
           <NavLink
             to="/"
             className={({ isActive }) =>
               clsx(
-                'block -mx-2 px-3 py-2 rounded-xl transition text-left space-y-1 border border-border-subtle/50 bg-bg-surface/80 shadow-[0_8px_20px_rgba(0,0,0,0.35)]',
-                'hover:bg-white/5 hover:border-border-subtle cursor-pointer',
+                'block -mx-2 px-3 py-3 rounded-[12px] transition text-left space-y-1 border border-border-subtle bg-bg-surface/85 shadow-soft',
+                'hover:bg-white/4 hover:border-border-subtle cursor-pointer',
                 'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/35 focus-visible:ring-offset-0',
                 isActive && 'border-border-subtle bg-white/5'
               )
             }
           >
-            <div className="text-xl font-semibold text-text-primary">{strings.headers.appTitle}</div>
+            <div className="text-xl font-semibold text-text-primary leading-tight">{strings.headers.appTitle}</div>
           </NavLink>
-          <nav className="flex flex-col gap-1 text-[15px]">
+          <nav className="flex flex-col gap-1.5 text-[15px]">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -169,10 +169,10 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors border border-transparent',
+                      'relative flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors border',
                       isActive
-                        ? 'bg-white/6 text-text-primary border-border-subtle'
-                        : 'text-text-muted hover:bg-white/4 hover:border-border-subtle/60 hover:text-text-primary'
+                        ? 'bg-bg-surface/75 text-text-primary border-border-subtle shadow-soft'
+                        : 'text-text-muted border-transparent hover:bg-white/4 hover:border-border-subtle/70 hover:text-text-primary'
                     )
                   }
                 >
@@ -183,7 +183,7 @@ export default function App() {
                       {item.badge ? (
                         <span
                           className={clsx(
-                            'ml-2 inline-grid h-6 min-w-[26px] shrink-0 place-items-center rounded-full px-2 text-[12px] font-semibold leading-none tracking-tight text-[#c7eadf] bg-status-ok/15 border border-status-ok/40',
+                            'ml-2 inline-grid h-6 min-w-[26px] shrink-0 place-items-center rounded-full px-2 text-[12px] font-semibold leading-none tracking-tight text-[#c7eadf] bg-status-ok/16 border border-status-ok/40',
                             isActive && 'text-[#ddf4ea] bg-status-ok/22 border-status-ok/50'
                           )}
                         >
@@ -199,13 +199,14 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-bg-shell/92 backdrop-blur border-b border-border-subtle/60 px-8 py-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <header className="sticky top-0 z-10 bg-bg-shell/90 backdrop-blur border-b border-border-subtle/70 px-8 py-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <SectionHeader
               as="h1"
               label={currentPage.label ?? undefined}
               title={currentPage.title}
               subtitle={currentPage.subtitle}
-              className="mb-0 shadow-none border-transparent bg-transparent px-0 py-0"
+              framed={false}
+              className="mb-0 px-0 py-0"
               action={
                 <InfoTooltip
                   label={hasOsiData ? osiExplainer : 'Нет данных по показателю OSI за выбранный период.'}
@@ -213,7 +214,7 @@ export default function App() {
                   className="self-start w-full"
                   resetKey={pathname}
                 >
-                  <div className="relative overflow-hidden rounded-[12px] border border-border-subtle/80 bg-bg-surface px-4 py-3 shadow-[0_8px_20px_rgba(0,0,0,0.32)] flex flex-col gap-2">
+                  <div className="relative overflow-hidden rounded-[12px] border border-border-subtle bg-bg-surface px-4 py-3 shadow-soft flex flex-col gap-2">
                     <div className="text-[11px] uppercase tracking-[0.14em] text-text-dim">Operational Strain Index</div>
                     <div className="flex items-center justify-between gap-3">
                       <div className="text-2xl font-semibold text-text-primary">{osiValueDisplay}</div>

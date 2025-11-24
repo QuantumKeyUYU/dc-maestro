@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import clsx from 'clsx';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Card } from '../../shared/components/Card';
 import { StatusPill } from '../../shared/components/StatusPill';
@@ -216,17 +217,17 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-2xl border border-border-subtle/70 bg-bg-surface p-6 shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-2">
+      <div className="rounded-[14px] border border-border-subtle bg-bg-surface/90 p-6 shadow-soft">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-1">
             <p className="text-[13px] uppercase tracking-[0.14em] text-text-dim">Дашборд</p>
             <h1 className="text-3xl font-semibold text-text-primary leading-tight">Обзор состояния сети и эксплуатационных рисков</h1>
-            <p className="text-sm text-text-muted max-w-3xl">Свежие сигналы по отказоустойчивости, загрузке и операционным рискам в единой панели.</p>
+            <p className="text-sm text-text-muted max-w-3xl">Ключевые сигналы по отказоустойчивости, загрузке и операционным рискам для быстрой реакции.</p>
           </div>
           <InfoTooltip label="Операционный индекс нагрузки рассчитывается как взвешенная метрика по инцидентам, загрузке смен и финансовым рискам." triggerArea="container">
-            <div className="flex items-center gap-4 rounded-xl border border-border-subtle/70 bg-bg-surfaceMuted/70 px-5 py-4 shadow-[0_10px_24px_rgba(0,0,0,0.3)]">
+            <div className="flex items-center gap-4 rounded-[12px] border border-border-subtle bg-bg-surfaceMuted/80 px-5 py-4 shadow-soft min-w-[260px]">
               <div className="space-y-1">
-                <div className="text-[12px] uppercase tracking-[0.16em] text-text-dim">OSI</div>
+                <div className="text-[12px] uppercase tracking-[0.14em] text-text-dim">OSI</div>
                 <div className="text-4xl font-semibold text-text-primary">{osi.value.toFixed(1)}</div>
                 <div className="text-xs text-text-muted">Operational Strain Index</div>
               </div>
@@ -236,10 +237,10 @@ export function DashboardPage() {
         </div>
       </div>
 
-      <Card title="Состояние сети сейчас" subtitle="Ключевые сигналы риска и доступности на текущий момент">
-        <div className="grid gap-6 lg:grid-cols-[1.2fr,1fr] items-start">
+      <Card title="Состояние сети сейчас" subtitle="Главные индикаторы доступности и риска в текущую смену">
+        <div className="grid gap-6 lg:grid-cols-[1.1fr,1fr] items-start">
           <div className="space-y-4">
-            <div className="flex flex-col gap-3 rounded-xl border border-border-subtle/70 bg-bg-surfaceMuted/60 px-5 py-4 shadow-[0_10px_22px_rgba(0,0,0,0.3)]">
+            <div className="flex flex-col gap-3 rounded-[12px] border border-border-subtle bg-bg-surfaceMuted/80 px-5 py-4 shadow-soft">
               <div className="flex items-center justify-between">
                 <span className="text-[12px] uppercase tracking-[0.14em] text-text-dim">Operational Strain Index</span>
                 <StatusPill label={osiState} tone={osiTone} size="sm" />
@@ -250,45 +251,125 @@ export function DashboardPage() {
               </div>
               <p className="text-sm text-text-muted leading-snug">Средний аптайм сети: {networkUptime.toFixed(2)}% · Ops load index: {avgOpsLoad.toFixed(1)} / 100</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {summaryCards.map((card) => (
-                <button
-                  key={card.label}
-                  type="button"
-                  onClick={card.onClick}
-                  className="text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/50 rounded-full"
-                >
-                  <KpiBadge label={card.label} value={card.value} tone={card.tone} />
-                </button>
-              ))}
+            <div className="rounded-[12px] border border-border-subtle bg-bg-surfaceMuted/60 px-5 py-4 shadow-soft space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-text-muted">Площадок вне нормы</span>
+                <StatusPill label={problemSites === 0 ? 'Норма' : 'Требует внимания'} tone={problemSites === 0 ? 'success' : 'warning'} size="sm" />
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-semibold text-text-primary">{problemSites}</span>
+                <span className="text-sm text-text-muted">площадок</span>
+              </div>
+              <p className="text-sm text-text-muted leading-snug">Просроченных заявок ТО: {overdueWorkOrders}</p>
             </div>
           </div>
 
-          <div className="rounded-xl border border-border-subtle/70 bg-bg-surfaceMuted/60 p-5 shadow-[0_10px_22px_rgba(0,0,0,0.3)] space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-text-muted">Площадок вне нормы</div>
-              <StatusPill label={problemSites === 0 ? 'Норма' : 'Требует внимания'} tone={problemSites === 0 ? 'success' : 'warning'} size="sm" />
-            </div>
-            <div className="text-3xl font-semibold text-text-primary">{problemSites}</div>
-            <p className="text-sm text-text-muted leading-snug">Просроченных заявок ТО: {overdueWorkOrders}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {summaryCards.map((card) => (
+              <button
+                key={card.label}
+                type="button"
+                onClick={card.onClick}
+                className="text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/45 rounded-[12px] border border-border-subtle bg-bg-surface/85 px-4 py-3 shadow-soft hover:bg-white/4 transition"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="space-y-1">
+                    <p className="text-[12px] uppercase tracking-wide text-text-dim">{card.label}</p>
+                    <p className="text-2xl font-semibold text-text-primary leading-tight">{card.value}</p>
+                  </div>
+                  <StatusPill label={card.value === 0 ? 'Норма' : 'Внимание'} tone={card.tone === 'danger' ? 'danger' : card.tone === 'warning' ? 'warning' : 'neutral'} size="sm" />
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       </Card>
 
+      <div ref={warningsRef}>
+        <Card title="Текущие предупреждения" subtitle="Инциденты, ТО, склад и безопасность" className="xl:col-span-2">
+          <div className="flex items-center justify-between mb-4">
+            {alertFilter ? (
+              <div className="flex items-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full bg-bg-surfaceMuted/80 px-3 py-1 text-xs text-text-primary border border-border-subtle">
+                  {alertFilterLabels[alertFilter]}
+                </span>
+                <button
+                  type="button"
+                  className="text-xs text-accent-primary hover:text-text-primary transition"
+                  onClick={() => setAlertFilter(null)}
+                >
+                  Сбросить
+                </button>
+              </div>
+            ) : (
+              <span className="text-xs text-text-dim">Живые предупреждения по всем потокам</span>
+            )}
+          </div>
+          <Table<AlertRow> isRowClickable onRowClick={(alert) => alert.link?.()} framed={false}>
+            <thead>
+              <tr>
+                <th className="text-left">Тип</th>
+                <th className="text-left">Описание</th>
+                <th className="text-center">Площадка</th>
+                <th className="text-left">Приоритет</th>
+                <th className="text-right">Действие</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredAlerts.map((alert) => {
+                const tone = alert.priority.includes('Крит') ? 'danger' : alert.priority.includes('Проср') ? 'warning' : 'warning';
+                return (
+                  <TableRow
+                    key={`${alert.type}-${alert.id}`}
+                    row={alert}
+                    className={clsx(tone === 'danger' ? 'bg-status-danger/8' : tone === 'warning' ? 'bg-status-warning/8' : '')}
+                  >
+                    <td className="pr-4 font-medium text-text-primary">{alert.type}</td>
+                    <td className="pr-4 text-text-primary">{alert.description}</td>
+                    <td className="pr-4 text-center text-text-muted">{alert.siteId}</td>
+                    <td className="pr-4">
+                      <StatusPill label={alert.priority} tone={tone} size="sm" />
+                    </td>
+                    <td className="pr-2 text-right">
+                      <CtaButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          alert.link?.();
+                        }}
+                        icon={<ArrowRight aria-hidden />}
+                      >
+                        Перейти
+                      </CtaButton>
+                    </td>
+                  </TableRow>
+                );
+              })}
+              {filteredAlerts.length === 0 && (
+                <tr>
+                  <td className="pr-4 text-text-muted" colSpan={5}>
+                    Нет предупреждений на сегодня.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </Card>
+      </div>
+
       <div className="grid gap-7 xl:grid-cols-[2fr,1fr] items-start">
         <Card className="xl:col-span-1" title="Обзор надёжности и нагрузки сети ЦОД" subtitle="Сигналы SLA и эксплуатационных рисков">
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="flex flex-col gap-2 rounded-lg border border-border-subtle/60 bg-bg-surfaceMuted/40 p-4">
+            <div className="flex flex-col gap-2 rounded-[10px] border border-border-subtle bg-bg-surface/80 p-4">
               <span className="text-xs uppercase tracking-[0.12em] text-text-dim">Uptime</span>
               <span className="text-2xl font-semibold text-text-primary">{networkUptime.toFixed(2)}%</span>
               <p className="text-[13px] text-text-muted leading-snug">Средний SLA по площадкам</p>
             </div>
-            <div className="flex flex-col gap-2 rounded-lg border border-border-subtle/60 bg-bg-surfaceMuted/40 p-4">
+            <div className="flex flex-col gap-2 rounded-[10px] border border-border-subtle bg-bg-surface/80 p-4">
               <span className="text-xs uppercase tracking-[0.12em] text-text-dim">Ops load</span>
               <span className="text-2xl font-semibold text-text-primary">{avgOpsLoad.toFixed(1)} / 100</span>
               <p className="text-[13px] text-text-muted leading-snug">Загрузка смен и команд</p>
             </div>
-            <div className="flex flex-col gap-2 rounded-lg border border-border-subtle/60 bg-bg-surfaceMuted/40 p-4">
+            <div className="flex flex-col gap-2 rounded-[10px] border border-border-subtle bg-bg-surface/80 p-4">
               <span className="text-xs uppercase tracking-[0.12em] text-text-dim">Статус сети</span>
               <StatusPill label={networkStatusText.replace('Сеть в целом: ', '')} tone={networkTone} />
               <p className="text-[13px] text-text-muted leading-snug">Контроль нагрузки и рисков</p>
@@ -326,7 +407,7 @@ export function DashboardPage() {
 
       <div className="grid gap-7 xl:grid-cols-[2fr,1fr] items-start">
         <Card className="xl:col-span-1" title="Состояние сети" subtitle="Uptime по площадкам">
-          <div className="h-80 bg-bg-surfaceMuted/50 rounded-lg border border-border-subtle/60 p-2">
+          <div className="h-80 bg-bg-surfaceMuted/50 rounded-[12px] border border-border-subtle p-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={16}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
@@ -334,24 +415,24 @@ export function DashboardPage() {
                 <YAxis tick={{ fill: '#b6c1d3', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
                 <Tooltip
                   contentStyle={{
-                    background: '#0b1018',
+                    background: '#0c1119',
                     border: '1px solid rgba(255,255,255,0.08)',
                     borderRadius: 10,
-                    color: '#d8e2f0',
-                    boxShadow: '0 12px 28px rgba(0,0,0,0.32)'
+                    color: '#dde7f5',
+                    boxShadow: '0 12px 28px rgba(0,0,0,0.28)'
                   }}
                   cursor={{ fill: 'rgba(255,255,255,0.04)' }}
                 />
-                <Bar dataKey="uptime" fill="#5bc8be" stroke="#5bc8be" strokeWidth={1} radius={[3, 3, 0, 0]} />
+                <Bar dataKey="uptime" fill="#4fb7ad" stroke="#4fb7ad" strokeWidth={1} radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </Card>
 
-        <Card title="Быстрый переход по ролям" subtitle="Навигация по ключевым потокам" className="bg-bg-surfaceMuted/70 border-border-subtle/70">
+        <Card title="Быстрый переход по ролям" subtitle="Навигация по ключевым потокам" className="bg-bg-surface/85">
           <div className="grid grid-cols-1 gap-3">
             {roleShortcuts.map((role) => (
-              <div key={role.title} className="flex items-center justify-between rounded-lg border border-border-subtle/60 bg-bg-surface/70 px-4 py-3">
+              <div key={role.title} className="flex items-center justify-between rounded-[12px] border border-border-subtle bg-bg-surfaceMuted/60 px-4 py-3">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-text-primary">{role.title}</div>
                   <p className="text-xs text-text-muted">{role.metric}</p>
@@ -365,99 +446,29 @@ export function DashboardPage() {
         </Card>
       </div>
 
-      <div className="space-y-6">
-        <div ref={warningsRef}>
-          <Card title="Текущие предупреждения" subtitle="Инциденты, ТО, склад и безопасность" className="xl:col-span-2">
-            <div className="flex items-center justify-between mb-4">
-              {alertFilter ? (
-                <div className="flex items-center gap-3">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-bg-surfaceMuted/80 px-3 py-1 text-xs text-text-primary border border-border-subtle/80">
-                    {alertFilterLabels[alertFilter]}
-                  </span>
-                  <button
-                    type="button"
-                    className="text-xs text-accent-primary hover:text-text-primary transition"
-                    onClick={() => setAlertFilter(null)}
-                  >
-                    Сбросить
-                  </button>
-                </div>
-              ) : (
-                <span className="text-xs text-text-dim">Живые предупреждения по всем потокам</span>
-              )}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        {withScores.map((site) => (
+          <Card key={site.id} interactive>
+            <div className="flex items-start justify-between">
+              <div className="space-y-1">
+                <div className="text-lg font-semibold text-text-primary">{site.name}</div>
+                <div className="text-sm text-text-muted">{site.region}</div>
+              </div>
+              <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} />
             </div>
-            <Table<AlertRow> isRowClickable onRowClick={(alert) => alert.link?.()} framed={false}>
-              <thead>
-                <tr>
-                  <th className="text-left">Тип</th>
-                  <th className="text-left">Описание</th>
-                  <th className="text-center">Площадка</th>
-                  <th className="text-left">Приоритет</th>
-                  <th className="text-right">Действие</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredAlerts.map((alert) => (
-                  <TableRow key={`${alert.type}-${alert.id}`} row={alert}>
-                    <td className="pr-4 font-medium text-text-primary">{alert.type}</td>
-                    <td className="pr-4 text-text-primary">{alert.description}</td>
-                    <td className="pr-4 text-center text-text-muted">{alert.siteId}</td>
-                    <td className="pr-4">
-                      <StatusPill
-                        label={alert.priority}
-                        tone={alert.priority.includes('Крит') ? 'danger' : alert.priority.includes('Проср') ? 'warning' : 'warning'}
-                        size="sm"
-                      />
-                    </td>
-                    <td className="pr-2 text-right">
-                      <CtaButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          alert.link?.();
-                        }}
-                        icon={<ArrowRight aria-hidden />}
-                      >
-                        Перейти
-                      </CtaButton>
-                    </td>
-                  </TableRow>
-                ))}
-                {filteredAlerts.length === 0 && (
-                  <tr>
-                    <td className="pr-4 text-text-muted" colSpan={5}>
-                      Нет предупреждений на сегодня.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </Table>
+            <div className="grid grid-cols-3 gap-3 mt-4">
+              <InfoTooltip label="Uptime за период мониторинга площадки">
+                <KpiBadge label="Uptime" value={`${site.uptime.toFixed(2)}%`} tone="info" />
+              </InfoTooltip>
+              <InfoTooltip label="Индекс надёжности: сочетает аптайм и среднее время восстановления. Чем ближе к 100, тем лучше.">
+                <KpiBadge label="Reliability" value={`${site.reliability.toFixed(1)}`} tone="success" />
+              </InfoTooltip>
+              <InfoTooltip label="Индекс загрузки мощностей и стоек">
+                <KpiBadge label="Capacity" value={`${site.capacity.toFixed(1)}%`} tone="warning" />
+              </InfoTooltip>
+            </div>
           </Card>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {withScores.map((site) => (
-            <Card key={site.id} interactive>
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <div className="text-lg font-semibold text-text-primary">{site.name}</div>
-                  <div className="text-sm text-text-muted">{site.region}</div>
-                </div>
-                <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} />
-              </div>
-              <div className="grid grid-cols-3 gap-3 mt-4">
-                <InfoTooltip label="Uptime за период мониторинга площадки">
-                  <KpiBadge label="Uptime" value={`${site.uptime.toFixed(2)}%`} tone="info" />
-                </InfoTooltip>
-                <InfoTooltip label="Индекс надёжности: сочетает аптайм и среднее время восстановления. Чем ближе к 100, тем лучше.">
-                  <KpiBadge label="Reliability" value={`${site.reliability.toFixed(1)}`} tone="success" />
-                </InfoTooltip>
-                <InfoTooltip label="Индекс загрузки мощностей и стоек">
-                  <KpiBadge label="Capacity" value={`${site.capacity.toFixed(1)}%`} tone="warning" />
-                </InfoTooltip>
-              </div>
-            </Card>
-          ))}
-        </div>
+        ))}
       </div>
     </div>
   );

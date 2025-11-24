@@ -6,37 +6,37 @@ module.exports = {
     extend: {
       colors: {
         bg: {
-          shell: '#05070b',
-          surface: '#0b1018',
-          surfaceSoft: '#0f1521',
-          surfaceMuted: '#101826'
+          shell: '#05080c',
+          surface: '#0c1119',
+          surfaceSoft: '#101724',
+          surfaceMuted: '#111a28'
         },
         border: {
-          subtle: 'rgba(255,255,255,0.06)',
-          muted: 'rgba(255,255,255,0.04)'
+          subtle: 'rgba(255,255,255,0.08)',
+          muted: 'rgba(255,255,255,0.05)'
         },
         accent: {
-          primary: '#5bc8be',
-          muted: '#6f86c1'
+          primary: '#4fb7ad',
+          muted: '#6f87c3'
         },
         status: {
-          ok: '#2c9b7f',
-          warning: '#c6933a',
-          danger: '#b35c63',
-          neutral: '#6b7a95'
+          ok: '#2a8f7a',
+          warning: '#b8893a',
+          danger: '#a6555c',
+          neutral: '#6f7f98'
         },
         text: {
-          primary: '#d8e2f0',
-          muted: '#b6c1d3',
-          dim: '#8d99b1'
+          primary: '#dde7f5',
+          muted: '#b8c3d6',
+          dim: '#8e9ab4'
         }
       },
       boxShadow: {
-        soft: '0 12px 30px -18px rgba(0, 0, 0, 0.55)',
-        lifted: '0 18px 36px -24px rgba(0, 0, 0, 0.55)',
-        ambient: '0 18px 48px -32px rgba(0, 0, 0, 0.7), 0 1px 0 0 rgba(255, 255, 255, 0.02)',
-        glow: '0 10px 24px -18px rgba(91, 200, 190, 0.3)',
-        focus: '0 0 0 1px rgba(91, 200, 190, 0.35), 0 8px 32px -24px rgba(111, 134, 193, 0.35)'
+        soft: '0 10px 26px -18px rgba(0, 0, 0, 0.55)',
+        lifted: '0 16px 32px -22px rgba(0, 0, 0, 0.55)',
+        ambient: '0 16px 42px -28px rgba(0, 0, 0, 0.65), 0 1px 0 0 rgba(255, 255, 255, 0.02)',
+        glow: '0 8px 22px -18px rgba(79, 183, 173, 0.28)',
+        focus: '0 0 0 1px rgba(79, 183, 173, 0.38), 0 8px 28px -22px rgba(111, 135, 195, 0.35)'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif']

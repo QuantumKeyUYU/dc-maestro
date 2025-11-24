@@ -10,13 +10,13 @@ export function Table<T = unknown>({ children, className, onRowClick, isRowClick
     <TableContext.Provider value={{ onRowClick: onRowClick as (row: unknown) => void, isRowClickable }}>
       <div
         className={clsx(
-          'overflow-x-auto scrollbar-thin rounded-xl',
-          framed ? 'border border-border-subtle/80 bg-bg-surface px-3.5 py-3' : 'px-3.5 py-3',
+          'overflow-x-auto scrollbar-thin rounded-[12px]',
+          framed ? 'border border-border-subtle bg-bg-surface/95 px-3.5 py-3' : 'px-3.5 py-3',
           className
         )}
       >
         <table
-          className="min-w-full text-[13px] text-text-primary border-collapse [&>thead>tr>th]:py-3 [&>thead>tr>th]:px-3 [&>thead>tr>th]:text-[11px] [&>thead>tr>th]:font-semibold [&>thead>tr>th]:tracking-wide [&>thead>tr>th]:text-text-dim [&>thead]:bg-bg-surfaceMuted [&>thead]:border-b [&>thead]:border-border-subtle/70 [&>tbody>tr]:border-b [&>tbody>tr]:border-border-subtle/60 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-3 [&>tbody>tr>td]:px-3 [&>tbody>tr>td]:align-middle [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-white/5"
+          className="min-w-full text-[13px] text-text-primary border-collapse [&>thead>tr>th]:py-3 [&>thead>tr>th]:px-3 [&>thead>tr>th]:text-[12px] [&>thead>tr>th]:font-semibold [&>thead>tr>th]:text-text-muted [&>thead]:bg-bg-surfaceMuted/80 [&>thead]:border-b [&>thead]:border-border-subtle/80 [&>tbody>tr]:border-b [&>tbody>tr]:border-border-subtle/70 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-3 [&>tbody>tr>td]:px-3 [&>tbody>tr>td]:align-middle [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-white/4"
         >
           {children}
         </table>
@@ -36,7 +36,7 @@ export function TableRow<T = unknown>({ row, className, children }: TableRowProp
       onClick={() => clickable && onRowClick?.(row)}
       className={clsx(
         'transition-colors duration-200',
-        clickable ? 'cursor-pointer hover:bg-white/10' : 'hover:bg-white/5',
+        clickable ? 'cursor-pointer hover:bg-white/6' : 'hover:bg-white/4',
         className
       )}
     >
