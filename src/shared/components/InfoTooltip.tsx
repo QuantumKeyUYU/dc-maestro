@@ -2,7 +2,7 @@ import { PropsWithChildren, useEffect, useId, useMemo, useRef, useState } from '
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 
-type InfoTooltipProps = PropsWithChildren<{ label: string; className?: string; triggerArea?: 'icon' | 'container'; id?: string }>;
+type InfoTooltipProps = PropsWithChildren<{ label: string; className?: string; triggerArea?: 'icon' | 'container'; id?: string; resetKey?: string | number }>;
 
 export function scheduleTooltipHide(
   hideTimerRef: React.MutableRefObject<ReturnType<typeof setTimeout> | null>,
@@ -20,7 +20,7 @@ export function scheduleTooltipHide(
   }, delay);
 }
 
-export function InfoTooltip({ label, children, className, triggerArea = 'icon', id }: InfoTooltipProps) {
+export function InfoTooltip({ label, children, className, triggerArea = 'icon', id, resetKey }: InfoTooltipProps) {
   const [open, setOpen] = useState(false);
   const [coords, setCoords] = useState<{ top: number; left: number } | null>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -58,6 +58,20 @@ export function InfoTooltip({ label, children, className, triggerArea = 'icon', 
       window.removeEventListener('scroll', handleReposition, true);
     };
   }, [open, updatePosition]);
+
+  useEffect(() => {
+    if (resetKey === undefined) return;
+
+    if (hideTimer.current) {
+      clearTimeout(hideTimer.current);
+      hideTimer.current = null;
+    }
+
+    if (open || coords) {
+      setOpen(false);
+      setCoords(null);
+    }
+  }, [resetKey, open, coords]);
 
   useEffect(
     () => () => {

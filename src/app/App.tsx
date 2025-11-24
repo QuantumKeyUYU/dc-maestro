@@ -152,10 +152,10 @@ export default function App() {
               to="/"
               className={({ isActive }) =>
                 clsx(
-                  'block -mx-2 px-3 py-2 rounded-xl transition text-left space-y-1.5 shadow-ambient/50 border border-white/5 bg-bg-surfaceSoft/60 backdrop-blur',
-                  'hover:shadow-lifted hover:border-white/10 hover:bg-bg-surfaceSoft/75 cursor-pointer',
+                  'block -mx-2 px-3 py-2 rounded-xl transition text-left space-y-1.5 shadow-ambient/40 border border-white/6 bg-bg-surfaceSoft/60 backdrop-blur',
+                  'hover:shadow-lifted hover:border-white/10 hover:bg-bg-surfaceSoft/72 cursor-pointer',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent',
-                  isActive && 'shadow-ambient/30 border-white/8'
+                  isActive && 'shadow-ambient/22 border-white/7'
                 )
               }
             >
@@ -184,7 +184,7 @@ export default function App() {
                     <>
                       <span className="pointer-events-none absolute bottom-1.5 left-2.5 right-2.5 h-px rounded-full bg-accent-primary/60 blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
                       <Icon className="w-[18px] h-[18px] text-transparent bg-clip-text bg-gradient-to-br from-accent-primary to-accent-muted" />
-                      <span className="flex-1 min-w-0 text-left leading-tight text-text-primary relative">
+                      <span className="flex-1 min-w-0 text-left leading-tight text-text-primary relative truncate">
                         {item.label}
                         <span
                           className={clsx(
@@ -196,7 +196,7 @@ export default function App() {
                       {item.badge ? (
                         <span
                           className={clsx(
-                            'ml-2 inline-grid h-5 min-w-[24px] shrink-0 place-items-center rounded-full px-2 text-[11px] font-semibold leading-[1.05] tracking-tight text-cyan-50/90 backdrop-blur-sm bg-[rgba(62,236,226,0.16)] shadow-[0_4px_10px_rgba(62,236,226,0.14)_inset,0_0_0_1px_rgba(62,236,226,0.22)] border border-[rgba(62,236,226,0.2)] [@media(forced-colors:active)]:border-[ButtonText] [@media(forced-colors:active)]:text-[CanvasText] [@media(forced-colors:active)]:bg-[Canvas]',
+                            'ml-2 inline-grid h-5 min-w-[24px] shrink-0 place-items-center rounded-full px-2 text-[11px] font-semibold leading-none tracking-tight text-cyan-50/90 backdrop-blur-sm bg-[rgba(62,236,226,0.16)] shadow-[0_4px_10px_rgba(62,236,226,0.14)_inset,0_0_0_1px_rgba(62,236,226,0.22)] border border-[rgba(62,236,226,0.2)] [@media(forced-colors:active)]:border-[ButtonText] [@media(forced-colors:active)]:text-[CanvasText] [@media(forced-colors:active)]:bg-[Canvas]',
                             isActive && 'text-cyan-50 shadow-[0_4px_12px_rgba(62,236,226,0.18)_inset,0_0_0_1px_rgba(62,236,226,0.3)]'
                           )}
                         >
@@ -225,6 +225,7 @@ export default function App() {
                 label={hasOsiData ? osiExplainer : 'Нет данных по показателю OSI за выбранный период.'}
                 triggerArea="container"
                 className="glass-shell self-start w-full max-w-xl"
+                resetKey={pathname}
               >
                 <div className="glass-inner flex flex-col gap-3 py-3 px-4 lg:flex-row lg:items-center lg:justify-between">
                   <div className="space-y-1 text-left">
