@@ -24,6 +24,9 @@ export const strings = {
   headers: {
     appTitle: 'DC Maestro',
     appSubtitle: 'Кокпит руководителя эксплуатации ЦОД',
+    dashboardLabel: 'Кокпит DC Maestro',
+    moduleLabel: 'Модуль',
+    aboutLabel: 'Сценарий демонстрации',
     osiTooltip:
       'Operational Strain Index — агрегированный индекс нагрузки на сеть ЦОД (надёжность, загрузка смен, частота инцидентов).'
   },
