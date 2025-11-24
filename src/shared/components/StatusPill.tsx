@@ -8,19 +8,19 @@ interface StatusPillProps {
 
 export function StatusPill({ label, tone = 'neutral', size = 'md' }: StatusPillProps) {
   const toneClass = {
-    neutral: 'bg-status-neutral/18 text-text-primary border-status-neutral/40',
-    success: 'bg-status-ok/18 text-[#b9e2d6] border-status-ok/45',
-    warning: 'bg-status-warning/18 text-[#e2c68f] border-status-warning/45',
-    danger: 'bg-status-danger/18 text-[#e9c0c5] border-status-danger/45',
-    info: 'bg-accent-muted/18 text-[#c7d6f6] border-accent-muted/40'
+    neutral: 'bg-status-neutral/12 text-text-primary border-status-neutral/35',
+    success: 'bg-status-ok/12 text-[#c9e7d7] border-status-ok/35',
+    warning: 'bg-status-warning/12 text-[#edd7ad] border-status-warning/40',
+    danger: 'bg-status-danger/12 text-[#edc7cb] border-status-danger/40',
+    info: 'bg-accent-muted/12 text-[#d5e0f8] border-accent-muted/35'
   }[tone];
 
-  const sizeClass = size === 'sm' ? 'px-3 py-[7px] text-[12px]' : 'px-3.5 py-2 text-[13px]';
+  const sizeClass = size === 'sm' ? 'px-3 h-7 text-[12px]' : 'px-3.5 h-8 text-[13px]';
 
   return (
     <span
       className={clsx(
-        'rounded-full font-medium border transition inline-flex items-center gap-2 tracking-tight',
+        'rounded-[6px] font-medium border transition inline-flex items-center gap-2 tracking-tight',
         sizeClass,
         toneClass
       )}

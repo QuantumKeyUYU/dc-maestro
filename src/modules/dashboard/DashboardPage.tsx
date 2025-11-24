@@ -217,17 +217,17 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-[14px] border border-border-subtle bg-bg-surface/90 p-6 shadow-soft">
+      <div className="rounded-[10px] border border-border-subtle bg-bg-surface p-6 shadow-soft">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1">
-            <p className="text-[13px] uppercase tracking-[0.14em] text-text-dim">Дашборд</p>
+            <p className="text-[12px] uppercase tracking-[0.12em] text-text-dim">Дашборд</p>
             <h1 className="text-3xl font-semibold text-text-primary leading-tight">Обзор состояния сети и эксплуатационных рисков</h1>
             <p className="text-sm text-text-muted max-w-3xl">Ключевые сигналы по отказоустойчивости, загрузке и операционным рискам для быстрой реакции.</p>
           </div>
           <InfoTooltip label="Операционный индекс нагрузки рассчитывается как взвешенная метрика по инцидентам, загрузке смен и финансовым рискам." triggerArea="container">
-            <div className="flex items-center gap-4 rounded-[12px] border border-border-subtle bg-bg-surfaceMuted/80 px-5 py-4 shadow-soft min-w-[260px]">
+            <div className="flex items-center gap-4 rounded-[10px] border border-border-subtle bg-bg-surfaceSoft px-5 py-4 shadow-soft min-w-[260px]">
               <div className="space-y-1">
-                <div className="text-[12px] uppercase tracking-[0.14em] text-text-dim">OSI</div>
+                <div className="text-[12px] uppercase tracking-[0.12em] text-text-dim">OSI</div>
                 <div className="text-4xl font-semibold text-text-primary">{osi.value.toFixed(1)}</div>
                 <div className="text-xs text-text-muted">Operational Strain Index</div>
               </div>
@@ -240,9 +240,9 @@ export function DashboardPage() {
       <Card title="Состояние сети сейчас" subtitle="Главные индикаторы доступности и риска в текущую смену">
         <div className="grid gap-6 lg:grid-cols-[1.1fr,1fr] items-start">
           <div className="space-y-4">
-            <div className="flex flex-col gap-3 rounded-[12px] border border-border-subtle bg-bg-surfaceMuted/80 px-5 py-4 shadow-soft">
+            <div className="flex flex-col gap-3 rounded-[10px] border border-border-subtle bg-bg-surfaceSoft px-5 py-4 shadow-soft">
               <div className="flex items-center justify-between">
-                <span className="text-[12px] uppercase tracking-[0.14em] text-text-dim">Operational Strain Index</span>
+                <span className="text-[12px] uppercase tracking-[0.12em] text-text-dim">Operational Strain Index</span>
                 <StatusPill label={osiState} tone={osiTone} size="sm" />
               </div>
               <div className="flex items-baseline gap-3">
@@ -251,7 +251,7 @@ export function DashboardPage() {
               </div>
               <p className="text-sm text-text-muted leading-snug">Средний аптайм сети: {networkUptime.toFixed(2)}% · Ops load index: {avgOpsLoad.toFixed(1)} / 100</p>
             </div>
-            <div className="rounded-[12px] border border-border-subtle bg-bg-surfaceMuted/60 px-5 py-4 shadow-soft space-y-2">
+            <div className="rounded-[10px] border border-border-subtle bg-bg-surface px-5 py-4 shadow-soft space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-text-muted">Площадок вне нормы</span>
                 <StatusPill label={problemSites === 0 ? 'Норма' : 'Требует внимания'} tone={problemSites === 0 ? 'success' : 'warning'} size="sm" />
@@ -270,7 +270,7 @@ export function DashboardPage() {
                 key={card.label}
                 type="button"
                 onClick={card.onClick}
-                className="text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/45 rounded-[12px] border border-border-subtle bg-bg-surface/85 px-4 py-3 shadow-soft hover:bg-white/4 transition"
+                className="text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/45 rounded-[10px] border border-border-subtle bg-bg-surfaceSoft px-4 py-3 shadow-soft hover:bg-white/[0.03] transition"
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="space-y-1">
@@ -290,7 +290,7 @@ export function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             {alertFilter ? (
               <div className="flex items-center gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full bg-bg-surfaceMuted/80 px-3 py-1 text-xs text-text-primary border border-border-subtle">
+                <span className="inline-flex items-center gap-2 rounded-[8px] bg-bg-surfaceSoft px-3 py-1.5 text-xs text-text-primary border border-border-subtle">
                   {alertFilterLabels[alertFilter]}
                 </span>
                 <button
@@ -322,7 +322,7 @@ export function DashboardPage() {
                   <TableRow
                     key={`${alert.type}-${alert.id}`}
                     row={alert}
-                    className={clsx(tone === 'danger' ? 'bg-status-danger/8' : tone === 'warning' ? 'bg-status-warning/8' : '')}
+                    className={clsx(tone === 'danger' ? 'bg-status-danger/10' : tone === 'warning' ? 'bg-status-warning/8' : '')}
                   >
                     <td className="pr-4 font-medium text-text-primary">{alert.type}</td>
                     <td className="pr-4 text-text-primary">{alert.description}</td>
@@ -359,17 +359,17 @@ export function DashboardPage() {
       <div className="grid gap-7 xl:grid-cols-[2fr,1fr] items-start">
         <Card className="xl:col-span-1" title="Обзор надёжности и нагрузки сети ЦОД" subtitle="Сигналы SLA и эксплуатационных рисков">
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="flex flex-col gap-2 rounded-[10px] border border-border-subtle bg-bg-surface/80 p-4">
+            <div className="flex flex-col gap-2 rounded-[10px] border border-border-subtle bg-bg-surfaceSoft p-4">
               <span className="text-xs uppercase tracking-[0.12em] text-text-dim">Uptime</span>
               <span className="text-2xl font-semibold text-text-primary">{networkUptime.toFixed(2)}%</span>
               <p className="text-[13px] text-text-muted leading-snug">Средний SLA по площадкам</p>
             </div>
-            <div className="flex flex-col gap-2 rounded-[10px] border border-border-subtle bg-bg-surface/80 p-4">
+            <div className="flex flex-col gap-2 rounded-[10px] border border-border-subtle bg-bg-surfaceSoft p-4">
               <span className="text-xs uppercase tracking-[0.12em] text-text-dim">Ops load</span>
               <span className="text-2xl font-semibold text-text-primary">{avgOpsLoad.toFixed(1)} / 100</span>
               <p className="text-[13px] text-text-muted leading-snug">Загрузка смен и команд</p>
             </div>
-            <div className="flex flex-col gap-2 rounded-[10px] border border-border-subtle bg-bg-surface/80 p-4">
+            <div className="flex flex-col gap-2 rounded-[10px] border border-border-subtle bg-bg-surfaceSoft p-4">
               <span className="text-xs uppercase tracking-[0.12em] text-text-dim">Статус сети</span>
               <StatusPill label={networkStatusText.replace('Сеть в целом: ', '')} tone={networkTone} />
               <p className="text-[13px] text-text-muted leading-snug">Контроль нагрузки и рисков</p>
@@ -407,32 +407,32 @@ export function DashboardPage() {
 
       <div className="grid gap-7 xl:grid-cols-[2fr,1fr] items-start">
         <Card className="xl:col-span-1" title="Состояние сети" subtitle="Uptime по площадкам">
-          <div className="h-80 bg-bg-surfaceMuted/50 rounded-[12px] border border-border-subtle p-2">
+          <div className="h-80 bg-bg-surfaceSoft rounded-[10px] border border-border-subtle p-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={16}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: '#b6c1d3', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
-                <YAxis tick={{ fill: '#b6c1d3', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
+                <XAxis dataKey="name" tick={{ fill: '#b4becf', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
+                <YAxis tick={{ fill: '#b4becf', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
                 <Tooltip
                   contentStyle={{
-                    background: '#0c1119',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: 10,
-                    color: '#dde7f5',
-                    boxShadow: '0 12px 28px rgba(0,0,0,0.28)'
+                    background: '#131c26',
+                    border: '1px solid rgba(255,255,255,0.07)',
+                    borderRadius: 6,
+                    color: '#dfe6f2',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.32)'
                   }}
                   cursor={{ fill: 'rgba(255,255,255,0.04)' }}
                 />
-                <Bar dataKey="uptime" fill="#4fb7ad" stroke="#4fb7ad" strokeWidth={1} radius={[3, 3, 0, 0]} />
+                <Bar dataKey="uptime" fill="#6c88cb" stroke="#6c88cb" strokeWidth={1} radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </Card>
 
-        <Card title="Быстрый переход по ролям" subtitle="Навигация по ключевым потокам" className="bg-bg-surface/85">
+        <Card title="Быстрый переход по ролям" subtitle="Навигация по ключевым потокам" className="bg-bg-surface">
           <div className="grid grid-cols-1 gap-3">
             {roleShortcuts.map((role) => (
-              <div key={role.title} className="flex items-center justify-between rounded-[12px] border border-border-subtle bg-bg-surfaceMuted/60 px-4 py-3">
+              <div key={role.title} className="flex items-center justify-between rounded-[10px] border border-border-subtle bg-bg-surfaceSoft px-4 py-3">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-text-primary">{role.title}</div>
                   <p className="text-xs text-text-muted">{role.metric}</p>

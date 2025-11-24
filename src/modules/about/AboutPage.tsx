@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
 import { Card } from '../../shared/components/Card';
 import { SectionHeader } from '../../shared/components/SectionHeader';
+import { CtaLink } from '../../shared/components/CtaPill';
 import { ArrowRight } from '../../shared/icons';
 
 const responsibilityItems = [
@@ -67,19 +67,15 @@ export function AboutPage() {
       <Card title="Зона ответственности" subtitle="Как пункты вакансии ложатся на модули DC Maestro">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {responsibilityItems.map((item) => (
-            <Card key={item.title} interactive className="bg-white/5">
+            <Card key={item.title} interactive>
               <div className="space-y-2">
                 <div className="text-lg font-semibold text-text-primary">{item.title}</div>
                 <p className="text-sm text-text-muted">{item.description}</p>
                 <p className="text-xs text-accent-muted mt-1">{item.label}</p>
               </div>
-              <Link
-                to={item.to}
-                className="inline-flex items-center gap-2 text-accent-primary font-medium text-sm mt-3 transition-transform hover:translate-x-0.5"
-              >
+              <CtaLink to={item.to} icon={<ArrowRight className="w-4 h-4" aria-hidden />} size="lg" className="mt-3">
                 Открыть модуль
-                <ArrowRight className="w-4 h-4" aria-hidden />
-              </Link>
+              </CtaLink>
             </Card>
           ))}
         </div>

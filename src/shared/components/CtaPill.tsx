@@ -3,7 +3,7 @@ import { MouseEvent, PropsWithChildren, ReactNode } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 const baseClasses =
-  'group inline-flex items-center gap-2 font-medium rounded-full bg-bg-surfaceMuted/70 border border-border-subtle text-text-primary transition-colors hover:bg-white/8 hover:border-border-subtle focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/45 focus-visible:ring-offset-0';
+  'group inline-flex items-center gap-2 font-medium rounded-[6px] bg-bg-surfaceSoft border border-border-subtle text-text-primary transition-colors hover:bg-white/[0.04] hover:border-border-subtle focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/45 focus-visible:ring-offset-0';
 
 const sizeClasses = {
   sm: 'h-8 px-3 text-[13px] leading-none',
