@@ -143,23 +143,22 @@ export default function App() {
   const osiToneDisplay = hasOsiData ? osiTone : 'neutral';
 
   return (
-    <div className="min-h-screen bg-[#0b111a] text-text-primary relative">
+    <div className="min-h-screen bg-bg-app text-text-primary relative">
       <div className="flex h-screen overflow-hidden relative">
-          <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[#0d141f] border-r border-[rgba(255,255,255,0.05)] p-6 flex flex-col gap-7 shadow-[0_10px_26px_rgba(0,0,0,0.5)]">
+          <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[#0b1118] border-r border-[rgba(255,255,255,0.05)] p-6 flex flex-col gap-7">
             <NavLink
               to="/"
               className={({ isActive }) =>
                 clsx(
-                  'block -mx-2 px-3 py-2 rounded-[14px] transition text-left space-y-1 border border-[rgba(255,255,255,0.07)] bg-[#0f1825]',
-                  'hover:bg-[#111b29] hover:border-[rgba(255,255,255,0.08)] cursor-pointer',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/25 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent',
-                  isActive && 'border-[rgba(255,255,255,0.1)]'
+                  'block -mx-2 px-3 py-2 rounded-[8px] transition text-left space-y-1 border border-[rgba(255,255,255,0.05)] bg-[#0d141c]',
+                  'hover:bg-white/[0.03] hover:border-[rgba(255,255,255,0.08)] cursor-pointer',
+                  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/25 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent',
+                  isActive && 'border-[rgba(255,255,255,0.1)] bg-white/[0.03]'
                 )
               }
             >
-              <div className="text-2xl font-semibold text-[#dce2e8]">{strings.headers.appTitle}</div>
-              <div className="text-[12px] text-text-muted">Кокпит руководителя эксплуатации ЦОД</div>
-              </NavLink>
+              <div className="text-xl font-semibold text-text-primary">{strings.headers.appTitle}</div>
+            </NavLink>
             <nav className="flex flex-col gap-1 text-[15px]">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -170,10 +169,10 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium transition-colors border border-transparent',
+                      'relative flex items-center gap-3 px-3 py-2.5 rounded-[8px] font-medium transition-colors border border-transparent',
                       isActive
-                        ? 'bg-white/5 text-text-primary border-[rgba(255,255,255,0.08)]'
-                        : 'text-text-muted hover:bg-white/4 hover:border-[rgba(255,255,255,0.06)] hover:text-text-primary'
+                        ? 'bg-white/[0.05] text-text-primary border-[rgba(255,255,255,0.08)]'
+                        : 'text-text-muted hover:bg-white/[0.03] hover:border-[rgba(255,255,255,0.06)] hover:text-text-primary'
                     )
                   }
                   >
@@ -184,8 +183,8 @@ export default function App() {
                         {item.badge ? (
                           <span
                             className={clsx(
-                              'ml-2 inline-grid h-5 min-w-[24px] shrink-0 place-items-center rounded-full px-2 text-[11px] font-semibold leading-none tracking-tight text-emerald-50/90 bg-[rgba(20,125,98,0.22)] border border-[rgba(20,125,98,0.36)] [@media(forced-colors:active)]:border-[ButtonText] [@media(forced-colors:active)]:text-[CanvasText] [@media(forced-colors:active)]:bg-[Canvas]',
-                              isActive && 'text-emerald-50 bg-[rgba(20,125,98,0.28)] border-[rgba(20,125,98,0.42)]'
+                              'ml-2 inline-grid h-5 min-w-[24px] shrink-0 place-items-center rounded-full px-2 text-[11px] font-semibold leading-none tracking-tight text-[#8fc7b7] bg-[rgba(42,143,115,0.18)] border border-[rgba(63,177,165,0.32)] [@media(forced-colors:active)]:border-[ButtonText] [@media(forced-colors:active)]:text-[CanvasText] [@media(forced-colors:active)]:bg-[Canvas]',
+                              isActive && 'text-[#a6d9c9] bg-[rgba(42,143,115,0.24)] border-[rgba(63,177,165,0.38)]'
                             )}
                           >
                             {item.badge.value}
@@ -200,7 +199,7 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-[#0b111a]/98 border-b border-[rgba(255,255,255,0.05)] px-8 py-4 max-[800px]:py-4 flex flex-col gap-6 max-[800px]:gap-5 lg:flex-row lg:items-start lg:justify-between">
+          <header className="sticky top-0 z-10 bg-[#0a1015]/95 border-b border-[rgba(255,255,255,0.06)] px-8 py-3 max-[800px]:py-3 flex flex-col gap-4 max-[800px]:gap-4 lg:flex-row lg:items-start lg:justify-between">
             <SectionHeader
               as="h1"
               label={currentPage.label ?? undefined}
@@ -212,19 +211,19 @@ export default function App() {
               <InfoTooltip
                 label={hasOsiData ? osiExplainer : 'Нет данных по показателю OSI за выбранный период.'}
                 triggerArea="container"
-                className="glass-shell self-start w-full max-w-xl"
+                className="self-start w-full max-w-xl"
                 resetKey={pathname}
               >
-                <div className="glass-inner flex flex-col gap-3 py-3 px-4 lg:flex-row lg:items-center lg:justify-between">
+                <div className="relative overflow-hidden rounded-[8px] border border-[rgba(255,255,255,0.06)] bg-[#0b1118] px-4 py-3 shadow-[0_6px_18px_rgba(0,0,0,0.24)] flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                   <div className="space-y-1 text-left">
                     <div className="text-[11px] uppercase tracking-[0.18em] text-text-dim">Operational Strain Index</div>
-                    <div className="text-3xl font-bold text-text-primary">{osiValueDisplay}</div>
+                    <div className="text-2xl font-semibold text-text-primary">{osiValueDisplay}</div>
                     <div className="text-sm text-text-muted">{osiDescriptor}</div>
                   </div>
                   <div className="flex flex-col items-start gap-2 lg:items-end">
                     <div className="flex items-center gap-2">
                       <StatusPill label={osiStateDisplay} tone={osiToneDisplay} size="sm" />
-                      <span className="text-xs text-text-muted hidden sm:inline">Наведи, чтобы узнать подробнее</span>
+                      <span className="text-[11px] text-text-muted hidden sm:inline">Наведи, чтобы узнать подробнее</span>
                     </div>
                   </div>
                 </div>
