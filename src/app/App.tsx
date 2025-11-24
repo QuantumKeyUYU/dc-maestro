@@ -21,43 +21,45 @@ import { Boxes, Briefcase, Cpu, LayoutDashboard, Shield, Users, Wallet, Wrench }
 import { useNavBadges } from '../shared/hooks/useNavBadges';
 import { SectionHeader } from '../shared/components/SectionHeader';
 
-const pageMeta = [
+type PageMeta = {
+  match: RegExp;
+  title: string;
+  subtitle?: string;
+  label?: string | null;
+};
+
+const pageMeta: PageMeta[] = [
   {
     match: /^\/$/,
     title: strings.dashboard.title,
     subtitle: strings.dashboard.subtitle,
     label: strings.headers.dashboardLabel
   },
-  { match: /^\/sites(\/.*)?$/, title: strings.sites.title, subtitle: strings.sites.subtitle, label: strings.headers.moduleLabel },
+  { match: /^\/sites(\/.*)?$/, title: strings.sites.title, subtitle: strings.sites.subtitle, label: undefined },
   {
     match: /^\/maintenance/,
     title: strings.maintenance.title,
-    subtitle: strings.maintenance.subtitle,
-    label: strings.headers.moduleLabel
+    subtitle: strings.maintenance.subtitle
   },
   {
     match: /^\/inventory/,
     title: strings.inventory.title,
-    subtitle: strings.inventory.subtitle,
-    label: strings.headers.moduleLabel
+    subtitle: strings.inventory.subtitle
   },
   {
     match: /^\/personnel/,
     title: strings.personnel.title,
-    subtitle: strings.personnel.subtitle,
-    label: strings.headers.moduleLabel
+    subtitle: strings.personnel.subtitle
   },
   {
     match: /^\/finance/,
     title: strings.finance.title,
-    subtitle: strings.finance.subtitle,
-    label: strings.headers.moduleLabel
+    subtitle: strings.finance.subtitle
   },
   {
     match: /^\/safety/,
     title: strings.safety.title,
-    subtitle: strings.safety.subtitle,
-    label: strings.headers.moduleLabel
+    subtitle: strings.safety.subtitle
   },
   {
     match: /^\/about/,
@@ -150,10 +152,10 @@ export default function App() {
               to="/"
               className={({ isActive }) =>
                 clsx(
-                  'block -mx-2 px-3 py-2 rounded-xl transition text-left space-y-1.5 shadow-ambient/70 border border-white/5 bg-bg-surfaceSoft/60 backdrop-blur',
-                  'hover:shadow-lifted hover:border-white/10 hover:bg-bg-surfaceSoft/80 cursor-pointer',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/40',
-                  isActive && 'shadow-ambient'
+                  'block -mx-2 px-3 py-2 rounded-xl transition text-left space-y-1.5 shadow-ambient/50 border border-white/5 bg-bg-surfaceSoft/60 backdrop-blur',
+                  'hover:shadow-lifted hover:border-white/10 hover:bg-bg-surfaceSoft/75 cursor-pointer',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent',
+                  isActive && 'shadow-ambient/30 border-white/8'
                 )
               }
             >
@@ -194,8 +196,8 @@ export default function App() {
                       {item.badge ? (
                         <span
                           className={clsx(
-                            'ml-2 inline-flex h-[20px] min-w-[24px] shrink-0 items-center justify-center rounded-full px-2 text-[11px] font-semibold leading-none tracking-tight text-cyan-50/90 backdrop-blur-sm bg-[rgba(62,236,226,0.16)] shadow-[0_4px_12px_rgba(62,236,226,0.15)_inset,0_0_0_1px_rgba(62,236,226,0.25)] border border-[rgba(62,236,226,0.18)]',
-                            isActive && 'text-cyan-50 shadow-[0_4px_12px_rgba(62,236,226,0.18)_inset,0_0_0_1px_rgba(62,236,226,0.32)]'
+                            'ml-2 inline-grid h-5 min-w-[24px] shrink-0 place-items-center rounded-full px-2 text-[11px] font-semibold leading-[1.05] tracking-tight text-cyan-50/90 backdrop-blur-sm bg-[rgba(62,236,226,0.16)] shadow-[0_4px_10px_rgba(62,236,226,0.14)_inset,0_0_0_1px_rgba(62,236,226,0.22)] border border-[rgba(62,236,226,0.2)] [@media(forced-colors:active)]:border-[ButtonText] [@media(forced-colors:active)]:text-[CanvasText] [@media(forced-colors:active)]:bg-[Canvas]',
+                            isActive && 'text-cyan-50 shadow-[0_4px_12px_rgba(62,236,226,0.18)_inset,0_0_0_1px_rgba(62,236,226,0.3)]'
                           )}
                         >
                           {item.badge.value}

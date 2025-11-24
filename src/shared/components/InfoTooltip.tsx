@@ -4,6 +4,22 @@ import clsx from 'clsx';
 
 type InfoTooltipProps = PropsWithChildren<{ label: string; className?: string; triggerArea?: 'icon' | 'container'; id?: string }>;
 
+export function scheduleTooltipHide(
+  hideTimerRef: React.MutableRefObject<ReturnType<typeof setTimeout> | null>,
+  setOpen: (next: boolean) => void,
+  setCoords: (next: { top: number; left: number } | null) => void,
+  delay = 120
+) {
+  if (hideTimerRef.current) {
+    clearTimeout(hideTimerRef.current);
+  }
+  hideTimerRef.current = setTimeout(() => {
+    setOpen(false);
+    setCoords(null);
+    hideTimerRef.current = null;
+  }, delay);
+}
+
 export function InfoTooltip({ label, children, className, triggerArea = 'icon', id }: InfoTooltipProps) {
   const [open, setOpen] = useState(false);
   const [coords, setCoords] = useState<{ top: number; left: number } | null>(null);
@@ -61,14 +77,7 @@ export function InfoTooltip({ label, children, className, triggerArea = 'icon', 
   };
 
   const scheduleHide = () => {
-    if (hideTimer.current) {
-      clearTimeout(hideTimer.current);
-    }
-    hideTimer.current = setTimeout(() => {
-      setOpen(false);
-      setCoords(null);
-      hideTimer.current = null;
-    }, 120);
+    scheduleTooltipHide(hideTimer, setOpen, setCoords);
   };
 
   return (

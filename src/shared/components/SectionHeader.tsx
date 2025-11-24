@@ -6,7 +6,7 @@ interface SectionHeaderProps {
   subtitle?: string;
   badge?: ReactNode;
   action?: ReactNode;
-  label?: string;
+  label?: string | null;
   as?: 'h1' | 'h2' | 'h3';
   className?: string;
 }
