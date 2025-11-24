@@ -17,6 +17,7 @@ import { shifts } from '../../shared/data/shifts';
 import { financialRecords } from '../../shared/data/financialRecords';
 import { ArrowRight } from '../../shared/icons';
 import { getStatusLabel, getStatusTone } from '../../shared/lib/status';
+import { CtaButton, CtaLink } from '../../shared/components/CtaPill';
 
 const chartData = sites.map((site) => ({ name: site.name, uptime: Number(uptimePercent(site).toFixed(2)) }));
 
@@ -215,9 +216,9 @@ export function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <Card title={strings.dashboard.todayReport} className="pt-2">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {summaryCards.map((card) => (
             card.onClick ? (
               <button
@@ -259,20 +260,16 @@ export function DashboardPage() {
       </Card>
 
       <Card title="Быстрый переход по ролям" subtitle="Shortcut-туры под собеседование для Вис Энергия" className="mt-2">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
           {roleShortcuts.map((role) => (
-            <Card key={role.title} interactive className="bg-white/5">
-              <div className="space-y-2">
-                <div className="text-lg font-semibold text-text-primary">{role.title}</div>
-                <p className="text-sm text-text-muted">{role.metric}</p>
-              </div>
-              <Link
-                to={role.to}
-                className="inline-flex items-center gap-2 text-accent-primary font-medium text-sm mt-3 transition-transform hover:translate-x-0.5"
-              >
+              <Card key={role.title} interactive>
+                <div className="space-y-2">
+                  <div className="text-lg font-semibold text-text-primary">{role.title}</div>
+                  <p className="text-sm text-text-muted">{role.metric}</p>
+                </div>
+              <CtaLink to={role.to} icon={<ArrowRight />} className="mt-3" size="lg">
                 Перейти
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+              </CtaLink>
             </Card>
           ))}
         </div>
@@ -294,7 +291,7 @@ export function DashboardPage() {
         </Card>
 
         <Card title={`${strings.dashboard.worstSites} (Reliability)`} subtitle="Площадки, требующие внимания">
-          <Table>
+          <Table framed={false}>
             <thead>
               <tr>
                 <th className="text-left">Площадка</th>
@@ -341,7 +338,7 @@ export function DashboardPage() {
                 <span className="text-xs text-text-dim">Живые предупреждения по всем потокам</span>
               )}
             </div>
-            <Table<AlertRow> isRowClickable onRowClick={(alert) => alert.link?.()}>
+            <Table<AlertRow> isRowClickable onRowClick={(alert) => alert.link?.()} framed={false}>
               <thead>
                 <tr>
                   <th className="text-left">Тип</th>
@@ -364,15 +361,15 @@ export function DashboardPage() {
                       />
                     </td>
                     <td className="pr-4">
-                      <button
+                      <CtaButton
                         onClick={(e) => {
                           e.stopPropagation();
                           alert.link?.();
                         }}
-                        className="text-accent-primary hover:text-accent-muted text-sm inline-flex items-center gap-2 transition-transform hover:translate-x-0.5"
+                        icon={<ArrowRight aria-hidden />}
                       >
-                        Перейти <ArrowRight className="w-4 h-4" aria-hidden />
-                      </button>
+                        Перейти
+                      </CtaButton>
                     </td>
                   </TableRow>
                 ))}

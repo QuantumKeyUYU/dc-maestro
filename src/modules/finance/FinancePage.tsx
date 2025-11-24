@@ -35,15 +35,15 @@ export function FinancePage() {
   ).map(([name, value]) => ({ name, value }));
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <Card className="xl:col-span-2" title="Финансовые записи">
-          <div className="flex gap-3 mb-3 flex-wrap items-center justify-between">
+          <div className="flex gap-3 mb-4 flex-wrap items-center justify-between">
             <div className="flex gap-2 flex-wrap">
               <select
                 value={siteFilter}
                 onChange={(e) => setSiteFilter(e.target.value)}
-                className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm"
+                className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary"
               >
                 <option value="all">Все площадки</option>
                 {sites.map((site) => (
@@ -56,7 +56,7 @@ export function FinancePage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value as 'all' | 'opex' | 'capex')}
-                className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm"
+                className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary"
               >
                 <option value="all">Все</option>
                 <option value="opex">OPEX</option>
@@ -67,10 +67,10 @@ export function FinancePage() {
               value={table.searchQuery}
               onChange={(e) => table.setSearchQuery(e.target.value)}
               placeholder="Поиск по категории или площадке"
-              className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary/60"
+              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)]"
             />
           </div>
-          <Table>
+          <Table framed={false}>
             <thead className="text-xs uppercase text-gray-400">
               <tr>
                 <th className="text-left py-2 cursor-pointer" onClick={() => table.requestSort('date')}>

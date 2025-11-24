@@ -36,18 +36,19 @@ a {
   position: relative;
   border-radius: 16px;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(62, 236, 226, 0.18) 45%, rgba(124, 140, 251, 0.12));
-  box-shadow: 0 26px 80px -48px rgba(0, 0, 0, 0.9);
+  background: linear-gradient(180deg, rgba(16, 26, 41, 0.96), rgba(12, 18, 27, 0.94));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
 }
 
 .glass-inner {
   position: relative;
   border-radius: 15px;
   padding: 24px;
-  background: linear-gradient(160deg, rgba(13, 18, 26, 0.88), rgba(13, 18, 26, 0.75));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(16px);
+  background: linear-gradient(180deg, rgba(16, 26, 41, 0.94), rgba(12, 18, 27, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
   overflow: visible;
 }
 
@@ -55,15 +56,15 @@ a {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(62, 236, 226, 0.12), transparent 35%),
-    radial-gradient(circle at 80% 0%, rgba(124, 140, 251, 0.12), transparent 32%);
+  background: radial-gradient(circle at 20% 20%, rgba(62, 236, 226, 0.16), transparent 34%),
+    radial-gradient(circle at 82% 6%, rgba(124, 140, 251, 0.16), transparent 32%);
   opacity: 0;
   transition: opacity 0.45s ease;
   pointer-events: none;
 }
 
 .glass-shell:hover .glass-inner::after {
-  opacity: 0.85;
+  opacity: 0.4;
 }
 
 @keyframes fade-up-smooth {
@@ -98,4 +99,19 @@ a {
 
 .animate-chip {
   animation: float-soft 0.45s ease;
+}
+
+.surface-panel {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(180deg, rgba(9, 15, 24, 0.95) 0%, rgba(12, 19, 30, 0.92) 100%);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  background-image: linear-gradient(180deg, rgba(9, 15, 24, 0.95) 0%, rgba(12, 19, 30, 0.92) 100%),
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.03), transparent 70%);
+  background-blend-mode: overlay;
+}
+
+.surface-panel-tight {
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
 }

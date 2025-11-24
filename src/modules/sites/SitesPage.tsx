@@ -31,14 +31,14 @@ export function SitesPage() {
   }, [state?.siteId]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Card title={strings.sites.allSites} subtitle="Кликните по строке, чтобы раскрыть детализацию площадки">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по названию, региону или статусу"
-            className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/70 focus:shadow-focus transition backdrop-blur"
+            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition backdrop-blur"
           />
           <div className="flex gap-2 text-xs text-gray-400">
             <InfoTooltip label="Uptime — доступность за период мониторинга" />
@@ -46,7 +46,7 @@ export function SitesPage() {
             <InfoTooltip label="Capacity — загрузка мощностей и стоек" />
           </div>
         </div>
-        <Table<DataCenterSite> isRowClickable onRowClick={(row) => navigate(`/sites/${row.id}`)}>
+        <Table<DataCenterSite> isRowClickable onRowClick={(row) => navigate(`/sites/${row.id}`)} framed={false}>
           <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => requestSort('name')}>
@@ -87,7 +87,7 @@ export function SitesPage() {
       </Card>
 
       <Card title="Быстрые показатели" subtitle="Оценка общей доступности, надёжности и загрузки">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <KpiBadge
             label="Средний Uptime"
             value={`${(

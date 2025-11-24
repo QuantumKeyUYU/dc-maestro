@@ -24,9 +24,9 @@ export function SafetyPage() {
   const visibleEvents = activeOnly ? safetyEvents.filter((event) => event.status !== 'done') : safetyEvents;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Card title="События безопасности">
-        <div className="flex items-center justify-between mb-3" ref={eventsRef}>
+        <div className="flex items-center justify-between mb-4" ref={eventsRef}>
           {activeOnly ? (
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-text-primary shadow-inner">
@@ -44,7 +44,7 @@ export function SafetyPage() {
             <span className="text-xs text-text-dim">Все события по охране труда</span>
           )}
         </div>
-        <Table>
+        <Table framed={false}>
           <thead>
             <tr>
               <th className="text-left py-2">Тип</th>
