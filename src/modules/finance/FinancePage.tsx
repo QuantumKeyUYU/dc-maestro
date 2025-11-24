@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Pie, PieChart, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 import { Card } from '../../shared/components/Card';
-import { SectionHeader } from '../../shared/components/SectionHeader';
 import { Table } from '../../shared/components/Table';
 import { financialRecords } from '../../shared/data/financialRecords';
 import { sites } from '../../shared/data/sites';
@@ -37,8 +36,6 @@ export function FinancePage() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.finance.title} subtitle={strings.finance.subtitle} />
-
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <Card className="xl:col-span-2" title="Финансовые записи">
           <div className="flex gap-3 mb-3 flex-wrap items-center justify-between">

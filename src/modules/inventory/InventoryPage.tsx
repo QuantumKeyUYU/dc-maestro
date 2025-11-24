@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Card } from '../../shared/components/Card';
-import { SectionHeader } from '../../shared/components/SectionHeader';
 import { Table } from '../../shared/components/Table';
 import { inventoryItems } from '../../shared/data/inventory';
 import { purchaseOrders } from '../../shared/data/purchaseOrders';
@@ -13,7 +12,9 @@ import { getStatusLabel, getStatusTone } from '../../shared/lib/status';
 export function InventoryPage() {
   const [showItems, setShowItems] = useState<Record<string, boolean>>({});
   const location = useLocation();
-  const locationState = location.state as { siteId?: string } | undefined;
+  const locationState = location.state as { siteId?: string; filter?: 'lowStock' } | undefined;
+  const [lowStockOnly, setLowStockOnly] = useState(false);
+  const itemsRef = useRef<HTMLDivElement>(null);
 
   const itemsTable = useTableSortAndFilter(inventoryItems, ['sku', 'name', 'siteId', 'category'], 'name');
   const poTable = useTableSortAndFilter(purchaseOrders, ['id', 'supplierName', 'status'], 'createdAt');
@@ -22,14 +23,32 @@ export function InventoryPage() {
     if (locationState?.siteId) {
       itemsTable.setSearchQuery(locationState.siteId);
     }
-  }, [locationState?.siteId, itemsTable.setSearchQuery]);
+    if (locationState?.filter === 'lowStock') {
+      setLowStockOnly(true);
+      itemsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [locationState?.siteId, locationState?.filter, itemsTable.setSearchQuery]);
 
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.inventory.title} subtitle={strings.inventory.subtitle} />
-
       <Card title="Складские позиции">
-        <div className="flex justify-between items-center mb-3">
+        <div className="flex justify-between items-center mb-3" ref={itemsRef}>
+          {lowStockOnly ? (
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-text-primary shadow-inner">
+                Фильтр: позиции на минимуме
+              </span>
+              <button
+                type="button"
+                className="text-xs text-accent-primary hover:text-accent-muted transition"
+                onClick={() => setLowStockOnly(false)}
+              >
+                Сбросить
+              </button>
+            </div>
+          ) : (
+            <span className="text-xs text-text-dim">Показываем весь склад</span>
+          )}
           <input
             value={itemsTable.searchQuery}
             onChange={(e) => itemsTable.setSearchQuery(e.target.value)}
@@ -55,7 +74,9 @@ export function InventoryPage() {
             </tr>
           </thead>
           <tbody>
-            {itemsTable.sortedAndFiltered.map((item) => {
+            {itemsTable.sortedAndFiltered
+              .filter((item) => (lowStockOnly ? item.quantityOnHand <= item.minThreshold : true))
+              .map((item) => {
               const low = item.quantityOnHand <= item.minThreshold;
               return (
                 <tr key={item.id} className={`border-t border-border-subtle/40 ${low ? 'bg-status-warning/10' : ''}`}>
@@ -66,7 +87,7 @@ export function InventoryPage() {
                   <td className="py-2 pr-4 text-text-primary">{item.quantityOnHand} {item.unit}</td>
                 </tr>
               );
-            })}
+              })}
           </tbody>
         </Table>
       </Card>

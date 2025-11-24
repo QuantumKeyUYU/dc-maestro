@@ -30,7 +30,7 @@ export function TableRow<T = unknown>({ row, className, children }: TableRowProp
       onClick={() => clickable && onRowClick?.(row)}
       className={clsx(
         'transition-colors',
-        clickable ? 'cursor-pointer hover:bg-white/6 hover:border-white/15' : 'hover:bg-white/3',
+        clickable ? 'cursor-pointer hover:bg-white/8 hover:border-white/10' : 'hover:bg-white/5',
         className
       )}
     >

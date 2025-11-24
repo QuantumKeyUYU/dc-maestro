@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Card } from '../../shared/components/Card';
-import { SectionHeader } from '../../shared/components/SectionHeader';
 import { Table, TableRow } from '../../shared/components/Table';
 import { StatusPill } from '../../shared/components/StatusPill';
 import { sites } from '../../shared/data/sites';
@@ -33,8 +32,6 @@ export function SitesPage() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.sites.title} subtitle={strings.sites.subtitle} />
-
       <Card title={strings.sites.allSites} subtitle="Кликните по строке, чтобы раскрыть детализацию площадки">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
           <input

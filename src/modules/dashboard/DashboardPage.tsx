@@ -1,7 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Card } from '../../shared/components/Card';
-import { SectionHeader } from '../../shared/components/SectionHeader';
 import { StatusPill } from '../../shared/components/StatusPill';
 import { KpiBadge } from '../../shared/components/KpiBadge';
 import { Table, TableRow } from '../../shared/components/Table';
@@ -21,9 +20,13 @@ import { getStatusLabel, getStatusTone } from '../../shared/lib/status';
 
 const chartData = sites.map((site) => ({ name: site.name, uptime: Number(uptimePercent(site).toFixed(2)) }));
 
+type AlertFilter = 'critical-incidents' | 'maintenance-overdue' | 'inventory-low' | 'safety-overdue' | null;
+
 export function DashboardPage() {
   const navigate = useNavigate();
   const today = new Date();
+  const warningsRef = useRef<HTMLDivElement>(null);
+  const [alertFilter, setAlertFilter] = useState<AlertFilter>(null);
 
   const withScores = useMemo(
     () =>
@@ -65,26 +68,38 @@ export function DashboardPage() {
       .reduce((sum, r) => sum + r.amountRub, 0);
   }, []);
 
-  const summaryCards: { label: string; value: number; tone: 'neutral' | 'success' | 'warning' | 'danger' | 'info' }[] = [
+  const summaryCards: {
+    label: string;
+    value: number;
+    tone: 'neutral' | 'success' | 'warning' | 'danger' | 'info';
+    onClick?: () => void;
+  }[] = [
     {
       label: 'Критических инцидентов',
       value: incidents.filter((i) => i.severity === 'critical' && !i.resolvedAt).length,
-      tone: incidents.some((i) => i.severity === 'critical' && !i.resolvedAt) ? 'danger' : 'neutral'
+      tone: incidents.some((i) => i.severity === 'critical' && !i.resolvedAt) ? 'danger' : 'neutral',
+      onClick: () => {
+        setAlertFilter('critical-incidents');
+        warningsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     },
     {
       label: 'Просроченных заявок на ТО',
       value: workOrders.filter((wo) => wo.status !== 'done' && wo.dueDate && wo.dueDate < today).length,
-      tone: workOrders.some((wo) => wo.status !== 'done' && wo.dueDate && wo.dueDate < today) ? 'warning' : 'neutral'
+      tone: workOrders.some((wo) => wo.status !== 'done' && wo.dueDate && wo.dueDate < today) ? 'warning' : 'neutral',
+      onClick: () => navigate('/maintenance', { state: { filter: 'overdue' } })
     },
     {
       label: 'Позиции на минимуме/ниже',
       value: inventoryItems.filter((item) => item.quantityOnHand <= item.minThreshold).length,
-      tone: inventoryItems.some((item) => item.quantityOnHand <= item.minThreshold) ? 'warning' : 'neutral'
+      tone: inventoryItems.some((item) => item.quantityOnHand <= item.minThreshold) ? 'warning' : 'neutral',
+      onClick: () => navigate('/inventory', { state: { filter: 'lowStock' } })
     },
     {
       label: 'Просроченных событий безопасности',
       value: safetyEvents.filter((e) => e.status === 'overdue').length,
-      tone: safetyEvents.some((e) => e.status === 'overdue') ? 'danger' : 'neutral'
+      tone: safetyEvents.some((e) => e.status === 'overdue') ? 'danger' : 'neutral',
+      onClick: () => navigate('/safety', { state: { filter: 'open' } })
     }
   ];
 
@@ -96,6 +111,7 @@ export function DashboardPage() {
     description: string;
     siteId: string;
     priority: string;
+    category: 'incident' | 'maintenance' | 'inventory' | 'safety';
     link?: () => void;
   };
 
@@ -108,7 +124,8 @@ export function DashboardPage() {
         description: i.description,
         siteId: i.siteId,
         priority: 'Критично',
-        link: () => navigate('/sites', { state: { siteId: i.siteId } })
+        link: () => navigate('/sites', { state: { siteId: i.siteId } }),
+        category: 'incident' as const
       })),
     ...workOrders
       .filter((wo) => wo.status !== 'done' && wo.dueDate && wo.dueDate < today)
@@ -118,7 +135,8 @@ export function DashboardPage() {
         description: wo.description ?? wo.type,
         siteId: wo.siteId,
         priority: 'Просрочено',
-        link: () => navigate('/maintenance', { state: { siteId: wo.siteId, workOrderId: wo.id } })
+        link: () => navigate('/maintenance', { state: { siteId: wo.siteId, workOrderId: wo.id } }),
+        category: 'maintenance' as const
       })),
     ...inventoryItems
       .filter((item) => item.quantityOnHand <= item.minThreshold)
@@ -128,7 +146,8 @@ export function DashboardPage() {
         description: `${item.name} (${item.sku}) на минимуме`,
         siteId: item.siteId ?? 'Центральный',
         priority: 'Низкий остаток',
-        link: () => navigate('/inventory', { state: { siteId: item.siteId } })
+        link: () => navigate('/inventory', { state: { siteId: item.siteId } }),
+        category: 'inventory' as const
       })),
     ...safetyEvents
       .filter((event) => event.status === 'overdue')
@@ -138,9 +157,33 @@ export function DashboardPage() {
         description: event.title,
         siteId: event.siteId ?? 'Общий',
         priority: 'Просрочено',
-        link: () => navigate('/safety', { state: { siteId: event.siteId } })
+        link: () => navigate('/safety', { state: { siteId: event.siteId } }),
+        category: 'safety' as const
       }))
   ];
+
+  const filteredAlerts = useMemo(() => {
+    if (!alertFilter) return alerts;
+    switch (alertFilter) {
+      case 'critical-incidents':
+        return alerts.filter((alert) => alert.category === 'incident');
+      case 'maintenance-overdue':
+        return alerts.filter((alert) => alert.category === 'maintenance');
+      case 'inventory-low':
+        return alerts.filter((alert) => alert.category === 'inventory');
+      case 'safety-overdue':
+        return alerts.filter((alert) => alert.category === 'safety');
+      default:
+        return alerts;
+    }
+  }, [alerts, alertFilter]);
+
+  const alertFilterLabels: Record<Exclude<AlertFilter, null>, string> = {
+    'critical-incidents': 'Фильтр: критические инциденты',
+    'maintenance-overdue': 'Фильтр: просроченные заявки ТО',
+    'inventory-low': 'Фильтр: позиции на минимуме',
+    'safety-overdue': 'Фильтр: просроченные события безопасности'
+  };
 
   const roleShortcuts = [
     {
@@ -173,12 +216,21 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-10">
-      <SectionHeader title={strings.dashboard.title} subtitle={strings.dashboard.subtitle} />
-
       <Card title={strings.dashboard.todayReport} className="pt-2">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {summaryCards.map((card) => (
-            <KpiBadge key={card.label} label={card.label} value={card.value} tone={card.tone} />
+            card.onClick ? (
+              <button
+                key={card.label}
+                type="button"
+                onClick={card.onClick}
+                className="text-left group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/60 rounded-2xl"
+              >
+                <KpiBadge label={card.label} value={card.value} tone={card.tone} />
+              </button>
+            ) : (
+              <KpiBadge key={card.label} label={card.label} value={card.value} tone={card.tone} />
+            )
           ))}
         </div>
       </Card>
@@ -187,7 +239,7 @@ export function DashboardPage() {
         <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div className="space-y-3 max-w-2xl">
             <p className="text-sm uppercase tracking-[0.18em] text-text-dim">Главная панель мониторинга</p>
-            <h3 className="text-3xl font-semibold text-text-primary drop-shadow">Обзор надёжности и нагрузки</h3>
+            <h3 className="text-3xl font-semibold text-text-primary drop-shadow">Обзор надёжности и нагрузки сети ЦОД</h3>
             <ul className="space-y-2 text-text-muted">
               {statusBullets.map((item) => (
                 <li key={item.label} className="flex items-center gap-3">
@@ -269,52 +321,72 @@ export function DashboardPage() {
       </div>
 
       <div className="space-y-6">
-        <Card title="Текущие предупреждения" subtitle="Инциденты, ТО, склад и безопасность" className="xl:col-span-2">
-          <Table<AlertRow> isRowClickable onRowClick={(alert) => alert.link?.()}>
-            <thead>
-              <tr>
-                <th className="text-left">Тип</th>
-                <th className="text-left">Описание</th>
-                <th className="text-left">Площадка</th>
-                <th className="text-left">Приоритет</th>
-                <th className="text-left">Действие</th>
-              </tr>
-            </thead>
-            <tbody>
-              {alerts.map((alert) => (
-                <TableRow key={`${alert.type}-${alert.id}`} row={alert} className="border-t border-border-subtle/40">
-                  <td className="pr-4 font-medium text-text-primary">{alert.type}</td>
-                  <td className="pr-4 text-text-primary">{alert.description}</td>
-                  <td className="pr-4 text-text-muted">{alert.siteId}</td>
-                  <td className="pr-4">
-                    <StatusPill
-                      label={alert.priority}
-                      tone={alert.priority.includes('Крит') ? 'danger' : alert.priority.includes('Проср') ? 'warning' : 'warning'}
-                    />
-                  </td>
-                  <td className="pr-4">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        alert.link?.();
-                      }}
-                      className="text-accent-primary hover:text-accent-muted text-sm inline-flex items-center gap-2 transition-transform hover:translate-x-0.5"
-                    >
-                      Перейти <ArrowRight className="w-4 h-4" aria-hidden />
-                    </button>
-                  </td>
-                </TableRow>
-              ))}
-              {alerts.length === 0 && (
-                <tr>
-                  <td className="pr-4 text-text-muted" colSpan={5}>
-                    Нет предупреждений на сегодня.
-                  </td>
-                </tr>
+        <div ref={warningsRef}>
+          <Card title="Текущие предупреждения" subtitle="Инциденты, ТО, склад и безопасность" className="xl:col-span-2">
+            <div className="flex items-center justify-between mb-3">
+              {alertFilter ? (
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-text-primary shadow-inner">
+                    {alertFilterLabels[alertFilter]}
+                  </span>
+                  <button
+                    type="button"
+                    className="text-xs text-accent-primary hover:text-accent-muted transition"
+                    onClick={() => setAlertFilter(null)}
+                  >
+                    Сбросить
+                  </button>
+                </div>
+              ) : (
+                <span className="text-xs text-text-dim">Живые предупреждения по всем потокам</span>
               )}
-            </tbody>
-          </Table>
-        </Card>
+            </div>
+            <Table<AlertRow> isRowClickable onRowClick={(alert) => alert.link?.()}>
+              <thead>
+                <tr>
+                  <th className="text-left">Тип</th>
+                  <th className="text-left">Описание</th>
+                  <th className="text-left">Площадка</th>
+                  <th className="text-left">Приоритет</th>
+                  <th className="text-left">Действие</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredAlerts.map((alert) => (
+                  <TableRow key={`${alert.type}-${alert.id}`} row={alert} className="border-t border-border-subtle/40">
+                    <td className="pr-4 font-medium text-text-primary">{alert.type}</td>
+                    <td className="pr-4 text-text-primary">{alert.description}</td>
+                    <td className="pr-4 text-text-muted">{alert.siteId}</td>
+                    <td className="pr-4">
+                      <StatusPill
+                        label={alert.priority}
+                        tone={alert.priority.includes('Крит') ? 'danger' : alert.priority.includes('Проср') ? 'warning' : 'warning'}
+                      />
+                    </td>
+                    <td className="pr-4">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          alert.link?.();
+                        }}
+                        className="text-accent-primary hover:text-accent-muted text-sm inline-flex items-center gap-2 transition-transform hover:translate-x-0.5"
+                      >
+                        Перейти <ArrowRight className="w-4 h-4" aria-hidden />
+                      </button>
+                    </td>
+                  </TableRow>
+                ))}
+                {filteredAlerts.length === 0 && (
+                  <tr>
+                    <td className="pr-4 text-text-muted" colSpan={5}>
+                      Нет предупреждений на сегодня.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          </Card>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {withScores.map((site) => (
