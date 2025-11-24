@@ -26,10 +26,10 @@ export function SectionHeader({
         {label ? (
           <p className="whitespace-nowrap text-[11px] font-normal text-text-muted leading-tight">{label}</p>
         ) : null}
-        <div className="flex items-center gap-2.5">
-          <span className="block h-8 w-[2px] rounded-full bg-accent-primary/35" />
+        <div className="flex items-center gap-2">
+          <span className="block h-8 w-[2px] rounded-full bg-white/10" />
           <div className="flex flex-wrap items-center gap-2">
-            <HeadingTag className="text-[26px] font-semibold text-[#dce2e8] tracking-tight leading-tight">{title}</HeadingTag>
+            <HeadingTag className="text-[24px] font-semibold text-text-primary tracking-tight leading-tight">{title}</HeadingTag>
             {badge}
           </div>
         </div>

@@ -281,10 +281,10 @@ export function DashboardPage() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={16}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="name" tick={{ fill: '#cbd5e1', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
-                <YAxis tick={{ fill: '#cbd5e1', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
-                <Tooltip contentStyle={{ background: '#0d1421', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, color: '#e5eaf3', boxShadow: '0 20px 45px -28px rgba(0,0,0,0.65)' }} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
-                <Bar dataKey="uptime" fill="#73d7cd" stroke="#6bc7c0" strokeWidth={1.2} radius={[10, 10, 6, 6]} />
+                <XAxis dataKey="name" tick={{ fill: '#b7c3d4', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
+                <YAxis tick={{ fill: '#b7c3d4', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
+                <Tooltip contentStyle={{ background: '#0b1118', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 8, color: '#d2dae6', boxShadow: '0 6px 18px rgba(0,0,0,0.24)' }} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+                <Bar dataKey="uptime" fill="#58a79d" stroke="#58a79d" strokeWidth={1} radius={[1, 1, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

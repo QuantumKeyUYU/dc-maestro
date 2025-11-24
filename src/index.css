@@ -8,10 +8,8 @@
 
 body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at 20% 20%, rgba(62, 236, 226, 0.08), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(124, 140, 251, 0.07), transparent 28%),
-    linear-gradient(180deg, #0b1220 0%, #0b1220 35%, #0d121a 100%);
-  color: #e5eaf3;
+  background: #080c12;
+  color: #d2dae6;
 }
 
 a {
@@ -34,37 +32,20 @@ a {
 
 .glass-shell {
   position: relative;
-  border-radius: 16px;
+  border-radius: 8px;
   padding: 1px;
-  background: linear-gradient(180deg, rgba(16, 26, 41, 0.96), rgba(12, 18, 27, 0.94));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+  background: #0b1118;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .glass-inner {
   position: relative;
-  border-radius: 15px;
-  padding: 24px;
-  background: linear-gradient(180deg, rgba(16, 26, 41, 0.94), rgba(12, 18, 27, 0.92));
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(14px);
+  border-radius: 7px;
+  padding: 18px;
+  background: #0d141c;
+  border: 1px solid rgba(255, 255, 255, 0.03);
   overflow: visible;
-}
-
-.glass-inner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(62, 236, 226, 0.16), transparent 34%),
-    radial-gradient(circle at 82% 6%, rgba(124, 140, 251, 0.16), transparent 32%);
-  opacity: 0;
-  transition: opacity 0.45s ease;
-  pointer-events: none;
-}
-
-.glass-shell:hover .glass-inner::after {
-  opacity: 0.4;
 }
 
 @keyframes fade-up-smooth {
@@ -102,16 +83,13 @@ a {
 }
 
 .surface-panel {
-  border-radius: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  background: linear-gradient(180deg, rgba(9, 15, 24, 0.95) 0%, rgba(12, 19, 30, 0.92) 100%);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-  background-image: linear-gradient(180deg, rgba(9, 15, 24, 0.95) 0%, rgba(12, 19, 30, 0.92) 100%),
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.03), transparent 70%);
-  background-blend-mode: overlay;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: #0b1118;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
 }
 
 .surface-panel-tight {
   padding: 1rem 1.5rem;
-  border-radius: 1rem;
+  border-radius: 8px;
 }
