@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Card } from '../../shared/components/Card';
 import { SectionHeader } from '../../shared/components/SectionHeader';
+import { ArrowRight } from 'lucide-react';
 
 const responsibilityItems = [
   {
@@ -60,29 +61,26 @@ export function AboutPage() {
       <Card title="Зона ответственности" subtitle="Как пункты вакансии ложатся на модули DC Maestro">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {responsibilityItems.map((item) => (
-            <div
-              key={item.title}
-              className="bg-gray-900/60 border border-gray-800 rounded-xl p-4 hover:border-primary/40 transition shadow-sm hover:shadow-primary/10 flex flex-col gap-3"
-            >
-              <div>
-                <div className="text-lg font-semibold text-gray-100">{item.title}</div>
-                <p className="text-sm text-gray-400 mt-1">{item.description}</p>
-                <p className="text-xs text-primary/80 mt-2">{item.label}</p>
+            <Card key={item.title} interactive className="p-4 bg-bg-surfaceSoft/60">
+              <div className="space-y-2">
+                <div className="text-lg font-semibold text-text-primary">{item.title}</div>
+                <p className="text-sm text-text-muted">{item.description}</p>
+                <p className="text-xs text-accent-muted mt-1">{item.label}</p>
               </div>
               <Link
                 to={item.to}
-                className="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:text-primary/80 transition"
+                className="inline-flex items-center gap-2 text-accent-primary font-medium text-sm mt-3 transition-transform hover:translate-x-0.5"
               >
                 Открыть модуль
-                <span aria-hidden className="text-base">↗</span>
+                <ArrowRight className="w-4 h-4" aria-hidden />
               </Link>
-            </div>
+            </Card>
           ))}
         </div>
       </Card>
 
       <Card title="Как использовать демо на собеседовании" subtitle="5 шагов, чтобы провести нанимающего через ключевые сценарии">
-        <ul className="list-disc pl-5 space-y-2 text-gray-200">
+        <ul className="list-disc pl-5 space-y-2 text-text-primary">
           {interviewFlow.map((tip) => (
             <li key={tip} className="leading-relaxed">
               {tip}

@@ -39,7 +39,7 @@ export function SitesPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по названию, региону или статусу"
-            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary/60"
+            className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-4 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-focus transition"
           />
           <div className="flex gap-2 text-xs text-gray-400">
             <InfoTooltip label="Uptime — доступность за период мониторинга" />
@@ -48,7 +48,7 @@ export function SitesPage() {
           </div>
         </div>
         <Table>
-          <thead className="text-xs uppercase text-gray-400">
+          <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => requestSort('name')}>
                 Площадка {sortConfig.key === 'name' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
@@ -68,13 +68,13 @@ export function SitesPage() {
             {sortedAndFiltered.map((site) => (
               <tr
                 key={site.id}
-                className={`border-t border-gray-800 cursor-pointer transition ${
-                  focusedSiteId === site.id ? 'bg-primary/5 border-primary/40' : 'hover:bg-gray-800/60'
+                className={`border-t border-border-subtle/40 cursor-pointer transition ${
+                  focusedSiteId === site.id ? 'bg-accent-muted/5 border-accent-primary/40' : 'hover:bg-bg-surfaceSoft/70'
                 }`}
                 onClick={() => navigate(`/sites/${site.id}`)}
               >
                 <td className="py-3 pr-4">{site.name}</td>
-                <td className="py-3 pr-4 text-gray-300">{site.region}</td>
+                <td className="py-3 pr-4 text-text-muted">{site.region}</td>
                 <td className="py-3 text-right">{uptimePercent(site).toFixed(2)}%</td>
                 <td className="py-3 text-right">{reliabilityScore(site).toFixed(1)}</td>
                 <td className="py-3 text-right">{capacityLoadIndex(site).toFixed(1)}%</td>
