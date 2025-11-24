@@ -7,13 +7,13 @@ export function Card({ children, className, title, subtitle, interactive = false
   return (
     <div
       className={clsx(
-        'group relative overflow-hidden rounded-[8px] border border-[rgba(255,255,255,0.04)] bg-[#0b1118] shadow-[0_6px_18px_rgba(0,0,0,0.24)] transition duration-150 p-6',
-        interactive && 'hover:bg-white/[0.02] cursor-pointer',
+        'group relative overflow-hidden rounded-xl border border-border-subtle/80 bg-bg-surface shadow-[0_8px_20px_rgba(0,0,0,0.35)] transition duration-150 p-6',
+        interactive && 'hover:bg-white/[0.03] cursor-pointer hover:shadow-[0_10px_26px_rgba(0,0,0,0.38)]',
         className
       )}
     >
       {(title || subtitle) && (
-        <div className="mb-4 space-y-1.5">
+        <div className="mb-5 space-y-1.5">
           {title && <div className="text-lg font-semibold text-text-primary tracking-tight leading-tight">{title}</div>}
           {subtitle && <div className="text-[13px] text-text-muted leading-snug">{subtitle}</div>}
         </div>
