@@ -17,7 +17,7 @@ import { strings } from '../shared/lib/strings';
 import { InfoTooltip } from '../shared/components/InfoTooltip';
 import { SitesDetailPage } from '../modules/sites/SitesDetailPage';
 import { AboutPage } from '../modules/about/AboutPage';
-import { Boxes, Briefcase, Cpu, LayoutDashboard, Shield, Users, Wallet, Wrench } from 'lucide-react';
+import { Boxes, Briefcase, Cpu, LayoutDashboard, Shield, Users, Wallet, Wrench } from '../shared/icons';
 
 const navItems = [
   { to: '/', label: strings.nav.dashboard, icon: LayoutDashboard },
@@ -36,12 +36,13 @@ export default function App() {
   const osiTone = osi.category === 'critical' ? 'danger' : osi.category === 'watch' ? 'warning' : 'success';
 
   return (
-    <div className="min-h-screen bg-bg-app text-text-primary">
-      <div className="flex h-screen overflow-hidden">
-        <aside className="w-64 md:w-60 sm:w-56 bg-bg-surface border-r border-border-subtle p-6 flex flex-col gap-8 shadow-soft">
+    <div className="min-h-screen bg-gradient-to-b from-[#0b1220] via-[#0b1220] to-[#0d121a] text-text-primary relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(62,236,226,0.08),transparent_30%),radial-gradient(circle_at_80%_0%,rgba(124,140,251,0.08),transparent_32%)]" />
+      <div className="flex h-screen overflow-hidden relative">
+        <aside className="w-64 md:w-60 sm:w-56 bg-gradient-to-b from-bg-surface/95 to-bg-surfaceSoft/90 border-r border-white/5 p-6 flex flex-col gap-8 shadow-ambient backdrop-blur-xl relative z-10">
           <div>
             <div className="text-[13px] uppercase tracking-[0.2em] text-text-dim">DC Maestro</div>
-            <div className="text-2xl font-semibold text-accent-primary mt-1">{strings.headers.appTitle}</div>
+            <div className="text-2xl font-semibold text-accent-primary mt-1 drop-shadow-sm">{strings.headers.appTitle}</div>
           </div>
           <nav className="flex flex-col gap-2 text-sm">
             {navItems.map((item) => {
@@ -52,26 +53,39 @@ export default function App() {
                   to={item.to}
                   className={({ isActive }) =>
                     clsx(
-                      'flex items-center gap-3 px-3 py-2 rounded-xl font-medium transition-colors border border-transparent',
-                      'hover:bg-bg-surfaceSoft/70 hover:text-text-primary',
+                      'relative group flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-all border border-transparent backdrop-blur-sm',
+                      'hover:bg-white/4 hover:text-text-primary hover:translate-x-[1px] hover:shadow-glow',
                       isActive
-                        ? 'bg-bg-surfaceSoft text-text-primary border-l-4 border-accent-primary/80 shadow-soft'
+                        ? 'bg-white/8 text-text-primary shadow-glow border-white/10'
                         : 'text-text-muted'
                     )
                   }
                 >
-                  <Icon className="w-4 h-4" />
-                  <span className="truncate">{item.label}</span>
+                  {({ isActive }) => (
+                    <>
+                      <span className="absolute bottom-1.5 left-3 right-3 h-px rounded-full bg-accent-primary/70 blur-sm opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
+                      <Icon className="w-4 h-4 scale-[1.05] text-transparent bg-clip-text bg-gradient-to-br from-accent-primary to-accent-muted" />
+                      <span className="truncate relative">
+                        {item.label}
+                        <span
+                          className={clsx(
+                            'absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-gradient-to-r from-accent-primary/70 to-transparent blur-sm transition-opacity duration-300',
+                            isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'
+                          )}
+                        />
+                      </span>
+                    </>
+                  )}
                 </NavLink>
               );
             })}
           </nav>
         </aside>
 
-        <main className="flex-1 overflow-y-auto scrollbar-thin">
-          <header className="sticky top-0 z-10 bg-bg-app/80 backdrop-blur border-b border-border-subtle px-8 py-5 flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-semibold text-text-primary">{strings.headers.appTitle}</h1>
+        <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
+          <header className="sticky top-0 z-10 bg-gradient-to-r from-bg-app/85 via-bg-app/75 to-bg-surface/70 backdrop-blur-2xl border-b border-white/5 px-8 py-5 flex items-center justify-between shadow-ambient">
+            <div className="space-y-1">
+              <h1 className="text-3xl font-semibold text-text-primary drop-shadow-sm">{strings.headers.appTitle}</h1>
               <p className="text-sm text-text-muted">{strings.headers.appSubtitle}</p>
             </div>
             <div className="flex items-center gap-4">

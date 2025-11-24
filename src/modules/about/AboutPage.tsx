@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Card } from '../../shared/components/Card';
 import { SectionHeader } from '../../shared/components/SectionHeader';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '../../shared/icons';
 
 const responsibilityItems = [
   {
@@ -61,7 +61,7 @@ export function AboutPage() {
       <Card title="Зона ответственности" subtitle="Как пункты вакансии ложатся на модули DC Maestro">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {responsibilityItems.map((item) => (
-            <Card key={item.title} interactive className="p-4 bg-bg-surfaceSoft/60">
+            <Card key={item.title} interactive className="bg-white/5">
               <div className="space-y-2">
                 <div className="text-lg font-semibold text-text-primary">{item.title}</div>
                 <p className="text-sm text-text-muted">{item.description}</p>

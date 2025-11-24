@@ -7,19 +7,25 @@ export function Card({ children, className, title, subtitle, interactive = false
   return (
     <div
       className={clsx(
-        'bg-bg-surface/90 border border-border-subtle rounded-2xl p-6 shadow-soft backdrop-blur transition duration-200',
-        interactive &&
-          'hover:shadow-lifted hover:bg-bg-surfaceSoft/80 hover:-translate-y-0.5 hover:border-accent-primary/40 cursor-pointer transition-transform',
+        'glass-shell group transition duration-300 animate-section',
+        interactive && 'hover:-translate-y-1 hover:shadow-glow cursor-pointer',
         className
       )}
     >
-      {(title || subtitle) && (
-        <div className="mb-4 space-y-1">
-          {title && <div className="text-2xl font-semibold text-text-primary">{title}</div>}
-          {subtitle && <div className="text-sm text-text-muted">{subtitle}</div>}
-        </div>
-      )}
-      {children}
+      <div
+        className={clsx(
+          'glass-inner transition-transform duration-300',
+          interactive && 'group-hover:-translate-y-0.5'
+        )}
+      >
+        {(title || subtitle) && (
+          <div className="mb-4 space-y-1">
+            {title && <div className="text-2xl font-semibold text-text-primary drop-shadow-sm">{title}</div>}
+            {subtitle && <div className="text-sm text-text-muted">{subtitle}</div>}
+          </div>
+        )}
+        {children}
+      </div>
     </div>
   );
 }

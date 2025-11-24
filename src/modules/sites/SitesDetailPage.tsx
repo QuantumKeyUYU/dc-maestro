@@ -64,15 +64,15 @@ export function SitesDetailPage() {
 
   return (
     <div className="space-y-6">
-      <div className="text-sm text-gray-400 flex items-center gap-2">
+      <div className="text-sm text-text-dim flex items-center gap-2">
         <button
           onClick={() => navigate('/sites')}
-          className="hover:text-primary transition inline-flex items-center gap-1"
+          className="hover:text-accent-primary transition inline-flex items-center gap-1"
         >
           Площадки ЦОД
         </button>
-        <span className="text-gray-600">/</span>
-        <span className="text-gray-200">{site.name}</span>
+        <span className="text-text-dim">/</span>
+        <span className="text-text-primary">{site.name}</span>
       </div>
       <SectionHeader
         title={`${site.name}: детализация`}
@@ -80,7 +80,7 @@ export function SitesDetailPage() {
         action={
           <button
             onClick={() => navigate('/sites')}
-            className="px-4 py-2 rounded-xl bg-gray-800 border border-gray-700 text-sm text-gray-100 hover:border-primary/60"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-text-primary hover:border-accent-primary/60 backdrop-blur"
           >
             ← Назад к списку
           </button>
@@ -90,8 +90,8 @@ export function SitesDetailPage() {
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="text-2xl font-semibold text-gray-50">{site.name}</div>
-            <div className="text-sm text-gray-400">{site.region}</div>
+            <div className="text-2xl font-semibold text-text-primary drop-shadow-sm">{site.name}</div>
+            <div className="text-sm text-text-muted">{site.region}</div>
           </div>
           <StatusPill
             label={site.status === 'healthy' ? 'Стабильно' : site.status === 'warning' ? 'Предупреждение' : 'Критично'}
@@ -103,8 +103,10 @@ export function SitesDetailPage() {
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`px-4 py-2 rounded-xl text-sm border transition ${
-                tab === t.key ? 'border-primary/50 bg-primary/10 text-primary' : 'border-gray-700 bg-gray-900/40 text-gray-200'
+              className={`px-4 py-2 rounded-xl text-sm border transition backdrop-blur ${
+                tab === t.key
+                  ? 'border-accent-primary/60 bg-accent-primary/10 text-text-primary shadow-glow'
+                  : 'border-white/10 bg-white/5 text-text-muted hover:border-accent-primary/40'
               }`}
             >
               {t.label}
@@ -132,7 +134,7 @@ export function SitesDetailPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card title="Нагрузка на мощность" className="bg-gray-900/40">
+              <Card title="Нагрузка на мощность" className="bg-white/5">
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -141,29 +143,29 @@ export function SitesDetailPage() {
                           <Cell key={entry.name} fill={CAPACITY_COLORS[index % CAPACITY_COLORS.length]} />
                         ))}
                       </Pie>
-                      <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #1f2937' }} />
+                      <Tooltip contentStyle={{ background: '#0f1828', border: '1px solid rgba(62,236,226,0.3)', borderRadius: 12, color: '#e5eaf3' }} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
               </Card>
-              <Card title="Загрузка по подсистемам" className="bg-gray-900/40">
+              <Card title="Загрузка по подсистемам" className="bg-white/5">
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={energyBars}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-                      <XAxis dataKey="name" tick={{ fill: '#cbd5e1', fontSize: 12 }} />
-                      <YAxis tick={{ fill: '#cbd5e1', fontSize: 12 }} domain={[0, 100]} />
-                      <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #1f2937' }} />
-                      <Bar dataKey="value" fill="#a855f7" radius={[6, 6, 0, 0]} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                      <XAxis dataKey="name" tick={{ fill: '#c7d2e9', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
+                      <YAxis tick={{ fill: '#c7d2e9', fontSize: 12 }} domain={[0, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
+                      <Tooltip contentStyle={{ background: '#0f1828', border: '1px solid rgba(62,236,226,0.3)', borderRadius: 12, color: '#e5eaf3' }} cursor={{ fill: 'rgba(62,236,226,0.06)' }} />
+                      <Bar dataKey="value" fill="#7c8cfb" stroke="#5f6ed8" strokeWidth={1.5} radius={[10, 10, 6, 6]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </Card>
             </div>
 
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-200">
-              <Card className="bg-gray-900/40" title="Кратко о площадке" subtitle="Основные параметры">
-                <ul className="space-y-2 text-gray-300">
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-text-primary">
+              <Card className="bg-white/5" title="Кратко о площадке" subtitle="Основные параметры">
+                <ul className="space-y-2 text-text-muted">
                   <li>Регион: {site.region}</li>
                   <li>Всего стоек: {site.totalRacks}, использовано: {site.usedRacks}</li>
                   <li>Мощность: {site.usedCapacityKw} / {site.totalCapacityKw} кВт</li>
@@ -175,22 +177,22 @@ export function SitesDetailPage() {
           <Card title="Инциденты по площадке">
             <div className="space-y-3">
               {siteIncidents.slice(0, 4).map((incident) => (
-                <div key={incident.id} className="p-3 rounded-lg bg-gray-900/50 border border-gray-800">
+                <div key={incident.id} className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur">
                   <div className="flex items-center justify-between">
-                    <div className="font-medium text-gray-100">{incident.category}</div>
+                    <div className="font-medium text-text-primary">{incident.category}</div>
                     <StatusPill
                       label={incident.severity === 'critical' ? 'Критично' : incident.severity === 'major' ? 'Важно' : 'Минор'}
                       tone={incident.severity === 'critical' ? 'danger' : incident.severity === 'major' ? 'warning' : 'info'}
                     />
                   </div>
-                  <p className="text-sm text-gray-300 mt-1">{incident.description}</p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-sm text-text-muted mt-1">{incident.description}</p>
+                  <p className="text-xs text-text-dim mt-1">
                     {new Date(incident.startedAt).toLocaleString('ru-RU')}
                     {incident.resolvedAt ? ` → ${new Date(incident.resolvedAt).toLocaleString('ru-RU')}` : ' (в работе)'}
                   </p>
                 </div>
               ))}
-              {siteIncidents.length === 0 && <p className="text-sm text-gray-400">Нет инцидентов.</p>}
+              {siteIncidents.length === 0 && <p className="text-sm text-text-muted">Нет инцидентов.</p>}
             </div>
           </Card>
         </div>
@@ -199,7 +201,7 @@ export function SitesDetailPage() {
       {tab === 'incidents' && (
         <Card title="Инциденты">
           <Table>
-            <thead className="text-xs uppercase text-gray-400">
+            <thead className="text-xs uppercase text-text-muted">
               <tr>
                 <th className="text-left py-2">Категория</th>
                 <th className="text-left py-2">Описание</th>
@@ -209,9 +211,9 @@ export function SitesDetailPage() {
             </thead>
             <tbody>
               {siteIncidents.map((incident) => (
-                <tr key={incident.id} className="border-t border-gray-800">
+                <tr key={incident.id} className="border-t border-white/5">
                   <td className="py-2 pr-4">{incident.category}</td>
-                  <td className="py-2 pr-4 text-gray-300">{incident.description}</td>
+                  <td className="py-2 pr-4 text-text-muted">{incident.description}</td>
                   <td className="py-2 pr-4">{new Date(incident.startedAt).toLocaleString('ru-RU')}</td>
                   <td className="py-2 pr-4">
                     <StatusPill
@@ -223,7 +225,7 @@ export function SitesDetailPage() {
               ))}
               {siteIncidents.length === 0 && (
                 <tr>
-                  <td className="py-2 pr-4 text-gray-400" colSpan={4}>
+                  <td className="py-2 pr-4 text-text-muted" colSpan={4}>
                     Нет инцидентов.
                   </td>
                 </tr>
@@ -237,7 +239,7 @@ export function SitesDetailPage() {
         <div className="space-y-4">
           <Card title="Активы">
             <Table>
-              <thead className="text-xs uppercase text-gray-400">
+              <thead className="text-xs uppercase text-text-muted">
                 <tr>
                   <th className="text-left py-2">Название</th>
                   <th className="text-left py-2">Тип</th>
@@ -247,11 +249,11 @@ export function SitesDetailPage() {
               </thead>
               <tbody>
                 {siteAssets.map((asset) => (
-                  <tr key={asset.id} className="border-t border-gray-800">
+                  <tr key={asset.id} className="border-t border-white/5">
                     <td className="py-2 pr-4">{asset.name}</td>
-                    <td className="py-2 pr-4 text-gray-300">{asset.type}</td>
+                    <td className="py-2 pr-4 text-text-muted">{asset.type}</td>
                     <td className="py-2 pr-4">{asset.criticality}</td>
-                    <td className="py-2 pr-4 text-gray-300">
+                    <td className="py-2 pr-4 text-text-muted">
                       {asset.nextPlannedMaintenanceDate
                         ? new Date(asset.nextPlannedMaintenanceDate).toLocaleDateString('ru-RU')
                         : '—'}
@@ -260,7 +262,7 @@ export function SitesDetailPage() {
                 ))}
                 {siteAssets.length === 0 && (
                   <tr>
-                    <td className="py-2 pr-4 text-gray-400" colSpan={4}>
+                    <td className="py-2 pr-4 text-text-muted" colSpan={4}>
                       Нет активов для этой площадки.
                     </td>
                   </tr>
@@ -271,7 +273,7 @@ export function SitesDetailPage() {
 
           <Card title="Заявки на ТО">
             <Table>
-              <thead className="text-xs uppercase text-gray-400">
+              <thead className="text-xs uppercase text-text-muted">
                 <tr>
                   <th className="text-left py-2">ID</th>
                   <th className="text-left py-2">Тип</th>
@@ -284,9 +286,9 @@ export function SitesDetailPage() {
                 {siteWorkOrders.map((wo) => {
                   const isOverdue = wo.dueDate && wo.status !== 'done' && wo.dueDate < new Date();
                   return (
-                    <tr key={wo.id} className={`border-t border-gray-800 ${isOverdue ? 'bg-danger/10' : ''}`}>
+                    <tr key={wo.id} className={`border-t border-white/5 ${isOverdue ? 'bg-danger/10' : ''}`}>
                       <td className="py-2 pr-4">{wo.id}</td>
-                      <td className="py-2 pr-4 text-gray-300">{wo.type}</td>
+                      <td className="py-2 pr-4 text-text-muted">{wo.type}</td>
                       <td className="py-2 pr-4">
                         <StatusPill
                           label={wo.status === 'done' ? 'Завершено' : wo.status === 'in_progress' ? 'В работе' : 'Открыто'}
@@ -296,7 +298,7 @@ export function SitesDetailPage() {
                         />
                       </td>
                       <td className="py-2 pr-4">{wo.priority}</td>
-                      <td className="py-2 pr-4 text-gray-300">
+                      <td className="py-2 pr-4 text-text-muted">
                         {wo.dueDate ? new Date(wo.dueDate).toLocaleDateString('ru-RU') : '—'}
                       </td>
                     </tr>
@@ -304,7 +306,7 @@ export function SitesDetailPage() {
                 })}
                 {siteWorkOrders.length === 0 && (
                   <tr>
-                    <td className="py-2 pr-4 text-gray-400" colSpan={5}>
+                    <td className="py-2 pr-4 text-text-muted" colSpan={5}>
                       Нет заявок.
                     </td>
                   </tr>
@@ -319,7 +321,7 @@ export function SitesDetailPage() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
           <Card className="xl:col-span-2" title="Финансовые записи">
             <Table>
-              <thead className="text-xs uppercase text-gray-400">
+              <thead className="text-xs uppercase text-text-muted">
                 <tr>
                   <th className="text-left py-2">Дата</th>
                   <th className="text-left py-2">Тип</th>
@@ -329,16 +331,16 @@ export function SitesDetailPage() {
               </thead>
               <tbody>
                 {siteFinances.map((record) => (
-                  <tr key={record.id} className="border-t border-gray-800">
+                  <tr key={record.id} className="border-t border-white/5">
                     <td className="py-2 pr-4">{new Date(record.date).toLocaleDateString('ru-RU')}</td>
-                    <td className="py-2 pr-4 text-gray-300">{record.type.toUpperCase()}</td>
-                    <td className="py-2 pr-4 text-gray-300">{record.category}</td>
+                    <td className="py-2 pr-4 text-text-muted">{record.type.toUpperCase()}</td>
+                    <td className="py-2 pr-4 text-text-muted">{record.category}</td>
                     <td className="py-2 pr-4">{record.amountRub.toLocaleString('ru-RU')} ₽</td>
                   </tr>
                 ))}
                 {siteFinances.length === 0 && (
                   <tr>
-                    <td className="py-2 pr-4 text-gray-400" colSpan={4}>
+                    <td className="py-2 pr-4 text-text-muted" colSpan={4}>
                       Финансовые записи отсутствуют.
                     </td>
                   </tr>
@@ -349,11 +351,11 @@ export function SitesDetailPage() {
           <Card title="Сводка по OPEX/CAPEX">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-gray-400 text-sm">OPEX за период</span>
+                <span className="text-text-muted text-sm">OPEX за период</span>
                 <span className="text-lg font-semibold">{opexTotal.toLocaleString('ru-RU')} ₽</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-gray-400 text-sm">CAPEX за период</span>
+                <span className="text-text-muted text-sm">CAPEX за период</span>
                 <span className="text-lg font-semibold">{capexTotal.toLocaleString('ru-RU')} ₽</span>
               </div>
               <div className="h-64">
@@ -364,7 +366,7 @@ export function SitesDetailPage() {
                         <Cell key={entry.name} fill={FINANCE_COLORS[index % FINANCE_COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #1f2937' }} />
+                    <Tooltip contentStyle={{ background: '#0f1828', border: '1px solid rgba(62,236,226,0.3)', borderRadius: 12, color: '#e5eaf3' }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
