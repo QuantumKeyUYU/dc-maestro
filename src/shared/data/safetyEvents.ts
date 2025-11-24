@@ -36,5 +36,14 @@ export const safetyEvents: SafetyEvent[] = [
     date: new Date('2024-11-30'),
     status: 'scheduled',
     responsibleStaffId: 'st-001'
+  },
+  {
+    id: 'safe-005',
+    siteId: 'spb-1',
+    type: 'training',
+    title: 'Просрочен инструктаж по работам на высоте',
+    date: new Date('2024-11-15'),
+    status: 'overdue',
+    responsibleStaffId: 'st-004'
   }
 ];

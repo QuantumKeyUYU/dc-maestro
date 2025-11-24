@@ -15,7 +15,7 @@ export function StatusPill({ label, tone = 'neutral' }: StatusPillProps) {
   }[tone];
 
   return (
-    <span className={clsx('px-3 py-1 rounded-full text-xs font-semibold border shadow-sm', toneClass)}>
+    <span className={clsx('px-3 py-1 rounded-full text-xs font-semibold border shadow-sm transition hover:shadow-lg', toneClass)}>
       {label}
     </span>
   );

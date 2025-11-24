@@ -7,7 +7,7 @@ export const inventoryItems: InventoryItem[] = [
     name: 'Батарейный модуль 96V',
     category: 'spare_part',
     quantityOnHand: 4,
-    minThreshold: 3,
+    minThreshold: 6,
     unit: 'pcs',
     siteId: 'msk-1'
   },
@@ -40,5 +40,25 @@ export const inventoryItems: InventoryItem[] = [
     minThreshold: 3,
     unit: 'l',
     siteId: 'nn-1'
+  },
+  {
+    id: 'inv-005',
+    sku: 'COOL-GLY-25L',
+    name: 'Охлаждающая жидкость 25л',
+    category: 'consumable',
+    quantityOnHand: 0,
+    minThreshold: 2,
+    unit: 'can',
+    siteId: 'spb-1'
+  },
+  {
+    id: 'inv-006',
+    sku: 'PPE-ARC-SET',
+    name: 'Комплект СИЗ для ВН',
+    category: 'safety',
+    quantityOnHand: 3,
+    minThreshold: 5,
+    unit: 'sets',
+    siteId: null
   }
 ];

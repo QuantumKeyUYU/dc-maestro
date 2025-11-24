@@ -5,10 +5,10 @@ export const incidents: Incident[] = [
     id: 'inc-001',
     siteId: 'nn-1',
     severity: 'critical',
-    startedAt: new Date('2024-11-10T03:15:00Z'),
-    resolvedAt: new Date('2024-11-10T06:40:00Z'),
+    startedAt: new Date('2024-11-23T03:15:00Z'),
+    resolvedAt: null,
     category: 'power',
-    description: 'Отказ ДГУ при тестовом запуске, переход на резервную линию.'
+    description: 'НН-1: отказ ДГУ на старте, нагрузка частично переведена на сеть.'
   },
   {
     id: 'inc-002',
@@ -31,10 +31,19 @@ export const incidents: Incident[] = [
   {
     id: 'inc-004',
     siteId: 'nsk-1',
-    severity: 'major',
+    severity: 'critical',
     startedAt: new Date('2024-11-22T04:10:00Z'),
     resolvedAt: null,
     category: 'security',
-    description: 'Проверка инцидента доступа в подсеть управления.'
+    description: 'ЕКБ-1: подозрение на несанкционированный доступ в подсеть управления.'
+  },
+  {
+    id: 'inc-005',
+    siteId: 'spb-1',
+    severity: 'critical',
+    startedAt: new Date('2024-11-24T07:45:00Z'),
+    resolvedAt: null,
+    category: 'cooling',
+    description: 'СПБ-1: аварийный рост температуры в зале B, резервное охлаждение задействовано.'
   }
 ];

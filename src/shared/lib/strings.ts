@@ -6,7 +6,8 @@ export const strings = {
     maintenance: 'ТО и активы',
     inventory: 'Запасы',
     finance: 'Финансы',
-    safety: 'Охрана труда'
+    safety: 'Охрана труда',
+    about: 'Вакансия / Demo'
   },
   headers: {
     appTitle: 'DC Maestro',
