@@ -47,9 +47,9 @@ export function PersonnelPage() {
   const opsIndex = opsLoadIndex(site, shifts);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Card title="Персонал" subtitle="Фильтры и поиск по людям">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
           <div className="flex gap-2 flex-wrap">
             {roles.map((role) => (
               <button
@@ -69,10 +69,10 @@ export function PersonnelPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по имени, роли, грейду"
-            className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-4 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-focus transition"
+            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition"
           />
         </div>
-        <Table>
+        <Table framed={false}>
           <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => requestSort('fullName')}>
@@ -102,13 +102,13 @@ export function PersonnelPage() {
         </Table>
       </Card>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <Card className="xl:col-span-2" title="Смены">
           <div className="flex gap-3 mb-3 flex-wrap">
             <select
               value={selectedSite}
               onChange={(e) => setSelectedSite(e.target.value)}
-              className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary"
+              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary"
             >
               {sites.map((siteItem) => (
                 <option key={siteItem.id} value={siteItem.id}>
@@ -117,7 +117,7 @@ export function PersonnelPage() {
               ))}
             </select>
           </div>
-          <Table>
+          <Table framed={false}>
             <thead>
               <tr>
                 <th className="text-left py-2">Дата</th>

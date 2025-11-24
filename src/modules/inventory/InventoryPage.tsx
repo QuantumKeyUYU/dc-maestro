@@ -30,9 +30,9 @@ export function InventoryPage() {
   }, [locationState?.siteId, locationState?.filter, itemsTable.setSearchQuery]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Card title="Складские позиции">
-        <div className="flex justify-between items-center mb-3" ref={itemsRef}>
+        <div className="flex justify-between items-center mb-4" ref={itemsRef}>
           {lowStockOnly ? (
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-text-primary shadow-inner">
@@ -53,11 +53,11 @@ export function InventoryPage() {
             value={itemsTable.searchQuery}
             onChange={(e) => itemsTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по SKU, названию или площадке"
-            className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-4 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60"
+            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)]"
           />
           <div className="text-xs text-text-dim">Клик по заголовку — сортировка</div>
         </div>
-        <Table>
+        <Table framed={false}>
           <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => itemsTable.requestSort('sku')}>
@@ -93,16 +93,16 @@ export function InventoryPage() {
       </Card>
 
       <Card title="Закупки">
-        <div className="flex justify-between items-center mb-3">
+        <div className="flex justify-between items-center mb-4">
           <input
             value={poTable.searchQuery}
             onChange={(e) => poTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по поставщику или статусу"
-            className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-4 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60"
+            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)]"
           />
           <div className="text-xs text-text-dim">Клик по строке статуса — подсказка</div>
         </div>
-        <Table>
+        <Table framed={false}>
           <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => poTable.requestSort('id')}>

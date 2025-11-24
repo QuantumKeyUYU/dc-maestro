@@ -43,12 +43,12 @@ export function MaintenancePage() {
   }, [locationState?.siteId, locationState?.filter, assetsTable.setSearchQuery, workOrdersTable.setSearchQuery]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Card title="Активы">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
           <div className="flex gap-3 flex-wrap">
             <select
-              className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary"
+              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary"
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value as (typeof types)[number])}
             >
@@ -59,7 +59,7 @@ export function MaintenancePage() {
               ))}
             </select>
             <select
-              className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary"
+              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary"
               value={critFilter}
               onChange={(e) => setCritFilter((e.target.value === 'all' ? 'all' : Number(e.target.value)) as (typeof criticalities)[number])}
             >
@@ -74,10 +74,10 @@ export function MaintenancePage() {
             value={assetsTable.searchQuery}
             onChange={(e) => assetsTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по названию, типу, площадке"
-            className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-4 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-focus transition"
+            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition"
           />
         </div>
-        <Table>
+        <Table framed={false}>
           <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => assetsTable.requestSort('name')}>
@@ -112,7 +112,7 @@ export function MaintenancePage() {
       </Card>
 
       <Card title="Заявки на ТО">
-        <div className="flex justify-between items-center mb-3" ref={workOrdersRef}>
+        <div className="flex justify-between items-center mb-4" ref={workOrdersRef}>
           {showOverdueOnly ? (
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-text-primary shadow-inner">
@@ -133,10 +133,10 @@ export function MaintenancePage() {
             value={workOrdersTable.searchQuery}
             onChange={(e) => workOrdersTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по ID, типу или площадке"
-            className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-4 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-focus transition"
+            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition"
           />
         </div>
-        <Table>
+        <Table framed={false}>
           <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => workOrdersTable.requestSort('id')}>

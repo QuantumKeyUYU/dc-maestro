@@ -113,7 +113,7 @@ export function InfoTooltip({ label, children, className, triggerArea = 'icon', 
       {triggerArea === 'icon' && (
         <button
           type="button"
-          className="inline-flex items-center justify-center w-5 h-5 rounded-full border border-white/10 bg-white/5 text-text-primary/70 shadow-soft transition hover:text-text-primary hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-accent-primary/50"
+          className="inline-flex items-center justify-center w-5 h-5 rounded-full border border-white/12 bg-white/6 text-text-muted shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition hover:text-text-primary hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-accent-primary/50"
           aria-label="Пояснение"
           aria-describedby={tooltipId}
         >
@@ -136,7 +136,7 @@ export function InfoTooltip({ label, children, className, triggerArea = 'icon', 
               <div
                 id={tooltipId}
                 role="tooltip"
-                className="max-w-sm rounded-xl border border-white/12 bg-bg-surface/95 px-4 py-3 text-sm text-text-primary shadow-ambient backdrop-blur-xl"
+                className="max-w-sm rounded-xl border border-white/10 bg-gradient-to-b from-bg-surface/96 to-bg-surfaceSoft/92 px-4 py-3 text-sm text-text-primary shadow-[0_12px_40px_rgba(0,0,0,0.45),inset_0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-2xl"
               >
                 <p className="leading-snug">{label}</p>
               </div>

@@ -64,7 +64,7 @@ export function SitesDetailPage() {
   const financialHealth = siteFinancialHealth(site, siteFinances);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="text-sm text-text-dim flex items-center gap-2">
         <button
           onClick={() => navigate('/sites')}
@@ -198,7 +198,7 @@ export function SitesDetailPage() {
 
       {tab === 'incidents' && (
         <Card title="Инциденты">
-          <Table>
+          <Table framed={false}>
             <thead className="text-xs uppercase text-text-muted">
               <tr>
                 <th className="text-left py-2">Категория</th>
@@ -234,9 +234,9 @@ export function SitesDetailPage() {
       )}
 
       {tab === 'maintenance' && (
-        <div className="space-y-4">
+        <div className="space-y-5">
           <Card title="Активы">
-            <Table>
+            <Table framed={false}>
               <thead className="text-xs uppercase text-text-muted">
                 <tr>
                   <th className="text-left py-2">Название</th>
@@ -270,7 +270,7 @@ export function SitesDetailPage() {
           </Card>
 
           <Card title="Заявки на ТО">
-            <Table>
+            <Table framed={false}>
               <thead className="text-xs uppercase text-text-muted">
                 <tr>
                   <th className="text-left py-2">ID</th>
@@ -316,9 +316,9 @@ export function SitesDetailPage() {
       )}
 
       {tab === 'finance' && (
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           <Card className="xl:col-span-2" title="Финансовые записи">
-            <Table>
+            <Table framed={false}>
               <thead className="text-xs uppercase text-text-muted">
                 <tr>
                   <th className="text-left py-2">Дата</th>
