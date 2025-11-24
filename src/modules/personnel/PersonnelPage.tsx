@@ -1,6 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Card } from '../../shared/components/Card';
-import { SectionHeader } from '../../shared/components/SectionHeader';
 import { Table } from '../../shared/components/Table';
 import { staffMembers } from '../../shared/data/staff';
 import { shifts } from '../../shared/data/shifts';
@@ -49,8 +48,6 @@ export function PersonnelPage() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.personnel.title} subtitle={strings.personnel.subtitle} />
-
       <Card title="Персонал" subtitle="Фильтры и поиск по людям">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
           <div className="flex gap-2 flex-wrap">

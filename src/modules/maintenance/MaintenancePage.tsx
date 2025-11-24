@@ -1,6 +1,5 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { Card } from '../../shared/components/Card';
-import { SectionHeader } from '../../shared/components/SectionHeader';
 import { Table } from '../../shared/components/Table';
 import { assets } from '../../shared/data/assets';
 import { workOrders } from '../../shared/data/workOrders';
@@ -15,9 +14,11 @@ const criticalities = ['all', 1, 2, 3] as const;
 
 export function MaintenancePage() {
   const location = useLocation();
-  const locationState = location.state as { siteId?: string; workOrderId?: string } | undefined;
+  const locationState = location.state as { siteId?: string; workOrderId?: string; filter?: 'overdue' } | undefined;
   const [typeFilter, setTypeFilter] = useState<(typeof types)[number]>('all');
   const [critFilter, setCritFilter] = useState<(typeof criticalities)[number]>('all');
+  const [showOverdueOnly, setShowOverdueOnly] = useState(false);
+  const workOrdersRef = useRef<HTMLDivElement>(null);
 
   const filteredAssets = useMemo(
     () =>
@@ -35,12 +36,14 @@ export function MaintenancePage() {
       assetsTable.setSearchQuery(locationState.siteId);
       workOrdersTable.setSearchQuery(locationState.siteId);
     }
-  }, [locationState?.siteId, assetsTable.setSearchQuery, workOrdersTable.setSearchQuery]);
+    if (locationState?.filter === 'overdue') {
+      setShowOverdueOnly(true);
+      workOrdersRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [locationState?.siteId, locationState?.filter, assetsTable.setSearchQuery, workOrdersTable.setSearchQuery]);
 
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.maintenance.title} subtitle={strings.maintenance.subtitle} />
-
       <Card title="Активы">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
           <div className="flex gap-3 flex-wrap">
@@ -109,7 +112,23 @@ export function MaintenancePage() {
       </Card>
 
       <Card title="Заявки на ТО">
-        <div className="flex justify-end mb-3">
+        <div className="flex justify-between items-center mb-3" ref={workOrdersRef}>
+          {showOverdueOnly ? (
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-text-primary shadow-inner">
+                Фильтр: просроченные заявки
+              </span>
+              <button
+                type="button"
+                className="text-xs text-accent-primary hover:text-accent-muted transition"
+                onClick={() => setShowOverdueOnly(false)}
+              >
+                Сбросить
+              </button>
+            </div>
+          ) : (
+            <span className="text-xs text-text-dim">Все активные заявки по умолчанию</span>
+          )}
           <input
             value={workOrdersTable.searchQuery}
             onChange={(e) => workOrdersTable.setSearchQuery(e.target.value)}
@@ -136,7 +155,12 @@ export function MaintenancePage() {
             </tr>
           </thead>
           <tbody>
-            {workOrdersTable.sortedAndFiltered.map((wo) => {
+            {workOrdersTable.sortedAndFiltered
+              .filter((wo) => {
+                const isOverdue = wo.dueDate && wo.status !== 'done' && wo.dueDate < new Date();
+                return showOverdueOnly ? isOverdue : true;
+              })
+              .map((wo) => {
               const isOverdue = wo.dueDate && wo.status !== 'done' && wo.dueDate < new Date();
               return (
                 <tr key={wo.id} className={`border-t border-border-subtle/40 ${isOverdue ? 'bg-status-danger/10' : ''}`}>
@@ -153,7 +177,7 @@ export function MaintenancePage() {
                   </td>
                 </tr>
               );
-            })}
+              })}
           </tbody>
         </Table>
       </Card>

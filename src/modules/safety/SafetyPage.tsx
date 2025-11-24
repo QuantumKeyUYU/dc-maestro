@@ -1,18 +1,49 @@
+import { useEffect, useRef, useState } from 'react';
 import { Card } from '../../shared/components/Card';
-import { SectionHeader } from '../../shared/components/SectionHeader';
 import { Table } from '../../shared/components/Table';
 import { safetyEvents } from '../../shared/data/safetyEvents';
 import { staffMembers } from '../../shared/data/staff';
 import { StatusPill } from '../../shared/components/StatusPill';
 import { strings } from '../../shared/lib/strings';
 import { getStatusLabel, getStatusTone } from '../../shared/lib/status';
+import { useLocation } from 'react-router-dom';
 
 export function SafetyPage() {
+  const location = useLocation();
+  const locationState = location.state as { filter?: 'open' } | undefined;
+  const [activeOnly, setActiveOnly] = useState(false);
+  const eventsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (locationState?.filter === 'open') {
+      setActiveOnly(true);
+      eventsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [locationState?.filter]);
+
+  const visibleEvents = activeOnly ? safetyEvents.filter((event) => event.status !== 'done') : safetyEvents;
+
   return (
     <div className="space-y-6">
-      <SectionHeader title={strings.safety.title} subtitle={strings.safety.subtitle} />
-
       <Card title="События безопасности">
+        <div className="flex items-center justify-between mb-3" ref={eventsRef}>
+          {activeOnly ? (
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-text-primary shadow-inner">
+                Фильтр: в работе и просрочено
+              </span>
+              <button
+                type="button"
+                className="text-xs text-accent-primary hover:text-accent-muted transition"
+                onClick={() => setActiveOnly(false)}
+              >
+                Сбросить
+              </button>
+            </div>
+          ) : (
+            <span className="text-xs text-text-dim">Все события по охране труда</span>
+          )}
+        </div>
         <Table>
           <thead>
             <tr>
@@ -25,7 +56,7 @@ export function SafetyPage() {
             </tr>
           </thead>
           <tbody>
-            {safetyEvents.map((event) => {
+            {visibleEvents.map((event) => {
               const staff = staffMembers.find((s) => s.id === event.responsibleStaffId);
               return (
                 <tr key={event.id} className="border-t border-border-subtle/40">

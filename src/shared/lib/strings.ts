@@ -11,7 +11,7 @@ export const strings = {
   },
   headers: {
     appTitle: 'DC Maestro',
-    appSubtitle: 'Operations cockpit',
+    appSubtitle: 'Кокпит руководителя эксплуатации ЦОД',
     osiTooltip:
       'Operational Strain Index — агрегированный индекс нагрузки на сеть ЦОД (надёжность, загрузка смен, частота инцидентов).'
   },
@@ -38,7 +38,7 @@ export const strings = {
   },
   sites: {
     title: 'Площадки ЦОД',
-    subtitle: 'Обзор площадок и инцидентов',
+    subtitle: 'Обзор площадок и инцидентов сети',
     allSites: 'Все площадки',
     overviewTab: 'Обзор',
     incidentsTab: 'Инциденты',
@@ -51,11 +51,11 @@ export const strings = {
   },
   maintenance: {
     title: 'ТО и активы',
-    subtitle: 'Активы и заявки'
+    subtitle: 'Активы, заявки и просрочки'
   },
   inventory: {
     title: 'Запасы',
-    subtitle: 'Остатки и закупки'
+    subtitle: 'Остатки, склад и закупки'
   },
   finance: {
     title: 'Финансовая сводка',

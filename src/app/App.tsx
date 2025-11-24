@@ -18,6 +18,7 @@ import { SitesDetailPage } from '../modules/sites/SitesDetailPage';
 import { AboutPage } from '../modules/about/AboutPage';
 import { Boxes, Briefcase, Cpu, LayoutDashboard, Shield, Users, Wallet, Wrench } from '../shared/icons';
 import { useNavBadges } from '../shared/hooks/useNavBadges';
+import { SectionHeader } from '../shared/components/SectionHeader';
 
 const pageMeta = [
   { match: /^\/$/, title: strings.dashboard.title, subtitle: strings.dashboard.subtitle },
@@ -27,7 +28,7 @@ const pageMeta = [
   { match: /^\/personnel/, title: strings.personnel.title, subtitle: strings.personnel.subtitle },
   { match: /^\/finance/, title: strings.finance.title, subtitle: strings.finance.subtitle },
   { match: /^\/safety/, title: strings.safety.title, subtitle: strings.safety.subtitle },
-  { match: /^\/about/, title: strings.nav.about, subtitle: 'Актуальная демо-страница' }
+  { match: /^\/about/, title: strings.nav.about, subtitle: 'Демо-кокпит под роль руководителя эксплуатации ЦОД' }
 ];
 
 export default function App() {
@@ -37,24 +38,49 @@ export default function App() {
 
   const navItems = [
     { to: '/', label: strings.nav.dashboard, icon: LayoutDashboard },
-    { to: '/sites', label: strings.nav.sites, icon: Cpu, badge: navBadges.nonHealthySites },
-    { to: '/maintenance', label: strings.nav.maintenance, icon: Wrench, badge: navBadges.overdueWorkOrders },
-    { to: '/inventory', label: strings.nav.inventory, icon: Boxes },
+    {
+      to: '/sites',
+      label: strings.nav.sites,
+      icon: Cpu,
+      badge: navBadges.nonHealthySites
+        ? { value: navBadges.nonHealthySites, tooltip: `${navBadges.nonHealthySites} площадки требуют внимания` }
+        : null
+    },
+    {
+      to: '/maintenance',
+      label: strings.nav.maintenance,
+      icon: Wrench,
+      badge: navBadges.overdueWorkOrders
+        ? { value: navBadges.overdueWorkOrders, tooltip: `${navBadges.overdueWorkOrders} просроченные заявки на ТО` }
+        : null
+    },
+    {
+      to: '/inventory',
+      label: strings.nav.inventory,
+      icon: Boxes,
+      badge: navBadges.lowInventory
+        ? { value: navBadges.lowInventory, tooltip: `${navBadges.lowInventory} позиций на минимуме или ниже` }
+        : null
+    },
     { to: '/personnel', label: strings.nav.personnel, icon: Users },
     { to: '/finance', label: strings.nav.finance, icon: Wallet },
-    { to: '/safety', label: strings.nav.safety, icon: Shield, badge: navBadges.overdueSafety },
+    {
+      to: '/safety',
+      label: strings.nav.safety,
+      icon: Shield,
+      badge: navBadges.openSafety
+        ? { value: navBadges.openSafety, tooltip: `${navBadges.openSafety} событий безопасности в работе` }
+        : null
+    },
     { to: '/about', label: strings.nav.about, icon: Briefcase }
   ];
 
   const currentPage = pageMeta.find((entry) => entry.match.test(pathname)) ?? pageMeta[0];
 
   const osiTone = osi.category === 'critical' ? 'danger' : osi.category === 'watch' ? 'warning' : 'success';
-  const osiDescriptor =
-    osi.category === 'critical'
-      ? 'Критично / Требуется реакция'
-      : osi.category === 'watch'
-        ? 'Нагрузка сети / Рост нагрузки'
-        : 'Стабильно / Контроль тренда';
+  const osiState = osi.category === 'critical' ? 'Критично' : osi.category === 'watch' ? 'Повышенная нагрузка' : 'Стабильно';
+  const osiTrend = osi.category === 'critical' ? 'Требуется реакция' : osi.category === 'watch' ? 'Рост нагрузки' : 'Контроль тренда';
+  const osiDescriptor = `Нагрузка сети · ${osiState} / ${osiTrend}`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0b1220] via-[#0b1220] to-[#0d121a] text-text-primary relative overflow-hidden">
@@ -63,7 +89,7 @@ export default function App() {
           <aside className="w-64 md:w-60 sm:w-56 bg-gradient-to-b from-bg-surface/95 to-bg-surfaceSoft/90 border-r border-white/5 p-6 flex flex-col gap-8 shadow-ambient backdrop-blur-xl relative z-10">
             <div className="space-y-1">
               <div className="text-2xl font-semibold text-text-primary drop-shadow-sm">{strings.headers.appTitle}</div>
-              <div className="text-xs uppercase tracking-[0.22em] text-text-dim">Кокпит эксплуатации</div>
+              <div className="text-xs uppercase tracking-[0.22em] text-text-dim">Кокпит руководителя эксплуатации ЦОД</div>
             </div>
           <nav className="flex flex-col gap-2 text-sm">
             {navItems.map((item) => {
@@ -96,9 +122,16 @@ export default function App() {
                         />
                       </span>
                       {item.badge ? (
-                        <span className="ml-auto inline-flex min-w-[24px] h-6 items-center justify-center rounded-full bg-status-warning/20 text-status-warning text-xs font-semibold px-2 shadow-[0_0_0_1px_rgba(251,191,36,0.35)]">
-                          {item.badge}
-                        </span>
+                        <InfoTooltip label={item.badge.tooltip}>
+                          <span
+                            className={clsx(
+                              'ml-auto inline-flex min-w-[26px] h-6 items-center justify-center rounded-full border px-2 text-xs font-semibold shadow-[0_0_0_1px_rgba(62,236,226,0.18)] bg-bg-surfaceSoft text-accent-primary',
+                              isActive && 'opacity-80 bg-bg-surface'
+                            )}
+                          >
+                            {item.badge.value}
+                          </span>
+                        </InfoTooltip>
                       ) : null}
                     </>
                   )}
@@ -109,25 +142,24 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-gradient-to-r from-bg-app/90 via-bg-app/80 to-bg-surface/75 backdrop-blur-2xl border-b border-white/5 px-8 py-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between shadow-ambient">
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.24em] text-text-dim">DC Maestro</p>
-              <h1 className="text-3xl font-semibold text-text-primary drop-shadow-sm">{currentPage.title}</h1>
-              {currentPage.subtitle && <p className="text-base text-text-muted leading-relaxed max-w-3xl">{currentPage.subtitle}</p>}
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="glass-shell">
+          <header className="sticky top-0 z-10 bg-gradient-to-r from-bg-app/90 via-bg-app/80 to-bg-surface/75 backdrop-blur-2xl border-b border-white/5 px-8 py-5 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between shadow-ambient">
+            <SectionHeader
+              as="h1"
+              label={`Модуль: ${currentPage.title}`}
+              title={currentPage.title}
+              subtitle={currentPage.subtitle}
+              className="mb-0"
+            />
+            <div className="flex items-start gap-4">
+              <div className="glass-shell self-start">
                 <div className="glass-inner flex items-center gap-4 py-3 px-4">
                   <div className="space-y-1 text-left">
                     <div className="text-[11px] uppercase tracking-[0.18em] text-text-dim">Operational Strain Index</div>
                     <div className="text-3xl font-bold text-text-primary">{osi.value.toFixed(1)}</div>
-                    <div className="text-sm text-text-muted">Нагрузка сети · {osiDescriptor}</div>
+                    <div className="text-sm text-text-muted">{osiDescriptor}</div>
                   </div>
                   <InfoTooltip label={strings.headers.osiTooltip}>
-                    <StatusPill
-                      label={osi.category === 'critical' ? 'Критично' : osi.category === 'watch' ? 'Нагрузка' : 'Стабильно'}
-                      tone={osiTone}
-                    />
+                    <StatusPill label={osiState} tone={osiTone} />
                   </InfoTooltip>
                 </div>
               </div>
