@@ -58,8 +58,10 @@ export function PersonnelPage() {
               <button
                 key={role.key}
                 onClick={() => setRoleFilter(role.key)}
-                className={`px-3 py-1 rounded-full text-sm border ${
-                  roleFilter === role.key ? 'border-primary/60 bg-primary/10 text-primary' : 'border-gray-700 bg-gray-900/60'
+                className={`px-3 py-1.5 rounded-full text-sm border transition ${
+                  roleFilter === role.key
+                    ? 'border-accent-primary/50 bg-accent-primary/10 text-accent-primary shadow-focus'
+                    : 'border-border-subtle bg-bg-surfaceSoft text-text-muted hover:border-accent-primary/30'
                 }`}
               >
                 {role.label}
@@ -70,11 +72,11 @@ export function PersonnelPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по имени, роли, грейду"
-            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary/60"
+            className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-4 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-focus transition"
           />
         </div>
         <Table>
-          <thead className="text-xs uppercase text-gray-400">
+          <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => requestSort('fullName')}>
                 Имя {sortConfig.key === 'fullName' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
@@ -91,11 +93,11 @@ export function PersonnelPage() {
           </thead>
           <tbody>
             {sortedAndFiltered.map((member) => (
-              <tr key={member.id} className="border-t border-gray-800">
+              <tr key={member.id} className="border-t border-border-subtle/40">
                 <td className="py-2 pr-4">{member.fullName}</td>
-                <td className="py-2 pr-4 text-gray-300">{member.role}</td>
+                <td className="py-2 pr-4 text-text-muted">{member.role}</td>
                 <td className="py-2 pr-4">{member.grade}</td>
-                <td className="py-2 pr-4 text-gray-300">{member.assignedSiteIds.join(', ')}</td>
+                <td className="py-2 pr-4 text-text-muted">{member.assignedSiteIds.join(', ')}</td>
                 <td className="py-2 pr-4">{member.hourlyRate.toLocaleString('ru-RU')} ₽/ч</td>
               </tr>
             ))}
@@ -109,7 +111,7 @@ export function PersonnelPage() {
             <select
               value={selectedSite}
               onChange={(e) => setSelectedSite(e.target.value)}
-              className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm"
+              className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary"
             >
               {sites.map((siteItem) => (
                 <option key={siteItem.id} value={siteItem.id}>
@@ -119,7 +121,7 @@ export function PersonnelPage() {
             </select>
           </div>
           <Table>
-            <thead className="text-xs uppercase text-gray-400">
+            <thead>
               <tr>
                 <th className="text-left py-2">Дата</th>
                 <th className="text-left py-2">Начало</th>
@@ -131,7 +133,7 @@ export function PersonnelPage() {
             </thead>
             <tbody>
               {siteShifts.map((shift) => (
-                <tr key={shift.id} className="border-t border-gray-800">
+                <tr key={shift.id} className="border-t border-border-subtle/40">
                   <td className="py-2 pr-4">{shift.date}</td>
                   <td className="py-2 pr-4">{shift.startTime}</td>
                   <td className="py-2 pr-4">{shift.endTime}</td>
@@ -145,13 +147,13 @@ export function PersonnelPage() {
         </Card>
         <Card title="Ops Load Index" subtitle={site?.name}>
           <div className="flex flex-col gap-3">
-            <div className="text-4xl font-bold">{opsIndex.toFixed(1)}</div>
+            <div className="text-4xl font-bold text-text-primary">{opsIndex.toFixed(1)}</div>
             <StatusPill
               label={opsIndex > 80 ? 'Высокая нагрузка' : opsIndex > 60 ? 'Повышенная' : 'Комфортно'}
               tone={opsIndex > 80 ? 'danger' : opsIndex > 60 ? 'warning' : 'success'}
             />
             <InfoTooltip label="Ops Load Index: плановые vs фактические часы смен + переработка">
-              <p className="text-sm text-gray-400">Расчёт по плановым/фактическим часам и переработке.</p>
+              <p className="text-sm text-text-muted">Расчёт по плановым/фактическим часам и переработке.</p>
             </InfoTooltip>
           </div>
         </Card>

@@ -16,6 +16,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { InfoTooltip } from '../../shared/components/InfoTooltip';
 import { shifts } from '../../shared/data/shifts';
 import { financialRecords } from '../../shared/data/financialRecords';
+import { ArrowRight } from 'lucide-react';
 
 const chartData = sites.map((site) => ({ name: site.name, uptime: Number(uptimePercent(site).toFixed(2)) }));
 
@@ -43,6 +44,14 @@ export function DashboardPage() {
     () => sites.reduce((sum, site) => sum + opsLoadIndex(site, shifts), 0) / Math.max(sites.length, 1),
     []
   );
+
+  const networkTone = networkUptime > 98 && avgOpsLoad < 55 ? 'success' : networkUptime > 96 ? 'warning' : 'danger';
+  const networkStatusText =
+    networkTone === 'success'
+      ? 'Сеть в целом: Стабильно'
+      : networkTone === 'warning'
+        ? 'Сеть в целом: Предупреждение'
+        : 'Сеть в целом: Критично';
 
   const overdueWorkOrders = workOrders.filter((wo) => wo.status !== 'done' && wo.dueDate && wo.dueDate < today).length;
   const monthlyOpex = useMemo(() => {
@@ -148,70 +157,88 @@ export function DashboardPage() {
     <div className="space-y-8">
       <SectionHeader title={strings.dashboard.title} description={strings.dashboard.description} />
 
-      <Card title={strings.dashboard.todayReport}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {summaryCards.map((card) => (
-            <KpiBadge key={card.label} label={card.label} value={card.value} tone={card.tone} />
-          ))}
+      <Card className="border border-accent-muted/20 bg-gradient-to-br from-bg-surface to-bg-surfaceSoft/80 shadow-lifted">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="space-y-2">
+            <p className="text-sm text-text-dim">DC Maestro / Кокпит эксплуатации ЦОД</p>
+            <h3 className="text-2xl font-semibold text-text-primary">Главная панель мониторинга</h3>
+            <p className="text-sm text-text-muted max-w-2xl">
+              Быстрый взгляд на аптайм, инциденты и нагрузку. Все ключевые показатели сведены в блоки ниже, чтобы команда могла
+              реагировать быстрее.
+            </p>
+          </div>
+          <div className="flex flex-col items-start md:items-end gap-2">
+            <StatusPill label={networkStatusText} tone={networkTone} />
+            <p className="text-sm text-text-muted">Средний аптайм сети: {networkUptime.toFixed(2)}%</p>
+          </div>
         </div>
       </Card>
 
-      <Card title="Быстрый переход по ролям" subtitle="Shortcut-туры под собеседование для Вис Энергия">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          {roleShortcuts.map((role) => (
-            <div
-              key={role.title}
-              className="rounded-xl border border-gray-800 bg-gray-900/60 p-4 flex flex-col gap-3 hover:border-primary/40 transition"
-            >
-              <div>
-                <div className="font-semibold text-gray-100">{role.title}</div>
-                <p className="text-sm text-gray-400 mt-1">{role.metric}</p>
-              </div>
-              <Link
-                to={role.to}
-                className="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:text-primary/80 transition"
-              >
-                Перейти
-                <span aria-hidden className="text-base">↗</span>
-              </Link>
-            </div>
-          ))}
-        </div>
-      </Card>
+      <div className="grid gap-6 xl:grid-cols-[2fr,1fr]">
+        <Card className="xl:col-span-2" title={strings.dashboard.todayReport}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {summaryCards.map((card) => (
+              <KpiBadge key={card.label} label={card.label} value={card.value} tone={card.tone} />
+            ))}
+          </div>
+        </Card>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <Card className="xl:col-span-2" title="Uptime по площадкам">
+        <Card
+          className="xl:col-span-2"
+          title="Быстрый переход по ролям"
+          subtitle="Shortcut-туры под собеседование для Вис Энергия"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            {roleShortcuts.map((role) => (
+              <Card key={role.title} interactive className="p-4 bg-bg-surfaceSoft/60 border-border-subtle">
+                <div className="space-y-2">
+                  <div className="text-lg font-semibold text-text-primary">{role.title}</div>
+                  <p className="text-sm text-text-muted">{role.metric}</p>
+                </div>
+                <Link
+                  to={role.to}
+                  className="inline-flex items-center gap-2 text-accent-primary font-medium text-sm mt-3 transition-transform hover:translate-x-0.5"
+                >
+                  Перейти
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </Card>
+            ))}
+          </div>
+        </Card>
+
+        <Card className="xl:col-span-1" title="Состояние сети" subtitle="Uptime по площадкам">
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={16}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-                <XAxis dataKey="name" tick={{ fill: '#cbd5e1', fontSize: 12 }} />
-                <YAxis tick={{ fill: '#cbd5e1', fontSize: 12 }} domain={[90, 100]} />
-                <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #1f2937' }} />
-                <Bar dataKey="uptime" fill="#38bdf8" radius={[6, 6, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1f2b3f" />
+                <XAxis dataKey="name" tick={{ fill: '#b5c0d8', fontSize: 12 }} />
+                <YAxis tick={{ fill: '#b5c0d8', fontSize: 12 }} domain={[90, 100]} />
+                <Tooltip contentStyle={{ background: '#0f192b', border: '1px solid #1f2b3f', color: '#e5eaf3' }} />
+                <Bar dataKey="uptime" fill="#5de4c7" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </Card>
 
-        <Card title={`${strings.dashboard.worstSites} (Reliability)`}>
+        <Card title={`${strings.dashboard.worstSites} (Reliability)`} subtitle="Площадки, требующие внимания">
           <Table>
-            <thead className="text-xs uppercase text-gray-400">
+            <thead>
               <tr>
-                <th className="text-left py-2">Площадка</th>
-                <th className="text-right py-2">Reliability</th>
-                <th className="text-right py-2">Статус</th>
+                <th className="text-left">Площадка</th>
+                <th className="text-right">Reliability</th>
+                <th className="text-right">Статус</th>
               </tr>
             </thead>
             <tbody>
               {worstSites.map((site) => (
-                <tr key={site.id} className="border-t border-gray-800">
-                  <td className="py-3 pr-4">
-                    <div className="font-medium text-gray-100">{site.name}</div>
-                    <div className="text-xs text-gray-400">{site.region}</div>
+                <tr key={site.id} className="border-t border-border-subtle/40">
+                  <td className="pr-4">
+                    <div className="font-medium text-text-primary">{site.name}</div>
+                    <div className="text-xs text-text-muted">{site.region}</div>
                   </td>
-                  <td className="py-3 text-right">{site.reliability.toFixed(1)}</td>
-                  <td className="py-3 text-right">
+                  <td className="text-right">{site.reliability.toFixed(1)}</td>
+                  <td className="text-right">
                     <StatusPill
                       label={site.status === 'healthy' ? 'Стабильно' : site.status === 'warning' ? 'Предупреждение' : 'Критично'}
                       tone={site.status === 'healthy' ? 'success' : site.status === 'warning' ? 'warning' : 'danger'}
@@ -224,59 +251,57 @@ export function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 gap-4">
-        <Card title="Текущие предупреждения">
-          <Table>
-            <thead className="text-xs uppercase text-gray-400">
-              <tr>
-                <th className="text-left py-2">Тип</th>
-                <th className="text-left py-2">Описание</th>
-                <th className="text-left py-2">Площадка</th>
-                <th className="text-left py-2">Приоритет</th>
-                <th className="text-left py-2">Действие</th>
+      <Card title="Текущие предупреждения" subtitle="Инциденты, ТО, склад и безопасность" className="xl:col-span-2">
+        <Table>
+          <thead>
+            <tr>
+              <th className="text-left">Тип</th>
+              <th className="text-left">Описание</th>
+              <th className="text-left">Площадка</th>
+              <th className="text-left">Приоритет</th>
+              <th className="text-left">Действие</th>
+            </tr>
+          </thead>
+          <tbody>
+            {alerts.map((alert) => (
+              <tr key={`${alert.type}-${alert.id}`} className="border-t border-border-subtle/40">
+                <td className="pr-4 font-medium text-text-primary">{alert.type}</td>
+                <td className="pr-4 text-text-primary">{alert.description}</td>
+                <td className="pr-4 text-text-muted">{alert.siteId}</td>
+                <td className="pr-4">
+                  <StatusPill
+                    label={alert.priority}
+                    tone={alert.priority.includes('Крит') ? 'danger' : alert.priority.includes('Проср') ? 'warning' : 'warning'}
+                  />
+                </td>
+                <td className="pr-4">
+                  <button
+                    onClick={alert.link}
+                    className="text-accent-primary hover:text-accent-muted text-sm inline-flex items-center gap-2 transition-transform hover:translate-x-0.5"
+                  >
+                    Перейти <ArrowRight className="w-4 h-4" aria-hidden />
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {alerts.map((alert) => (
-                <tr key={`${alert.type}-${alert.id}`} className="border-t border-gray-800">
-                  <td className="py-3 pr-4">{alert.type}</td>
-                  <td className="py-3 pr-4 text-gray-200">{alert.description}</td>
-                  <td className="py-3 pr-4 text-gray-300">{alert.siteId}</td>
-                  <td className="py-3 pr-4">
-                    <StatusPill
-                      label={alert.priority}
-                      tone={alert.priority.includes('Крит') ? 'danger' : alert.priority.includes('Проср') ? 'warning' : 'warning'}
-                    />
-                  </td>
-                  <td className="py-3 pr-4">
-                    <button
-                      onClick={alert.link}
-                      className="text-primary hover:text-primary/80 text-sm inline-flex items-center gap-1 transition"
-                    >
-                      Перейти <span aria-hidden>↗</span>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {alerts.length === 0 && (
-                <tr>
-                  <td className="py-3 pr-4 text-gray-400" colSpan={5}>
-                    Нет предупреждений на сегодня.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
-        </Card>
-      </div>
+            ))}
+            {alerts.length === 0 && (
+              <tr>
+                <td className="pr-4 text-text-muted" colSpan={5}>
+                  Нет предупреждений на сегодня.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {withScores.map((site) => (
-          <Card key={site.id}>
+          <Card key={site.id} interactive>
             <div className="flex items-start justify-between">
-              <div>
-                <div className="text-lg font-semibold text-gray-100">{site.name}</div>
-                <div className="text-sm text-gray-400">{site.region}</div>
+              <div className="space-y-1">
+                <div className="text-lg font-semibold text-text-primary">{site.name}</div>
+                <div className="text-sm text-text-muted">{site.region}</div>
               </div>
               <StatusPill
                 label={site.status === 'healthy' ? 'Стабильно' : site.status === 'warning' ? 'Предупреждение' : 'Критично'}

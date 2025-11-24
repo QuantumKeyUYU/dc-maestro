@@ -44,7 +44,7 @@ export function MaintenancePage() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
           <div className="flex gap-3 flex-wrap">
             <select
-              className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm"
+              className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary"
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value as (typeof types)[number])}
             >
@@ -55,7 +55,7 @@ export function MaintenancePage() {
               ))}
             </select>
             <select
-              className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm"
+              className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary"
               value={critFilter}
               onChange={(e) => setCritFilter((e.target.value === 'all' ? 'all' : Number(e.target.value)) as (typeof criticalities)[number])}
             >
@@ -70,11 +70,11 @@ export function MaintenancePage() {
             value={assetsTable.searchQuery}
             onChange={(e) => assetsTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по названию, типу, площадке"
-            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary/60"
+            className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-4 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-focus transition"
           />
         </div>
         <Table>
-          <thead className="text-xs uppercase text-gray-400">
+          <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => assetsTable.requestSort('name')}>
                 Название {assetsTable.sortConfig.key === 'name' ? (assetsTable.sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
@@ -91,12 +91,12 @@ export function MaintenancePage() {
           </thead>
           <tbody>
             {assetsTable.sortedAndFiltered.map((asset) => (
-              <tr key={asset.id} className="border-t border-gray-800">
+              <tr key={asset.id} className="border-t border-border-subtle/40">
                 <td className="py-2 pr-4">{asset.name}</td>
-                <td className="py-2 pr-4 text-gray-300">{asset.type}</td>
+                <td className="py-2 pr-4 text-text-muted">{asset.type}</td>
                 <td className="py-2 pr-4">{asset.criticality}</td>
-                <td className="py-2 pr-4 text-gray-300">{asset.siteId}</td>
-                <td className="py-2 pr-4 text-gray-300">
+                <td className="py-2 pr-4 text-text-muted">{asset.siteId}</td>
+                <td className="py-2 pr-4 text-text-muted">
                   {asset.nextPlannedMaintenanceDate
                     ? new Date(asset.nextPlannedMaintenanceDate).toLocaleDateString('ru-RU')
                     : '—'}
@@ -113,11 +113,11 @@ export function MaintenancePage() {
             value={workOrdersTable.searchQuery}
             onChange={(e) => workOrdersTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по ID, типу или площадке"
-            className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary/60"
+            className="bg-bg-surfaceSoft border border-border-subtle rounded-lg px-4 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-focus transition"
           />
         </div>
         <Table>
-          <thead className="text-xs uppercase text-gray-400">
+          <thead>
             <tr>
               <th className="text-left py-2 cursor-pointer" onClick={() => workOrdersTable.requestSort('id')}>
                 ID {workOrdersTable.sortConfig.key === 'id' ? (workOrdersTable.sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
@@ -138,9 +138,9 @@ export function MaintenancePage() {
             {workOrdersTable.sortedAndFiltered.map((wo) => {
               const isOverdue = wo.dueDate && wo.status !== 'done' && wo.dueDate < new Date();
               return (
-                <tr key={wo.id} className={`border-t border-gray-800 ${isOverdue ? 'bg-danger/10' : ''}`}>
+                <tr key={wo.id} className={`border-t border-border-subtle/40 ${isOverdue ? 'bg-status-danger/10' : ''}`}>
                   <td className="py-2 pr-4">{wo.id}</td>
-                  <td className="py-2 pr-4 text-gray-300">{wo.type}</td>
+                  <td className="py-2 pr-4 text-text-muted">{wo.type}</td>
                   <td className="py-2 pr-4">
                     <StatusPill
                       label={wo.status === 'done' ? 'Завершено' : wo.status === 'in_progress' ? 'В работе' : isOverdue ? 'Просрочено' : 'Открыто'}
@@ -156,9 +156,9 @@ export function MaintenancePage() {
                     />
                   </td>
                   <td className="py-2 pr-4">{wo.priority}</td>
-                  <td className="py-2 pr-4 text-gray-300">{wo.assetId}</td>
-                  <td className="py-2 pr-4 text-gray-300">{wo.siteId}</td>
-                  <td className="py-2 pr-4 text-gray-300">
+                  <td className="py-2 pr-4 text-text-muted">{wo.assetId}</td>
+                  <td className="py-2 pr-4 text-text-muted">{wo.siteId}</td>
+                  <td className="py-2 pr-4 text-text-muted">
                     {wo.dueDate ? new Date(wo.dueDate).toLocaleDateString('ru-RU') : '—'}
                   </td>
                 </tr>
