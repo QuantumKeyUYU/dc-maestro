@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { ReactNode } from 'react';
-import { strings } from '../lib/strings';
 
 interface SectionHeaderProps {
   title: string;
@@ -17,18 +16,20 @@ export function SectionHeader({
   subtitle,
   badge,
   action,
-  label = strings.headers.appTitle,
+  label,
   as: HeadingTag = 'h2',
   className
 }: SectionHeaderProps) {
   return (
-    <div className={clsx('flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between', className)}>
-      <div className="space-y-2 max-w-4xl">
-        <p className="whitespace-nowrap text-[10px] uppercase tracking-[0.14em] text-text-dim sm:text-[11px] sm:tracking-[0.16em]">{label}</p>
+    <div className={clsx('flex flex-col gap-2.5 sm:flex-row sm:items-start sm:justify-between', className)}>
+      <div className="space-y-1.5 max-w-4xl">
+        {label ? (
+          <p className="whitespace-nowrap text-[11px] font-medium tracking-[0.04em] text-text-dim leading-none">{label}</p>
+        ) : null}
         <div className="flex items-center gap-3">
           <span className="block h-10 w-1 rounded-full bg-gradient-to-b from-accent-primary/80 via-accent-primary/45 to-transparent shadow-[0_0_18px_rgba(62,236,226,0.5)]" />
-          <div className="flex flex-wrap items-center gap-3">
-            <HeadingTag className="text-3xl font-semibold text-text-primary tracking-tight drop-shadow-sm">{title}</HeadingTag>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <HeadingTag className="text-3xl font-semibold text-text-primary tracking-tight drop-shadow-sm leading-tight">{title}</HeadingTag>
             {badge}
           </div>
         </div>

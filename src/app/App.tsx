@@ -22,14 +22,49 @@ import { useNavBadges } from '../shared/hooks/useNavBadges';
 import { SectionHeader } from '../shared/components/SectionHeader';
 
 const pageMeta = [
-  { match: /^\/$/, title: strings.dashboard.title, subtitle: strings.dashboard.subtitle },
-  { match: /^\/sites(\/.*)?$/, title: strings.sites.title, subtitle: strings.sites.subtitle },
-  { match: /^\/maintenance/, title: strings.maintenance.title, subtitle: strings.maintenance.subtitle },
-  { match: /^\/inventory/, title: strings.inventory.title, subtitle: strings.inventory.subtitle },
-  { match: /^\/personnel/, title: strings.personnel.title, subtitle: strings.personnel.subtitle },
-  { match: /^\/finance/, title: strings.finance.title, subtitle: strings.finance.subtitle },
-  { match: /^\/safety/, title: strings.safety.title, subtitle: strings.safety.subtitle },
-  { match: /^\/about/, title: strings.about.title, subtitle: strings.about.subtitle }
+  {
+    match: /^\/$/,
+    title: strings.dashboard.title,
+    subtitle: strings.dashboard.subtitle,
+    label: strings.headers.dashboardLabel
+  },
+  { match: /^\/sites(\/.*)?$/, title: strings.sites.title, subtitle: strings.sites.subtitle, label: strings.headers.moduleLabel },
+  {
+    match: /^\/maintenance/,
+    title: strings.maintenance.title,
+    subtitle: strings.maintenance.subtitle,
+    label: strings.headers.moduleLabel
+  },
+  {
+    match: /^\/inventory/,
+    title: strings.inventory.title,
+    subtitle: strings.inventory.subtitle,
+    label: strings.headers.moduleLabel
+  },
+  {
+    match: /^\/personnel/,
+    title: strings.personnel.title,
+    subtitle: strings.personnel.subtitle,
+    label: strings.headers.moduleLabel
+  },
+  {
+    match: /^\/finance/,
+    title: strings.finance.title,
+    subtitle: strings.finance.subtitle,
+    label: strings.headers.moduleLabel
+  },
+  {
+    match: /^\/safety/,
+    title: strings.safety.title,
+    subtitle: strings.safety.subtitle,
+    label: strings.headers.moduleLabel
+  },
+  {
+    match: /^\/about/,
+    title: strings.about.title,
+    subtitle: strings.about.subtitle,
+    label: strings.headers.aboutLabel
+  }
 ];
 
 export default function App() {
@@ -110,19 +145,20 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-b from-[#0b1220] via-[#0b1220] to-[#0d121a] text-text-primary relative">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(62,236,226,0.08),transparent_30%),radial-gradient(circle_at_80%_0%,rgba(124,140,251,0.08),transparent_32%)]" />
       <div className="flex h-screen overflow-hidden relative">
-          <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-gradient-to-b from-bg-surface/95 to-bg-surfaceSoft/90 border-r border-white/5 p-6 flex flex-col gap-8 shadow-ambient backdrop-blur-xl relative z-10">
+          <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-gradient-to-b from-bg-surface/95 to-bg-surfaceSoft/90 border-r border-white/5 p-6 flex flex-col gap-8 shadow-ambient backdrop-blur-xl relative z-10 overflow-hidden">
             <NavLink
               to="/"
               className={({ isActive }) =>
                 clsx(
-                  'space-y-1 -mx-2 px-2 py-1.5 rounded-xl transition text-left block',
-                  'hover:bg-white/5 hover:shadow-glow/50 cursor-pointer',
-                  isActive ? 'bg-white/5' : 'bg-transparent'
+                  'block -mx-2 px-3 py-2 rounded-xl transition text-left space-y-1.5 shadow-ambient/70 border border-white/5 bg-bg-surfaceSoft/60 backdrop-blur',
+                  'hover:shadow-lifted hover:border-white/10 hover:bg-bg-surfaceSoft/80 cursor-pointer',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/40',
+                  isActive && 'shadow-ambient'
                 )
               }
             >
               <div className="text-2xl font-semibold text-text-primary drop-shadow-sm">{strings.headers.appTitle}</div>
-              <div className="text-xs uppercase tracking-[0.22em] text-text-dim">Кокпит руководителя эксплуатации ЦОД</div>
+              <div className="text-[11px] tracking-[0.12em] text-text-dim">Кокпит руководителя эксплуатации ЦОД</div>
             </NavLink>
           <nav className="flex flex-col gap-1.5 text-[15px]">
             {navItems.map((item) => {
@@ -134,7 +170,7 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative group flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-all border border-transparent backdrop-blur-sm',
+                      'relative group flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-all border border-transparent backdrop-blur-sm overflow-hidden',
                       'hover:bg-white/5 hover:text-text-primary hover:translate-x-[1px] hover:shadow-glow',
                       isActive
                         ? 'bg-white/8 text-text-primary shadow-glow border-white/10'
@@ -144,7 +180,7 @@ export default function App() {
                 >
                   {({ isActive }) => (
                     <>
-                      <span className="absolute bottom-1.5 left-3 right-3 h-px rounded-full bg-accent-primary/60 blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+                      <span className="pointer-events-none absolute bottom-1.5 left-2.5 right-2.5 h-px rounded-full bg-accent-primary/60 blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
                       <Icon className="w-[18px] h-[18px] text-transparent bg-clip-text bg-gradient-to-br from-accent-primary to-accent-muted" />
                       <span className="flex-1 min-w-0 text-left leading-tight text-text-primary relative">
                         {item.label}
@@ -158,8 +194,8 @@ export default function App() {
                       {item.badge ? (
                         <span
                           className={clsx(
-                            'ml-3 inline-flex h-[22px] min-w-[28px] shrink-0 items-center justify-center rounded-full border px-2.5 text-[11px] font-medium tracking-tight text-cyan-50/85 backdrop-blur-sm bg-[rgba(54,211,211,0.16)] border-[rgba(54,211,211,0.46)] shadow-[0_0_0_1px_rgba(62,236,226,0.12)]',
-                            isActive && 'text-cyan-50 border-[rgba(62,236,226,0.6)]'
+                            'ml-2 inline-flex h-[20px] min-w-[24px] shrink-0 items-center justify-center rounded-full px-2 text-[11px] font-semibold leading-none tracking-tight text-cyan-50/90 backdrop-blur-sm bg-[rgba(62,236,226,0.16)] shadow-[0_4px_12px_rgba(62,236,226,0.15)_inset,0_0_0_1px_rgba(62,236,226,0.25)] border border-[rgba(62,236,226,0.18)]',
+                            isActive && 'text-cyan-50 shadow-[0_4px_12px_rgba(62,236,226,0.18)_inset,0_0_0_1px_rgba(62,236,226,0.32)]'
                           )}
                         >
                           {item.badge.value}
@@ -174,10 +210,10 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-gradient-to-r from-bg-app/90 via-bg-app/80 to-bg-surface/75 backdrop-blur-2xl border-b border-white/5 px-8 py-5 max-[800px]:py-4 flex flex-col gap-6 max-[800px]:gap-5 lg:flex-row lg:items-start lg:justify-between shadow-ambient">
+          <header className="sticky top-0 z-10 bg-gradient-to-r from-bg-app/90 via-bg-app/80 to-bg-surface/75 backdrop-blur-2xl border-b border-white/5 px-8 py-4 max-[800px]:py-4 flex flex-col gap-6 max-[800px]:gap-5 lg:flex-row lg:items-start lg:justify-between shadow-ambient">
             <SectionHeader
               as="h1"
-              label={`Модуль: ${currentPage.title}`}
+              label={currentPage.label ?? undefined}
               title={currentPage.title}
               subtitle={currentPage.subtitle}
               className="mb-0"

@@ -66,6 +66,7 @@ export function InfoTooltip({ label, children, className, triggerArea = 'icon', 
     }
     hideTimer.current = setTimeout(() => {
       setOpen(false);
+      setCoords(null);
       hideTimer.current = null;
     }, 120);
   };
