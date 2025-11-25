@@ -7,9 +7,11 @@ import { sites } from '../../shared/data/sites';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
-const COLORS = ['#6FB7F0', '#59C2D5', '#7AC7F0', '#4DA7C1'];
-const LABEL_COLOR = 'rgba(236,242,255,0.78)';
-const SEGMENT_SEPARATOR = 'rgba(10,15,22,0.92)';
+const FINANCE_SLICE_COLORS = {
+  energy: '#38bdf8',
+  maintenance: '#0ea5e9',
+  staff: '#0369a1'
+} as const;
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -27,6 +29,7 @@ export function FinancePage() {
 
   const totalOpex = filtered.filter((r) => r.type === 'opex').reduce((sum, r) => sum + r.amountRub, 0);
   const totalCapex = filtered.filter((r) => r.type === 'capex').reduce((sum, r) => sum + r.amountRub, 0);
+  const total = totalOpex + totalCapex;
 
   const pieData = Object.entries(
     filtered.reduce<Record<string, number>>((acc, r) => {
@@ -102,16 +105,9 @@ export function FinancePage() {
           </Table>
         </Card>
         <Card title="Сводка">
-          <div className="space-y-5">
-            <div className="grid gap-4 md:grid-cols-[1fr,1fr] md:items-center">
-              <div className="flex flex-col gap-2 text-left md:text-right">
-                <div className="text-xs text-text-muted">Total OPEX</div>
-                <div className="text-2xl font-semibold text-text-primary leading-tight">{totalOpex.toLocaleString('ru-RU')} ₽</div>
-
-                <div className="text-xs text-text-muted pt-2">Total CAPEX</div>
-                <div className="text-2xl font-semibold text-text-primary leading-tight">{totalCapex.toLocaleString('ru-RU')} ₽</div>
-              </div>
-              <div className="h-64">
+          <div className="space-y-6">
+            <div className="grid gap-6 md:grid-cols-[minmax(0,1fr),240px] md:items-center">
+              <div className="relative h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -121,56 +117,55 @@ export function FinancePage() {
                       cy="50%"
                       outerRadius={92}
                       innerRadius={56}
-                      strokeWidth={3}
-                      cornerRadius={10}
+                      stroke="#0c1119"
+                      strokeWidth={2}
                       labelLine={false}
-                      paddingAngle={3}
-                      label={({ name, x, y }) => (
-                        <text x={x} y={y} fill={LABEL_COLOR} textAnchor="middle" dominantBaseline="central" fontSize={11}>
-                          {name}
-                        </text>
-                      )}
+                      label={false}
+                      paddingAngle={2}
                     >
-                      {pieData.map((entry, index) => (
-                        <Cell
-                          key={`cell-${entry.name}`}
-                          fill={COLORS[index % COLORS.length]}
-                          stroke={SEGMENT_SEPARATOR}
-                          strokeWidth={1}
-                        />
-                      ))}
+                      {pieData.map((entry) => {
+                        const fill = FINANCE_SLICE_COLORS[entry.name as keyof typeof FINANCE_SLICE_COLORS] ?? FINANCE_SLICE_COLORS.energy;
+                        return <Cell key={`cell-${entry.name}`} fill={fill} />;
+                      })}
                     </Pie>
                     <Tooltip
                       contentStyle={{
-                        background: 'rgba(8,12,19,0.96)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: 14,
+                        background: 'rgba(8,12,19,0.95)',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        borderRadius: 12,
                         color: 'rgba(236,242,255,0.9)',
-                        boxShadow: '0 16px 38px rgba(0,0,0,0.5)'
+                        boxShadow: '0 10px 28px rgba(0,0,0,0.4)'
                       }}
-                      itemStyle={{ color: 'rgba(236,242,255,0.9)' }}
+                      itemStyle={{ color: 'rgba(236,242,255,0.92)', fontSize: 12 }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
+                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center space-y-1">
+                  <div className="text-[11px] uppercase tracking-wide text-text-secondary">Всего OPEX + CAPEX</div>
+                  <div className="text-xl font-semibold text-text-primary leading-tight">{total.toLocaleString('ru-RU')} ₽</div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 text-right md:items-end">
+                <div className="text-xs text-text-muted">Total OPEX</div>
+                <div className="text-2xl font-semibold text-text-primary leading-tight">{totalOpex.toLocaleString('ru-RU')} ₽</div>
+                <div className="text-xs text-text-muted pt-2">Total CAPEX</div>
+                <div className="text-2xl font-semibold text-text-primary leading-tight">{totalCapex.toLocaleString('ru-RU')} ₽</div>
               </div>
             </div>
             {pieData.length ? (
-              <div className="grid gap-2 sm:grid-cols-2">
-                {pieData.map((entry, index) => (
-                  <div
-                    key={entry.name}
-                    className="flex items-center justify-between rounded-[12px] border border-border-soft/70 bg-white/[0.03] px-3 py-2"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className="h-2.5 w-2.5 rounded-full"
-                        style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                      />
-                      <span className="text-sm text-text-primary leading-tight">{entry.name}</span>
+              <div className="flex flex-col gap-2">
+                {pieData.map((entry) => {
+                  const fill = FINANCE_SLICE_COLORS[entry.name as keyof typeof FINANCE_SLICE_COLORS] ?? FINANCE_SLICE_COLORS.energy;
+                  return (
+                    <div key={entry.name} className="flex items-center justify-between text-xs text-text-secondary">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: fill }} />
+                        <span className="text-sm text-text-primary leading-tight capitalize">{entry.name}</span>
+                      </div>
+                      <span className="text-sm text-text-secondary">{entry.value.toLocaleString('ru-RU')} ₽</span>
                     </div>
-                    <span className="text-sm text-text-secondary">{entry.value.toLocaleString('ru-RU')} ₽</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : null}
           </div>
