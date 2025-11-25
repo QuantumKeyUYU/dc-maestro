@@ -17,12 +17,12 @@ module.exports = {
           muted: '#7E8BA7'
         },
         accent: {
-          primary: '#4CB8FF'
+          primary: '#4FB4FF'
         },
         status: {
           ok: '#3BD8A1',
-          warn: '#E8B04A',
-          danger: '#FF5C5C'
+          warn: '#F2C063',
+          danger: '#FF5C67'
         }
       },
       borderRadius: {

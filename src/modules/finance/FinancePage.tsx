@@ -7,9 +7,9 @@ import { sites } from '../../shared/data/sites';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
-const COLORS = ['rgba(76,184,255,1)', 'rgba(76,184,255,0.75)', 'rgba(76,184,255,0.5)', 'rgba(76,184,255,0.25)'];
+const COLORS = ['rgba(79,180,255,1)', 'rgba(79,180,255,0.75)', 'rgba(79,180,255,0.5)', 'rgba(79,180,255,0.25)'];
 const LABEL_COLOR = 'rgba(255,255,255,0.7)';
-const SEGMENT_SEPARATOR = 'rgba(8,12,18,0.9)';
+const SEGMENT_SEPARATOR = 'rgba(7,10,16,0.96)';
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -110,7 +110,7 @@ export function FinancePage() {
               <div className="text-xs text-text-muted mt-3">Total CAPEX</div>
               <div className="text-lg font-semibold text-text-primary">{totalCapex.toLocaleString('ru-RU')} ₽</div>
             </div>
-            <div className="h-64 rounded-[18px] bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.08)] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[20px]">
+            <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -135,7 +135,7 @@ export function FinancePage() {
                         key={`cell-${entry.name}`}
                         fill={COLORS[index % COLORS.length]}
                         stroke={SEGMENT_SEPARATOR}
-                        strokeWidth={1.2}
+                        strokeWidth={1}
                       />
                     ))}
                   </Pie>
