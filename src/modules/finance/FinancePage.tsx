@@ -7,11 +7,11 @@ import { sites } from '../../shared/data/sites';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
-const FINANCE_SLICE_COLORS = {
-  energy: '#4FB4FF',
-  maintenance: '#79C7F3',
-  staff: '#2E7AC2'
-} as const;
+const CATEGORY_COLORS: Record<string, string> = {
+  energy: '#3b82f6',
+  maintenance: '#22c1c3',
+  staff: '#2563eb'
+};
 
 type PieLabelProps = {
   cx?: number;
@@ -135,7 +135,7 @@ export function FinancePage() {
         </Card>
         <Card title="Сводка">
           <div className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-[minmax(0,1fr),240px] md:items-center">
+            <div className="grid gap-6 md:grid-cols-[minmax(0,1fr),260px] md:items-center">
               <div className="relative h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -153,7 +153,7 @@ export function FinancePage() {
                       paddingAngle={2}
                     >
                       {pieData.map((entry) => {
-                        const fill = FINANCE_SLICE_COLORS[entry.name as keyof typeof FINANCE_SLICE_COLORS] ?? FINANCE_SLICE_COLORS.energy;
+                        const fill = CATEGORY_COLORS[entry.name] ?? CATEGORY_COLORS.energy;
                         return <Cell key={`cell-${entry.name}`} fill={fill} />;
                       })}
                     </Pie>
@@ -174,34 +174,34 @@ export function FinancePage() {
                   <div className="text-xl font-semibold text-text-primary leading-tight">{total.toLocaleString('ru-RU')} ₽</div>
                 </div>
               </div>
-              <div className="flex flex-col gap-4 text-right md:items-end md:justify-center">
-                <div className="space-y-1 text-right">
-                  <div className="text-[12px] uppercase tracking-[0.1em] text-text-muted">Total OPEX</div>
-                  <div className="text-[22px] font-semibold text-text-primary leading-tight">{totalOpex.toLocaleString('ru-RU')} ₽</div>
+              <div className="flex w-full flex-col items-end gap-4 text-right">
+                <div className="w-full space-y-1">
+                  <div className="text-[11px] uppercase tracking-[0.12em] text-text-muted">Total OPEX</div>
+                  <div className="text-[24px] font-semibold text-text-primary leading-tight">{totalOpex.toLocaleString('ru-RU')} ₽</div>
                 </div>
-                <div className="space-y-1 text-right">
-                  <div className="text-[12px] uppercase tracking-[0.1em] text-text-muted">Total CAPEX</div>
-                  <div className="text-[22px] font-semibold text-text-primary leading-tight">{totalCapex.toLocaleString('ru-RU')} ₽</div>
+                <div className="w-full space-y-1">
+                  <div className="text-[11px] uppercase tracking-[0.12em] text-text-muted">Total CAPEX</div>
+                  <div className="text-[24px] font-semibold text-text-primary leading-tight">{totalCapex.toLocaleString('ru-RU')} ₽</div>
                 </div>
+                {pieData.length ? (
+                  <div className="flex w-full flex-wrap justify-end gap-2">
+                    {pieData.map((entry) => {
+                      const fill = CATEGORY_COLORS[entry.name] ?? CATEGORY_COLORS.energy;
+                      return (
+                        <div
+                          key={entry.name}
+                          className="inline-flex min-w-[180px] items-center gap-3 rounded-full border border-border-soft/80 bg-base-panelSoft px-3.5 py-2 text-[13px] text-text-primary shadow-[0_12px_26px_rgba(0,0,0,0.28)]"
+                        >
+                          <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: fill }} />
+                          <span className="capitalize leading-none">{entry.name}</span>
+                          <span className="ml-auto whitespace-nowrap text-text-secondary">{entry.value.toLocaleString('ru-RU')} ₽</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : null}
               </div>
             </div>
-            {pieData.length ? (
-              <div className="flex flex-wrap gap-2">
-                {pieData.map((entry) => {
-                  const fill = FINANCE_SLICE_COLORS[entry.name as keyof typeof FINANCE_SLICE_COLORS] ?? FINANCE_SLICE_COLORS.energy;
-                  return (
-                    <div
-                      key={entry.name}
-                      className="inline-flex items-center gap-2 rounded-full border border-border-soft/80 bg-base-panelSoft px-3 py-1.5 text-sm text-text-primary shadow-[0_12px_26px_rgba(0,0,0,0.3)]"
-                    >
-                      <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: fill }} />
-                      <span className="capitalize leading-tight">{entry.name}</span>
-                      <span className="text-text-secondary whitespace-nowrap">{entry.value.toLocaleString('ru-RU')} ₽</span>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : null}
           </div>
         </Card>
       </div>
