@@ -30,12 +30,12 @@ export function InventoryPage() {
   }, [locationState?.siteId, locationState?.filter, itemsTable.setSearchQuery]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <Card title="Складские позиции">
         <div className="flex justify-between items-center mb-4" ref={itemsRef}>
           {lowStockOnly ? (
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-surface-2/85 px-3 py-1 text-xs text-white border border-white/10">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs text-white border border-white/20 backdrop-blur-[12px]">
                 Фильтр: позиции на минимуме
               </span>
               <button
@@ -53,7 +53,7 @@ export function InventoryPage() {
             value={itemsTable.searchQuery}
             onChange={(e) => itemsTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по SKU, названию или площадке"
-            className="bg-surface-2/90 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30"
+            className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/70 focus:ring-1 focus:ring-accent-primary/30 backdrop-blur-[16px]"
           />
           <div className="text-xs text-text-muted">Клик по заголовку — сортировка</div>
         </div>
@@ -79,7 +79,7 @@ export function InventoryPage() {
               .map((item) => {
               const low = item.quantityOnHand <= item.minThreshold;
               return (
-                <tr key={item.id} className={`border-t border-white/5 ${low ? 'bg-accent-warning/5' : ''}`}>
+                <tr key={item.id} className={`border-t border-white/5 ${low ? 'bg-status-warn/10' : ''}`}>
                   <td className="py-2 pr-4 text-text-primary">{item.sku}</td>
                   <td className="py-2 pr-4 text-text-primary">{item.name}</td>
                   <td className="py-2 pr-4 text-text-secondary">{item.category}</td>
@@ -98,7 +98,7 @@ export function InventoryPage() {
             value={poTable.searchQuery}
             onChange={(e) => poTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по поставщику или статусу"
-            className="bg-surface-2/90 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30"
+            className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/70 focus:ring-1 focus:ring-accent-primary/30 backdrop-blur-[16px]"
           />
           <div className="text-xs text-text-muted">Клик по строке статуса — подсказка</div>
         </div>

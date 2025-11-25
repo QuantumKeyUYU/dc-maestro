@@ -3,11 +3,11 @@ import { MouseEvent, PropsWithChildren, ReactNode } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 const baseClasses =
-  'group inline-flex items-center gap-2 font-medium rounded-xl bg-surface-2/85 border border-white/10 text-text-primary transition-all hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/40 focus-visible:ring-offset-0 active:scale-[0.98]';
+  'group inline-flex items-center gap-2 font-semibold rounded-full bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] text-text-primary transition-all hover:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/40 focus-visible:ring-offset-0 active:scale-[0.98] backdrop-blur-[16px] shadow-[0_12px_34px_rgba(0,0,0,0.45)]';
 
 const sizeClasses = {
-  sm: 'h-8 px-3 text-[13px] leading-none',
-  lg: 'h-9 px-4 text-sm'
+  sm: 'h-9 px-4 text-[13px] leading-none',
+  lg: 'h-10 px-5 text-sm'
 };
 
 const iconClasses = 'w-4 h-4 text-text-muted group-hover:text-white transition';

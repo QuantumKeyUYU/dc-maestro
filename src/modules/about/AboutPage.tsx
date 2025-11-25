@@ -52,7 +52,7 @@ const interviewFlow = [
 
 export function AboutPage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <SectionHeader
         title="DC Maestro для роли Руководителя эксплуатации сети ЦОД"
         subtitle="Внутренний прототип под вакансию «Вис Энергия»: демонстрация системного управления сетью ЦОД."

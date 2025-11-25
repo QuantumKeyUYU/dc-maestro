@@ -27,12 +27,12 @@ export function SectionHeader({
       className={clsx(
         'flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between',
         framed &&
-          'relative overflow-hidden rounded-xl border border-white/10 bg-[rgba(255,255,255,0.04)] px-5 py-4 shadow-[0_15px_35px_rgba(0,0,0,0.45)] backdrop-blur-xl before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-white/10 before:content-[""]',
+          "relative overflow-hidden rounded-[18px] border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.03)] px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.55)] backdrop-blur-[20px] before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-[rgba(255,255,255,0.08)] before:content-['']",
         className
       )}
     >
       <div className="space-y-1 max-w-4xl">
-        {label ? <p className="text-xs font-semibold text-text-muted uppercase tracking-[0.14em]">{label}</p> : null}
+        {label ? <p className="text-[11px] font-semibold text-text-muted uppercase tracking-[0.18em]">{label}</p> : null}
         <div className="flex flex-wrap items-center gap-2">
           <HeadingTag className="text-2xl sm:text-[26px] font-semibold text-white tracking-tight leading-tight">
             {title}

@@ -24,12 +24,12 @@ export function SafetyPage() {
   const visibleEvents = activeOnly ? safetyEvents.filter((event) => event.status !== 'done') : safetyEvents;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <Card title="События безопасности">
         <div className="flex items-center justify-between mb-4" ref={eventsRef}>
           {activeOnly ? (
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-surface-2/85 px-3 py-1 text-xs text-white border border-white/10">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs text-white border border-white/20 backdrop-blur-[12px]">
                 Фильтр: в работе и просрочено
               </span>
               <button
