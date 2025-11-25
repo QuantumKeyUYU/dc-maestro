@@ -122,22 +122,22 @@ export default function App() {
   }, [currentPage, metaDescriptionByRoute, pathname]);
 
   return (
-    <div className="min-h-screen text-text-primary relative bg-surface-0 bg-gradient-to-b from-surface-0 to-[#0F141A]">
+    <div className="min-h-screen text-text-primary relative bg-[#05070A]">
       <div className="flex h-screen overflow-hidden relative">
-        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[rgba(8,12,18,0.96)] border-r border-white/6 px-6 py-6 flex flex-col gap-6 backdrop-blur-xl shadow-[0_18px_44px_rgba(0,0,0,0.55)]">
+        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[rgba(8,12,18,0.92)] border-r border-[rgba(255,255,255,0.06)] px-6 py-6 flex flex-col gap-6 backdrop-blur-[24px] shadow-[0_30px_90px_rgba(0,0,0,0.65)]">
           <NavLink
             to="/"
             className={({ isActive }) =>
               clsx(
-                'relative block -mx-1 px-4 py-3 rounded-xl transition text-left space-y-1 border border-white/8 bg-[rgba(15,20,28,0.96)] shadow-[0_16px_40px_rgba(0,0,0,0.45)]',
-                'hover:bg-white/[0.05] text-text-primary',
-                isActive && 'bg-white/[0.06] text-text-primary border-white/12'
+                'relative block -mx-1 px-4 py-3 rounded-[16px] transition text-left space-y-1 border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.05)] shadow-[0_18px_48px_rgba(0,0,0,0.5)] backdrop-blur-2xl',
+                'hover:bg-white/[0.08] text-text-primary',
+                isActive && 'bg-white/[0.09] text-text-primary border-white/18'
               )
             }
           >
             <div className="text-xl font-semibold text-text-primary leading-tight">{strings.headers.appTitle}</div>
           </NavLink>
-          <nav className="flex flex-col gap-1.5 text-[15px]">
+          <nav className="flex flex-col gap-2 text-[15px]">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -147,19 +147,19 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent text-white/55',
+                      'relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors border border-transparent text-white/60 backdrop-blur-[14px]',
                       isActive
-                        ? 'bg-white/[0.06] text-white/92 border-l-2 border-accent-primary pl-2.5'
+                        ? 'bg-white/[0.06] text-white/95 pl-3 after:absolute after:left-2 after:top-1/2 after:-translate-y-1/2 after:h-8 after:w-[3px] after:rounded-full after:bg-accent-primary/35'
                         : 'hover:bg-white/[0.04]'
                     )
                   }
                 >
                   {({ isActive }) => (
                     <>
-                      <Icon className={clsx('w-[18px] h-[18px]', isActive ? 'text-white/92' : 'text-white/55')} />
+                      <Icon className={clsx('w-[18px] h-[18px]', isActive ? 'text-white/95' : 'text-white/60')} />
                       <span className="flex-1 min-w-0 text-left leading-tight relative truncate">{item.label}</span>
                       {item.badge ? (
-                        <span className="ml-auto inline-flex items-center justify-center rounded-full px-2 py-[2px] text-xs text-white/80 bg-white/5 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
+                        <span className="ml-auto inline-flex items-center justify-center rounded-full px-2 py-[2px] text-xs text-white/80 bg-white/5 border border-white/15">
                           {item.badge.value}
                         </span>
                       ) : null}
@@ -171,8 +171,8 @@ export default function App() {
           </nav>
         </aside>
 
-        <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-surface-0/90 backdrop-blur-xl border-b border-white/5 px-7 py-5 shadow-[0_18px_48px_rgba(0,0,0,0.35)]">
+        <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent">
+          <header className="sticky top-0 z-10 bg-[rgba(5,7,10,0.92)] backdrop-blur-[18px] border-b border-[rgba(255,255,255,0.06)] px-7 py-5 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
             <SectionHeader
               as="h1"
               label={currentPage.label ?? undefined}
@@ -183,7 +183,7 @@ export default function App() {
             />
           </header>
 
-          <div className="px-8 pt-7 max-[800px]:pt-6 pb-12 space-y-10">
+          <div className="px-8 pt-8 max-[800px]:pt-7 pb-12 space-y-8">
             <Routes>
               <Route path="/" element={<DashboardPage />} />
               <Route path="/sites" element={<SitesPage />} />

@@ -249,9 +249,9 @@ export function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-8">
-      <div className="grid gap-4 xl:grid-cols-[1.6fr,1fr] items-stretch">
-        <Card className="flex flex-col gap-3">
+    <div className="space-y-6">
+      <div className="grid gap-6 xl:grid-cols-[1.6fr,1fr] items-stretch">
+        <Card className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">Обзор состояния сети</div>
             <StatusPill variant={networkVariant} label={networkStatusText.replace('Сеть в целом: ', '')} />
@@ -268,7 +268,7 @@ export function DashboardPage() {
           </div>
         </Card>
         <InfoTooltip label={`Operational Strain Index · ${osiDescriptor}`} triggerArea="container" className="h-full">
-          <div className="relative h-full rounded-2xl bg-surface-1/90 backdrop-blur-xl border border-white/10 px-6 py-4 shadow-[0_15px_35px_rgba(0,0,0,0.45)] overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-accent-primary/40 before:content-['']">
+          <div className="relative h-full rounded-[18px] bg-[rgba(255,255,255,0.04)] backdrop-blur-[20px] border border-[rgba(255,255,255,0.08)] px-6 py-5 shadow-[0_22px_60px_rgba(0,0,0,0.55)] overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-accent-primary/40 before:content-['']">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-2">
                 <div className="text-[11px] uppercase tracking-[0.18em] text-white/50">OSI</div>
@@ -282,7 +282,7 @@ export function DashboardPage() {
         </InfoTooltip>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {metricCards.map((metric, idx) => (
           <button
             key={`${metric.label}-${idx}`}
@@ -292,11 +292,11 @@ export function DashboardPage() {
           >
             <div
               className={clsx(
-                'rounded-xl border border-white/10 bg-surface-2/90 px-4 py-4 shadow-[0_15px_35px_rgba(0,0,0,0.45)] transition-transform h-full',
+                'rounded-[16px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-5 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.5)] transition-transform h-full backdrop-blur-[18px]',
                 metric.onClick && 'group-hover:-translate-y-[1px]'
               )}
             >
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">{metric.label}</div>
                 <div className="flex items-center justify-between gap-2">
                   <div className="text-2xl font-semibold text-text-primary leading-tight">{metric.value}</div>
@@ -315,7 +315,7 @@ export function DashboardPage() {
                   />
                 </div>
                 {metric.helperText ? <div className="text-sm text-text-secondary">{metric.helperText}</div> : null}
-                <div className="mt-2 h-[2px] w-8 rounded-full bg-accent-primary/70" />
+                <div className="mt-1 h-[2px] w-10 rounded-full bg-accent-primary/70" />
               </div>
             </div>
           </button>
@@ -327,7 +327,7 @@ export function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             {alertFilter ? (
               <div className="flex items-center gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full bg-surface-2/80 px-3 py-1.5 text-xs text-white border border-white/10">
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs text-white border border-white/20 backdrop-blur-[14px]">
                   {alertFilterLabels[alertFilter]}
                 </span>
                 <button
@@ -362,9 +362,9 @@ export function DashboardPage() {
                     className={clsx(
                       'border-b border-white/5',
                       tone === 'danger'
-                        ? 'border-l-2 border-accent-danger'
+                        ? 'border-l-2 border-status-danger'
                         : tone === 'warning'
-                          ? 'border-l-2 border-accent-warning'
+                          ? 'border-l-2 border-status-warn'
                           : 'border-l border-transparent'
                     )}
                   >
@@ -402,8 +402,8 @@ export function DashboardPage() {
             </tbody>
           </Table>
         </Card>
-        <Card className="flex flex-col gap-3" title="Риски и акценты" subtitle="Обновляется по данным за сутки">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Card className="flex flex-col gap-4" title="Риски и акценты" subtitle="Обновляется по данным за сутки">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <KpiBadge label="Площадок вне нормы" value={problemSites} helperText="Контроль SLA и инженерии" tone={problemSites === 0 ? 'neutral' : 'warn'} />
             <KpiBadge label="Просроченные заявки ТО" value={overdueWorkOrders} helperText="Оперативное реагирование" tone={overdueWorkOrders === 0 ? 'neutral' : 'warn'} />
             <KpiBadge label="Критические инциденты" value={incidents.filter((i) => i.severity === 'critical' && !i.resolvedAt).length} helperText="Live incidents" tone={incidents.some((i) => i.severity === 'critical' && !i.resolvedAt) ? 'danger' : 'neutral'} />
@@ -412,25 +412,25 @@ export function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-7 xl:grid-cols-[2fr,1fr] items-start">
+      <div className="grid gap-6 xl:grid-cols-[2fr,1fr] items-start">
         <Card className="xl:col-span-1" title="Состояние сети" subtitle="Uptime по площадкам">
-          <div className="h-80 bg-surface-1/85 rounded-2xl border border-white/8 p-2">
+          <div className="h-80 bg-[rgba(255,255,255,0.03)] rounded-[18px] border border-[rgba(255,255,255,0.08)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-[18px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={18}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: '#C8CFDB', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
-                <YAxis tick={{ fill: '#C8CFDB', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                <XAxis dataKey="name" tick={{ fill: '#C7D4E9', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} />
+                <YAxis tick={{ fill: '#C7D4E9', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} />
                 <Tooltip
                   contentStyle={{
-                    background: '#0F141A',
+                    background: 'rgba(8,11,16,0.9)',
                     border: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: 12,
-                    color: '#E6E7EB',
-                    boxShadow: '0 12px 32px rgba(0,0,0,0.45)'
+                    borderRadius: 14,
+                    color: '#EAF1FF',
+                    boxShadow: '0 14px 36px rgba(0,0,0,0.55)'
                   }}
-                  cursor={{ fill: 'rgba(26,34,44,0.35)' }}
+                  cursor={{ fill: 'rgba(255,255,255,0.04)' }}
                 />
-                <Bar dataKey="uptime" fill="#33A7FF" stroke="#33A7FF" strokeWidth={2} radius={[8, 8, 4, 4]} />
+                <Bar dataKey="uptime" fill="#4CB8FF" stroke="#4CB8FF" strokeWidth={2} radius={[10, 10, 6, 6]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -464,11 +464,11 @@ export function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-7 xl:grid-cols-[2fr,1fr] items-start">
+      <div className="grid gap-6 xl:grid-cols-[2fr,1fr] items-start">
         <Card title="Быстрый переход по ролям" subtitle="Навигация по ключевым потокам">
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 gap-4">
             {roleShortcuts.map((role) => (
-              <div key={role.title} className="flex items-center justify-between rounded-xl border border-white/10 bg-surface-2/90 px-4 py-3 shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
+              <div key={role.title} className="flex items-center justify-between rounded-[14px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-5 py-4 shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur-[16px]">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-white">{role.title}</div>
                   <p className="text-xs text-text-secondary">{role.metric}</p>
@@ -484,7 +484,7 @@ export function DashboardPage() {
         <Card title="Площадки" subtitle="Uptime, reliability и capacity">
           <div className="flex flex-col gap-4">
             {withScores.slice(0, 3).map((site) => (
-              <div key={site.id} className="flex items-center justify-between rounded-xl border border-white/10 bg-surface-2/90 px-4 py-3 shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
+              <div key={site.id} className="flex items-center justify-between rounded-[14px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-5 py-4 shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur-[16px]">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-white">{site.name}</div>
                   <div className="text-xs text-text-secondary">{site.region}</div>

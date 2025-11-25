@@ -6,27 +6,23 @@ module.exports = {
     extend: {
       colors: {
         surface: {
-          0: '#0A0F14',
-          1: '#0F141A',
-          2: '#121820',
-          3: '#1A222C'
+          0: '#05070A',
+          1: '#0A0F16',
+          2: '#0D131D',
+          3: '#111A26'
         },
         text: {
-          primary: '#EEF2F7',
-          secondary: '#B3B9C7',
-          muted: '#7A828E'
+          primary: '#EAF1FF',
+          secondary: '#B8C3D9',
+          muted: '#7E8BA7'
         },
         accent: {
-          primary: '#33A7FF',
-          secondary: '#6C82FF',
-          positive: '#27C48F',
-          warning: '#D9A63A',
-          danger: '#C94A4A'
+          primary: '#4CB8FF'
         },
         status: {
-          ok: '#27C48F',
-          warn: '#D9A63A',
-          danger: '#C94A4A'
+          ok: '#3BD8A1',
+          warn: '#E8B04A',
+          danger: '#FF5C5C'
         }
       },
       borderRadius: {
@@ -34,7 +30,7 @@ module.exports = {
         '2xl': '1.2rem'
       },
       boxShadow: {
-        'luxe-card': '0 8px 24px rgba(0,0,0,0.45)'
+        'luxe-card': '0 20px 60px rgba(0,0,0,0.55)'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif']

@@ -42,27 +42,27 @@ export function MaintenancePage() {
     }
   }, [locationState?.siteId, locationState?.filter, assetsTable.setSearchQuery, workOrdersTable.setSearchQuery]);
 
-  return (
-    <div className="space-y-8">
-      <Card title="Активы">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
-          <div className="flex gap-3 flex-wrap">
-            <select
-              className="bg-surface-2/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value as (typeof types)[number])}
-            >
+    return (
+      <div className="space-y-6">
+        <Card title="Активы">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
+            <div className="flex gap-3 flex-wrap">
+              <select
+                className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-3.5 py-2 text-sm text-text-primary backdrop-blur-[14px]"
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value as (typeof types)[number])}
+              >
               {types.map((type) => (
                 <option key={type} value={type}>
                   {type === 'all' ? 'Все типы' : type}
                 </option>
               ))}
-            </select>
-            <select
-              className="bg-surface-2/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
-              value={critFilter}
-              onChange={(e) => setCritFilter((e.target.value === 'all' ? 'all' : Number(e.target.value)) as (typeof criticalities)[number])}
-            >
+              </select>
+              <select
+                className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-3.5 py-2 text-sm text-text-primary backdrop-blur-[14px]"
+                value={critFilter}
+                onChange={(e) => setCritFilter((e.target.value === 'all' ? 'all' : Number(e.target.value)) as (typeof criticalities)[number])}
+              >
               {criticalities.map((crit) => (
                 <option key={crit} value={crit}>
                   {crit === 'all' ? 'Все уровни' : `Критичность ${crit}`}
@@ -70,13 +70,13 @@ export function MaintenancePage() {
               ))}
             </select>
           </div>
-          <input
-            value={assetsTable.searchQuery}
-            onChange={(e) => assetsTable.setSearchQuery(e.target.value)}
-            placeholder="Поиск по названию, типу, площадке"
-            className="bg-surface-2/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30 transition"
-          />
-        </div>
+            <input
+              value={assetsTable.searchQuery}
+              onChange={(e) => assetsTable.setSearchQuery(e.target.value)}
+              placeholder="Поиск по названию, типу, площадке"
+              className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/70 focus:ring-1 focus:ring-accent-primary/30 transition backdrop-blur-[16px]"
+            />
+          </div>
         <Table framed={false}>
           <thead>
             <tr>
@@ -94,9 +94,9 @@ export function MaintenancePage() {
             </tr>
           </thead>
           <tbody>
-            {assetsTable.sortedAndFiltered.map((asset) => (
-              <tr key={asset.id} className="border-t border-surface-1">
-                <td className="py-2 pr-4 text-text-primary">{asset.name}</td>
+              {assetsTable.sortedAndFiltered.map((asset) => (
+                <tr key={asset.id} className="border-t border-white/10">
+                  <td className="py-2 pr-4 text-text-primary">{asset.name}</td>
                 <td className="py-2 pr-4 text-text-secondary">{asset.type}</td>
                 <td className="py-2 pr-4 text-text-primary">{asset.criticality}</td>
                 <td className="py-2 pr-4 text-text-secondary">{asset.siteId}</td>
@@ -112,13 +112,13 @@ export function MaintenancePage() {
       </Card>
 
       <Card title="Заявки на ТО">
-        <div className="flex justify-between items-center mb-4" ref={workOrdersRef}>
-          {showOverdueOnly ? (
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-surface-2/80 px-3 py-1 text-xs text-white border border-white/5">
-                Фильтр: просроченные заявки
-              </span>
-              <button
+          <div className="flex justify-between items-center mb-4" ref={workOrdersRef}>
+            {showOverdueOnly ? (
+              <div className="flex items-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs text-white border border-white/20 backdrop-blur-[12px]">
+                  Фильтр: просроченные заявки
+                </span>
+                <button
                 type="button"
                 className="text-xs text-accent-primary hover:text-white transition"
                 onClick={() => setShowOverdueOnly(false)}
@@ -129,13 +129,13 @@ export function MaintenancePage() {
           ) : (
             <span className="text-xs text-text-muted">Все активные заявки по умолчанию</span>
           )}
-          <input
-            value={workOrdersTable.searchQuery}
-            onChange={(e) => workOrdersTable.setSearchQuery(e.target.value)}
-            placeholder="Поиск по ID, типу или площадке"
-            className="bg-surface-2/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30 transition"
-          />
-        </div>
+            <input
+              value={workOrdersTable.searchQuery}
+              onChange={(e) => workOrdersTable.setSearchQuery(e.target.value)}
+              placeholder="Поиск по ID, типу или площадке"
+              className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/70 focus:ring-1 focus:ring-accent-primary/30 transition backdrop-blur-[16px]"
+            />
+          </div>
         <Table framed={false}>
           <thead>
             <tr>
@@ -162,9 +162,9 @@ export function MaintenancePage() {
               })
               .map((wo) => {
               const isOverdue = wo.dueDate && wo.status !== 'done' && wo.dueDate < new Date();
-              return (
-                <tr key={wo.id} className={`border-t border-surface-1 ${isOverdue ? 'bg-surface-1/60' : ''}`}>
-                  <td className="py-2 pr-4 text-text-primary">{wo.id}</td>
+                return (
+                  <tr key={wo.id} className={`border-t border-white/10 ${isOverdue ? 'bg-status-danger/5' : ''}`}>
+                    <td className="py-2 pr-4 text-text-primary">{wo.id}</td>
                   <td className="py-2 pr-4 text-text-secondary">{wo.type}</td>
                   <td className="py-2 pr-4">
                     <StatusPill label={getStatusLabel(isOverdue ? 'overdue' : wo.status)} tone={getStatusTone(isOverdue ? 'overdue' : wo.status)} />

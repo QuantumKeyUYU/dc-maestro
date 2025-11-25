@@ -64,7 +64,7 @@ export function SitesDetailPage() {
   const financialHealth = siteFinancialHealth(site, siteFinances);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="text-sm text-text-muted flex items-center gap-2">
         <button
           onClick={() => navigate('/sites')}

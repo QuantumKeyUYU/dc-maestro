@@ -47,7 +47,7 @@ export function PersonnelPage() {
   const opsIndex = opsLoadIndex(site, shifts);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <Card title="Персонал" subtitle="Фильтры и поиск по людям">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
           <div className="flex gap-2 flex-wrap">
@@ -55,10 +55,10 @@ export function PersonnelPage() {
               <button
                 key={role.key}
                 onClick={() => setRoleFilter(role.key)}
-                className={`px-3 py-1.5 rounded-full text-sm border transition ${
+                className={`px-3.5 py-1.5 rounded-full text-sm border transition backdrop-blur-[14px] shadow-[0_12px_30px_rgba(0,0,0,0.35)] ${
                   roleFilter === role.key
-                    ? 'border-accent-primary/50 bg-accent-primary/10 text-accent-primary shadow-focus'
-                    : 'border-white/5 bg-surface-2/80 text-text-secondary hover:border-accent-primary/30'
+                    ? 'border-accent-primary/60 bg-accent-primary/15 text-white'
+                    : 'border-[rgba(255,255,255,0.18)] bg-[rgba(255,255,255,0.06)] text-text-secondary hover:border-accent-primary/40'
                 }`}
               >
                 {role.label}
@@ -69,7 +69,7 @@ export function PersonnelPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по имени, роли, грейду"
-            className="bg-surface-2/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30 transition"
+            className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/70 focus:ring-1 focus:ring-accent-primary/30 transition backdrop-blur-[16px]"
           />
         </div>
         <Table framed={false}>
@@ -90,7 +90,7 @@ export function PersonnelPage() {
           </thead>
           <tbody>
             {sortedAndFiltered.map((member) => (
-              <tr key={member.id} className="border-t border-surface-1">
+              <tr key={member.id} className="border-t border-white/10">
                 <td className="py-2 pr-4 text-text-primary">{member.fullName}</td>
                 <td className="py-2 pr-4 text-text-secondary">{member.role}</td>
                 <td className="py-2 pr-4 text-text-primary">{member.grade}</td>
@@ -108,7 +108,7 @@ export function PersonnelPage() {
             <select
               value={selectedSite}
               onChange={(e) => setSelectedSite(e.target.value)}
-              className="bg-surface-2/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
+              className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-3.5 py-2 text-sm text-text-primary backdrop-blur-[14px]"
             >
               {sites.map((siteItem) => (
                 <option key={siteItem.id} value={siteItem.id}>
@@ -144,13 +144,13 @@ export function PersonnelPage() {
         </Card>
         <Card title="Ops Load Index" subtitle={site?.name}>
           <div className="flex flex-col gap-3">
-            <div className="text-4xl font-bold text-neutral-100">{opsIndex.toFixed(1)}</div>
+            <div className="text-4xl font-bold text-text-primary">{opsIndex.toFixed(1)}</div>
             <StatusPill
               label={opsIndex > 80 ? 'Высокая нагрузка' : opsIndex > 60 ? 'Повышенная' : 'Комфортно'}
               tone={opsIndex > 80 ? 'danger' : opsIndex > 60 ? 'warning' : 'success'}
             />
             <InfoTooltip label="Ops Load Index: плановые vs фактические часы смен + переработка">
-              <p className="text-sm text-neutral-400">Расчёт по плановым/фактическим часам и переработке.</p>
+              <p className="text-sm text-text-secondary">Расчёт по плановым/фактическим часам и переработке.</p>
             </InfoTooltip>
           </div>
         </Card>
