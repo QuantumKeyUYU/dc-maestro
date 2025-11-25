@@ -38,7 +38,7 @@ export function SitesPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по названию, региону или статусу"
-            className="bg-bg-surface/90 border border-border-subtle rounded-[12px] px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/50 focus:shadow-[0_0_0_1px_rgba(79,183,173,0.35)] transition"
+            className="bg-ink-900/90 border border-white/5 rounded-[12px] px-4 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-accent/50 focus:shadow-[0_0_0_1px_rgba(79,183,173,0.35)] transition"
           />
           <div className="flex gap-2 text-xs text-gray-400">
             <InfoTooltip label="Uptime — доступность за период мониторинга" />
@@ -69,11 +69,11 @@ export function SitesPage() {
                 key={site.id}
                 row={site}
                 className={
-                  focusedSiteId === site.id ? 'bg-accent-muted/5 border-accent-primary/40' : 'border-t border-border-subtle/40'
+                  focusedSiteId === site.id ? 'bg-accent-muted/5 border-accent/40' : 'border-t border-white/10'
                 }
               >
                 <td className="py-3 pr-4">{site.name}</td>
-                <td className="py-3 pr-4 text-text-muted">{site.region}</td>
+                <td className="py-3 pr-4 text-neutral-400">{site.region}</td>
                 <td className="py-3 text-right">{uptimePercent(site).toFixed(2)}%</td>
                 <td className="py-3 text-right">{reliabilityScore(site).toFixed(1)}</td>
                 <td className="py-3 text-right">{capacityLoadIndex(site).toFixed(1)}%</td>

@@ -10,13 +10,15 @@ export function Table<T = unknown>({ children, className, onRowClick, isRowClick
     <TableContext.Provider value={{ onRowClick: onRowClick as (row: unknown) => void, isRowClickable }}>
       <div
         className={clsx(
-          'overflow-x-auto scrollbar-thin rounded-[8px]',
-          framed ? 'border border-border-subtle bg-bg-surface px-3 py-3' : 'px-3 py-3',
+          'overflow-x-auto scrollbar-thin rounded-2xl',
+          framed
+            ? 'border border-white/5 bg-ink-900/80 px-3 py-3 shadow-luxe-card backdrop-blur-md'
+            : 'px-3 py-3',
           className
         )}
       >
         <table
-          className="min-w-full text-[13px] text-text-primary border-collapse [&>thead>tr>th]:py-3 [&>thead>tr>th]:px-3 [&>thead>tr>th]:text-[12px] [&>thead>tr>th]:font-semibold [&>thead>tr>th]:text-text-muted [&>thead]:bg-bg-surfaceSoft [&>thead]:border-b [&>thead]:border-border-subtle [&>tbody>tr]:border-b [&>tbody>tr]:border-border-subtle/60 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-3 [&>tbody>tr>td]:px-3 [&>tbody>tr>td]:align-middle [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-white/[0.03]"
+          className="min-w-full text-[13px] text-neutral-100 border-collapse [&>thead>tr>th]:py-3 [&>thead>tr>th]:px-3 [&>thead>tr>th]:text-xs [&>thead>tr>th]:font-semibold [&>thead>tr>th]:uppercase [&>thead>tr>th]:tracking-[0.14em] [&>thead>tr>th]:text-neutral-500 [&>thead]:bg-ink-900 [&>thead]:border-b [&>thead]:border-white/5 [&>tbody>tr]:border-b [&>tbody>tr]:border-white/5 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-2.5 [&>tbody>tr>td]:px-3 [&>tbody>tr>td]:align-middle [&>tbody>tr]:transition-all [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-ink-800/60"
         >
           {children}
         </table>
@@ -35,8 +37,10 @@ export function TableRow<T = unknown>({ row, className, children }: TableRowProp
     <tr
       onClick={() => clickable && onRowClick?.(row)}
       className={clsx(
-        'transition-colors duration-150',
-        clickable ? 'cursor-pointer hover:bg-white/[0.04]' : 'hover:bg-white/[0.03]',
+        'transition-all duration-150',
+        clickable
+          ? 'group cursor-pointer hover:bg-ink-800/60 hover:-translate-y-[1px]'
+          : 'hover:bg-ink-800/60',
         className
       )}
     >

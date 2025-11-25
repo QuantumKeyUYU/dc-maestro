@@ -43,7 +43,7 @@ export function FinancePage() {
               <select
                 value={siteFilter}
                 onChange={(e) => setSiteFilter(e.target.value)}
-                className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary"
+                className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-neutral-100"
               >
                 <option value="all">Все площадки</option>
                 {sites.map((site) => (
@@ -56,7 +56,7 @@ export function FinancePage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value as 'all' | 'opex' | 'capex')}
-                className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary"
+                className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-neutral-100"
               >
                 <option value="all">Все</option>
                 <option value="opex">OPEX</option>
@@ -67,7 +67,7 @@ export function FinancePage() {
               value={table.searchQuery}
               onChange={(e) => table.setSearchQuery(e.target.value)}
               placeholder="Поиск по категории или площадке"
-              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)]"
+              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-accent/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)]"
             />
           </div>
           <Table framed={false}>

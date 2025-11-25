@@ -57,8 +57,8 @@ export function PersonnelPage() {
                 onClick={() => setRoleFilter(role.key)}
                 className={`px-3 py-1.5 rounded-full text-sm border transition ${
                   roleFilter === role.key
-                    ? 'border-accent-primary/50 bg-accent-primary/10 text-accent-primary shadow-focus'
-                    : 'border-border-subtle bg-bg-surfaceSoft text-text-muted hover:border-accent-primary/30'
+                    ? 'border-accent/50 bg-accent/10 text-accent shadow-focus'
+                    : 'border-white/5 bg-ink-900/70 text-neutral-400 hover:border-accent/30'
                 }`}
               >
                 {role.label}
@@ -69,7 +69,7 @@ export function PersonnelPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по имени, роли, грейду"
-            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition"
+            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-accent/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition"
           />
         </div>
         <Table framed={false}>
@@ -90,11 +90,11 @@ export function PersonnelPage() {
           </thead>
           <tbody>
             {sortedAndFiltered.map((member) => (
-              <tr key={member.id} className="border-t border-border-subtle/40">
+              <tr key={member.id} className="border-t border-white/10">
                 <td className="py-2 pr-4">{member.fullName}</td>
-                <td className="py-2 pr-4 text-text-muted">{member.role}</td>
+                <td className="py-2 pr-4 text-neutral-400">{member.role}</td>
                 <td className="py-2 pr-4">{member.grade}</td>
-                <td className="py-2 pr-4 text-text-muted">{member.assignedSiteIds.join(', ')}</td>
+                <td className="py-2 pr-4 text-neutral-400">{member.assignedSiteIds.join(', ')}</td>
                 <td className="py-2 pr-4">{member.hourlyRate.toLocaleString('ru-RU')} ₽/ч</td>
               </tr>
             ))}
@@ -108,7 +108,7 @@ export function PersonnelPage() {
             <select
               value={selectedSite}
               onChange={(e) => setSelectedSite(e.target.value)}
-              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary"
+              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-neutral-100"
             >
               {sites.map((siteItem) => (
                 <option key={siteItem.id} value={siteItem.id}>
@@ -130,7 +130,7 @@ export function PersonnelPage() {
             </thead>
             <tbody>
               {siteShifts.map((shift) => (
-                <tr key={shift.id} className="border-t border-border-subtle/40">
+                <tr key={shift.id} className="border-t border-white/10">
                   <td className="py-2 pr-4">{shift.date}</td>
                   <td className="py-2 pr-4">{shift.startTime}</td>
                   <td className="py-2 pr-4">{shift.endTime}</td>
@@ -144,13 +144,13 @@ export function PersonnelPage() {
         </Card>
         <Card title="Ops Load Index" subtitle={site?.name}>
           <div className="flex flex-col gap-3">
-            <div className="text-4xl font-bold text-text-primary">{opsIndex.toFixed(1)}</div>
+            <div className="text-4xl font-bold text-neutral-100">{opsIndex.toFixed(1)}</div>
             <StatusPill
               label={opsIndex > 80 ? 'Высокая нагрузка' : opsIndex > 60 ? 'Повышенная' : 'Комфортно'}
               tone={opsIndex > 80 ? 'danger' : opsIndex > 60 ? 'warning' : 'success'}
             />
             <InfoTooltip label="Ops Load Index: плановые vs фактические часы смен + переработка">
-              <p className="text-sm text-text-muted">Расчёт по плановым/фактическим часам и переработке.</p>
+              <p className="text-sm text-neutral-400">Расчёт по плановым/фактическим часам и переработке.</p>
             </InfoTooltip>
           </div>
         </Card>

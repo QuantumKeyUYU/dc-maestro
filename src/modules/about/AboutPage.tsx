@@ -58,7 +58,7 @@ export function AboutPage() {
         subtitle="Внутренний прототип под вакансию «Вис Энергия»: демонстрация системного управления сетью ЦОД."
       />
 
-      <p className="text-sm text-text-muted leading-relaxed max-w-4xl">
+      <p className="text-sm text-neutral-400 leading-relaxed max-w-4xl">
         Демо собирает ключевые сценарии роли: контроль эксплуатационных рисков, прозрачность загрузки смен, просроченные заявки и
         безопасность. Это быстрый кокпит, чтобы нанимающий сразу увидел, как закрываются задачи «руководителя эксплуатации ЦОД» без
         долгого онбординга.
@@ -69,8 +69,8 @@ export function AboutPage() {
           {responsibilityItems.map((item) => (
             <Card key={item.title} interactive>
               <div className="space-y-2">
-                <div className="text-lg font-semibold text-text-primary">{item.title}</div>
-                <p className="text-sm text-text-muted">{item.description}</p>
+                <div className="text-lg font-semibold text-neutral-100">{item.title}</div>
+                <p className="text-sm text-neutral-400">{item.description}</p>
                 <p className="text-xs text-accent-muted mt-1">{item.label}</p>
               </div>
               <CtaLink to={item.to} icon={<ArrowRight className="w-4 h-4" aria-hidden />} size="lg" className="mt-3">
@@ -82,7 +82,7 @@ export function AboutPage() {
       </Card>
 
       <Card title="Как использовать демо на собеседовании" subtitle="5 шагов, чтобы провести нанимающего через ключевые сценарии">
-        <ul className="list-disc pl-5 space-y-2 text-text-primary">
+        <ul className="list-disc pl-5 space-y-2 text-neutral-100">
           {interviewFlow.map((tip) => (
             <li key={tip} className="leading-relaxed">
               {tip}
