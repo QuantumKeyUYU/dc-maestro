@@ -2,29 +2,34 @@ import clsx from 'clsx';
 
 interface StatusPillProps {
   label: string;
+  variant?: 'neutral' | 'ok' | 'warn' | 'danger';
   tone?: 'neutral' | 'success' | 'warning' | 'danger' | 'info';
   size?: 'md' | 'sm';
 }
 
-export function StatusPill({ label, tone = 'neutral', size = 'md' }: StatusPillProps) {
-  const toneClass = {
-    neutral: 'bg-white/5 text-text-primary border-white/15',
-    success: 'bg-status-ok/10 text-status-ok border-status-ok/30',
-    warning: 'bg-status-warn/10 text-status-warn border-status-warn/30',
-    danger: 'bg-status-danger/10 text-status-danger border-status-danger/30',
-    info: 'bg-accent-azure/10 text-accent-azure border-accent-azure/30'
-  }[tone];
+export function StatusPill({ label, tone = 'neutral', variant, size = 'md' }: StatusPillProps) {
+  const resolvedVariant = variant ??
+    {
+      success: 'ok',
+      warning: 'warn',
+      danger: 'danger',
+      info: 'warn',
+      neutral: 'neutral'
+    }[tone];
 
-  const sizeClass = size === 'sm' ? 'px-3 py-1 text-xs' : 'px-3.5 py-1.5 text-[13px]';
+  const base = 'inline-flex items-center rounded-full px-3 py-1 text-xs font-medium border';
+
+  const variants = {
+    ok: 'bg-status-ok/10 text-status-ok border-status-ok/40',
+    warn: 'bg-status-warn/10 text-status-warn border-status-warn/40',
+    danger: 'bg-status-danger/10 text-status-danger border-status-danger/40',
+    neutral: 'bg-accent-soft text-text-secondary border-white/5'
+  } as const;
+
+  const sizeClass = size === 'sm' ? 'px-2.5 py-[5px] text-[11px]' : 'px-3.5 py-1.5 text-[13px]';
 
   return (
-    <span
-      className={clsx(
-        'inline-flex items-center rounded-full border text-xs font-medium tracking-tight transition bg-opacity-10 text-opacity-90 border-opacity-30',
-        sizeClass,
-        toneClass
-      )}
-    >
+    <span className={clsx(base, variants[resolvedVariant], sizeClass)}>
       {label}
     </span>
   );

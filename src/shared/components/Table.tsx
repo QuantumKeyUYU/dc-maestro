@@ -12,13 +12,13 @@ export function Table<T = unknown>({ children, className, onRowClick, isRowClick
         className={clsx(
           'overflow-x-auto scrollbar-thin rounded-2xl',
           framed
-            ? 'border border-white/5 bg-base-850/80 px-3 py-3 shadow-luxe-card backdrop-blur-xl'
+            ? 'border border-white/5 bg-surface-card/90 px-3 py-3 shadow-luxe-card backdrop-blur-xl'
             : 'px-3 py-3',
           className
         )}
       >
         <table
-          className="min-w-full text-[13px] text-text-primary border-collapse [&>thead>tr>th]:py-3 [&>thead>tr>th]:px-3 [&>thead>tr>th]:text-xs [&>thead>tr>th]:font-semibold [&>thead>tr>th]:uppercase [&>thead>tr>th]:tracking-wide [&>thead>tr>th]:text-text-secondary [&>thead]:bg-base-900 [&>thead]:border-b [&>thead]:border-base-800 [&>tbody>tr]:border-b [&>tbody>tr]:border-base-800 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-2.5 [&>tbody>tr>td]:px-3 [&>tbody>tr>td]:align-middle [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-base-800/60"
+          className="min-w-full text-[13px] text-text-primary border-collapse [&>thead>tr>th]:py-3 [&>thead>tr>th]:px-4 [&>thead>tr>th]:text-[11px] [&>thead>tr>th]:font-medium [&>thead>tr>th]:uppercase [&>thead>tr>th]:tracking-[0.16em] [&>thead>tr>th]:text-text-muted [&>thead]:bg-surface-soft [&>thead]:border-b [&>thead]:border-white/5 [&>tbody>tr]:border-b [&>tbody>tr]:border-white/5 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-2.5 [&>tbody>tr>td]:px-4 [&>tbody>tr>td]:align-middle [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-surface-raised/40"
         >
           {children}
         </table>
@@ -37,8 +37,8 @@ export function TableRow<T = unknown>({ row, className, children }: TableRowProp
     <tr
       onClick={() => clickable && onRowClick?.(row)}
       className={clsx(
-        'transition-all duration-150',
-        clickable ? 'group cursor-pointer hover:bg-base-800/60' : 'hover:bg-base-800/60',
+        'group transition-all duration-150',
+        clickable ? 'cursor-pointer hover:bg-surface-raised/40' : 'hover:bg-surface-raised/40',
         className
       )}
     >

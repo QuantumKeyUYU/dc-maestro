@@ -7,7 +7,7 @@ import { sites } from '../../shared/data/sites';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
-const COLORS = ['#3ECBF8', '#7D8CFF', '#4CC38A', '#F5A524', '#F33F3F'];
+const COLORS = ['#4CB5F5', '#63C0F7', '#7AD0FA', '#8B9BFF'];
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -43,7 +43,7 @@ export function FinancePage() {
               <select
                 value={siteFilter}
                 onChange={(e) => setSiteFilter(e.target.value)}
-                className="bg-base-850/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
+                className="bg-surface-card/90 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
               >
                 <option value="all">Все площадки</option>
                 {sites.map((site) => (
@@ -56,7 +56,7 @@ export function FinancePage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value as 'all' | 'opex' | 'capex')}
-                className="bg-base-850/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
+                className="bg-surface-card/90 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
               >
                 <option value="all">Все</option>
                 <option value="opex">OPEX</option>
@@ -67,7 +67,7 @@ export function FinancePage() {
               value={table.searchQuery}
               onChange={(e) => table.setSearchQuery(e.target.value)}
               placeholder="Поиск по категории или площадке"
-              className="bg-base-850/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-azure/60 focus:ring-1 focus:ring-accent-azure/30"
+              className="bg-surface-card/90 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30"
             />
           </div>
           <Table framed={false}>
@@ -100,14 +100,13 @@ export function FinancePage() {
           </Table>
         </Card>
         <Card title="Сводка">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-text-secondary text-sm">Total OPEX</span>
-              <span className="text-lg font-semibold text-white">{totalOpex.toLocaleString('ru-RU')} ₽</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-text-secondary text-sm">Total CAPEX</span>
-              <span className="text-lg font-semibold text-white">{totalCapex.toLocaleString('ru-RU')} ₽</span>
+          <div className="space-y-4">
+            <div className="flex flex-col gap-1 text-right">
+              <div className="text-xs text-text-muted">Total OPEX</div>
+              <div className="text-lg font-semibold text-text-primary">{totalOpex.toLocaleString('ru-RU')} ₽</div>
+
+              <div className="text-xs text-text-muted mt-3">Total CAPEX</div>
+              <div className="text-lg font-semibold text-text-primary">{totalCapex.toLocaleString('ru-RU')} ₽</div>
             </div>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -122,7 +121,11 @@ export function FinancePage() {
                     strokeWidth={2}
                     cornerRadius={8}
                     labelLine={false}
-                    label={({ name }) => name}
+                    label={({ name, x, y }) => (
+                      <text x={x} y={y} fill="#A1A5B0" textAnchor="middle" dominantBaseline="central" fontSize={12}>
+                        {name}
+                      </text>
+                    )}
                   >
                     {pieData.map((entry, index) => (
                       <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} stroke={COLORS[index % COLORS.length]} />
@@ -130,11 +133,12 @@ export function FinancePage() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      background: '#0D1117',
+                      background: '#0B0F16',
                       border: '1px solid rgba(255,255,255,0.08)',
                       borderRadius: 12,
-                      color: '#E6E7EB'
+                      color: '#A1A5B0'
                     }}
+                    itemStyle={{ color: '#A1A5B0' }}
                   />
                 </PieChart>
               </ResponsiveContainer>
