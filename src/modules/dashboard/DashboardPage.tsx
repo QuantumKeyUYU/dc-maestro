@@ -61,8 +61,11 @@ export function DashboardPage() {
         ? 'Сеть в целом: Предупреждение'
         : 'Сеть в целом: Критично';
 
+  const networkVariant = networkTone === 'success' ? 'ok' : networkTone === 'warning' ? 'warn' : 'danger';
+
   const osiTone = osi.category === 'critical' ? 'danger' : osi.category === 'watch' ? 'warning' : 'success';
   const osiState = osi.category === 'critical' ? 'Критично' : osi.category === 'watch' ? 'Повышенная нагрузка' : 'Стабильно';
+  const osiVariant = osiTone === 'success' ? 'ok' : osiTone === 'warning' ? 'warn' : 'danger';
 
   const problemSites = sites.filter((site) => site.status !== 'healthy').length;
 
@@ -242,23 +245,28 @@ export function DashboardPage() {
   return (
     <div className="space-y-8">
       <div className="grid gap-4 xl:grid-cols-[1.6fr,1fr] items-start">
-        <Card title="Обзор состояния сети" subtitle="Ключевые сигналы по отказоустойчивости, загрузке и операционным рискам для быстрой реакции.">
-          <div className="space-y-3 text-text-secondary">
-            <p className="text-sm leading-relaxed">
-              Мониторим SLA, загрузку смен, склад и безопасность в единой картине. Фокус на рисках, которые требуют внимания в текущей смене.
-            </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <StatusPill label={networkStatusText.replace('Сеть в целом: ', '')} tone={networkTone} />
-              <span className="text-sm text-text-secondary">Средний uptime: {networkUptime.toFixed(2)}% · Ops load: {avgOpsLoad.toFixed(1)} / 100</span>
-            </div>
+        <Card className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">Обзор состояния сети</div>
+            <StatusPill variant={networkVariant} label={networkStatusText.replace('Сеть в целом: ', '')} />
+          </div>
+          <p className="text-sm text-text-secondary max-w-2xl">
+            Ключевые сигналы по отказоустойчивости, загрузке и операционным рискам.
+          </p>
+          <div className="flex flex-wrap items-center gap-3 text-text-secondary">
+            <span>Средний uptime: {networkUptime.toFixed(2)}%</span>
+            <span className="text-text-muted">•</span>
+            <span>Ops load: {avgOpsLoad.toFixed(1)} / 100</span>
+            <span className="text-text-muted">•</span>
+            <span>OSI: {osi.value.toFixed(1)}</span>
           </div>
         </Card>
-        <Card title="Риски и акценты" subtitle="Обновляется по данным за сутки">
+        <Card className="flex flex-col gap-3" title="Риски и акценты" subtitle="Обновляется по данным за сутки">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <KpiBadge label="Площадок вне нормы" value={problemSites} helperText="Контроль SLA и инженерии" tone={problemSites === 0 ? 'neutral' : 'warning'} />
-            <KpiBadge label="Просроченные заявки ТО" value={overdueWorkOrders} helperText="Оперативное реагирование" tone={overdueWorkOrders === 0 ? 'neutral' : 'warning'} />
+            <KpiBadge label="Площадок вне нормы" value={problemSites} helperText="Контроль SLA и инженерии" tone={problemSites === 0 ? 'neutral' : 'warn'} />
+            <KpiBadge label="Просроченные заявки ТО" value={overdueWorkOrders} helperText="Оперативное реагирование" tone={overdueWorkOrders === 0 ? 'neutral' : 'warn'} />
             <KpiBadge label="Критические инциденты" value={incidents.filter((i) => i.severity === 'critical' && !i.resolvedAt).length} helperText="Live incidents" tone={incidents.some((i) => i.severity === 'critical' && !i.resolvedAt) ? 'danger' : 'neutral'} />
-            <KpiBadge label="Месячный OPEX" value={`₽${monthlyOpex.toLocaleString('ru-RU')}`} helperText="Последние 30 дней" tone="info" />
+            <KpiBadge label="Месячный OPEX" value={`₽${monthlyOpex.toLocaleString('ru-RU')}`} helperText="Последние 30 дней" />
           </div>
         </Card>
       </div>
@@ -269,18 +277,35 @@ export function DashboardPage() {
             key={`${metric.label}-${idx}`}
             type="button"
             onClick={metric.onClick}
-            className={clsx(
-              'text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-accent-azure/45 rounded-2xl border border-white/5 bg-base-850/80 px-4 py-4 shadow-luxe-card transition',
-              metric.onClick ? 'hover:-translate-y-[2px]' : ''
-            )}
+            className={clsx('text-left focus:outline-none', metric.onClick && 'group')}
           >
-            <div className="space-y-2">
-              <div className="text-xs uppercase tracking-wider text-text-muted">{metric.label}</div>
-              <div className="flex items-center justify-between gap-2">
-                <div className="text-2xl font-semibold text-white leading-tight">{metric.value}</div>
-                <StatusPill label={metric.value === 0 ? 'Норма' : 'Внимание'} tone={metric.tone ?? 'neutral'} size="sm" />
+            <div
+              className={clsx(
+                'rounded-2xl border border-white/5 bg-surface-card/95 px-4 py-4 shadow-[0_10px_28px_rgba(0,0,0,0.6)] transition-transform',
+                metric.onClick && 'group-hover:-translate-y-[1px]'
+              )}
+            >
+              <div className="space-y-2">
+                <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">{metric.label}</div>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-2xl font-semibold text-text-primary leading-tight">{metric.value}</div>
+                  <StatusPill
+                    label={metric.value === 0 ? 'Норма' : 'Внимание'}
+                    variant={
+                      metric.tone === 'danger'
+                        ? 'danger'
+                        : metric.tone === 'warning'
+                          ? 'warn'
+                          : metric.tone === 'success'
+                            ? 'ok'
+                            : 'neutral'
+                    }
+                    size="sm"
+                  />
+                </div>
+                {metric.helperText ? <div className="text-sm text-text-secondary">{metric.helperText}</div> : null}
+                <div className="mt-2 h-[2px] w-8 rounded-full bg-accent-primary/70" />
               </div>
-              {metric.helperText ? <div className="text-sm text-text-secondary">{metric.helperText}</div> : null}
             </div>
           </button>
         ))}
@@ -320,12 +345,27 @@ export function DashboardPage() {
               {filteredAlerts.map((alert) => {
                 const tone = alert.priority.includes('Крит') ? 'danger' : alert.priority.includes('Проср') ? 'warning' : 'warning';
                 return (
-                  <TableRow key={`${alert.type}-${alert.id}`} row={alert}>
+                  <TableRow
+                    key={`${alert.type}-${alert.id}`}
+                    row={alert}
+                    className={clsx(
+                      'border-b border-white/5',
+                      tone === 'danger'
+                        ? 'border-l-2 border-l-status-danger/80'
+                        : tone === 'warning'
+                          ? 'border-l-2 border-l-status-warn/80'
+                          : undefined
+                    )}
+                  >
                     <td className="pr-4 font-medium text-white">{alert.type}</td>
                     <td className="pr-4 text-text-primary">{alert.description}</td>
                     <td className="pr-4 text-center text-text-secondary">{alert.siteId}</td>
                     <td className="pr-4">
-                      <StatusPill label={alert.priority} tone={tone} size="sm" />
+                      <StatusPill
+                        label={alert.priority}
+                        variant={tone === 'danger' ? 'danger' : tone === 'warning' ? 'warn' : 'neutral'}
+                        size="sm"
+                      />
                     </td>
                     <td className="pr-2 text-right">
                       <CtaButton
@@ -355,7 +395,7 @@ export function DashboardPage() {
 
       <div className="grid gap-7 xl:grid-cols-[2fr,1fr] items-start">
         <Card className="xl:col-span-1" title="Состояние сети" subtitle="Uptime по площадкам">
-          <div className="h-80 bg-base-850/80 rounded-2xl border border-white/5 p-2">
+          <div className="h-80 bg-surface-soft/80 rounded-2xl border border-white/5 p-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={18}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(230,231,235,0.08)" vertical={false} />
@@ -371,7 +411,7 @@ export function DashboardPage() {
                   }}
                   cursor={{ fill: 'rgba(22,27,35,0.4)' }}
                 />
-                <Bar dataKey="uptime" fill="#3ECBF8" stroke="#3ECBF8" strokeWidth={2} radius={[8, 8, 4, 4]} />
+                <Bar dataKey="uptime" fill="#4CB5F5" stroke="#4CB5F5" strokeWidth={2} radius={[8, 8, 4, 4]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -409,7 +449,7 @@ export function DashboardPage() {
         <Card title="Быстрый переход по ролям" subtitle="Навигация по ключевым потокам">
           <div className="grid grid-cols-1 gap-3">
             {roleShortcuts.map((role) => (
-              <div key={role.title} className="flex items-center justify-between rounded-2xl border border-white/5 bg-base-850/80 px-4 py-3">
+              <div key={role.title} className="flex items-center justify-between rounded-2xl border border-white/5 bg-surface-card/90 px-4 py-3">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-white">{role.title}</div>
                   <p className="text-xs text-text-secondary">{role.metric}</p>
@@ -425,15 +465,15 @@ export function DashboardPage() {
         <Card title="Площадки" subtitle="Uptime, reliability и capacity">
           <div className="flex flex-col gap-4">
             {withScores.slice(0, 3).map((site) => (
-              <div key={site.id} className="flex items-center justify-between rounded-2xl border border-white/5 bg-base-850/70 px-4 py-3">
+              <div key={site.id} className="flex items-center justify-between rounded-2xl border border-white/5 bg-surface-card/90 px-4 py-3">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-white">{site.name}</div>
                   <div className="text-xs text-text-secondary">{site.region}</div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <StatusPill label={`Uptime ${site.uptime.toFixed(1)}%`} tone="info" size="sm" />
-                  <StatusPill label={`Reliab. ${site.reliability.toFixed(1)}`} tone="success" size="sm" />
-                  <StatusPill label={`Cap ${site.capacity.toFixed(1)}%`} tone="warning" size="sm" />
+                  <StatusPill label={`Uptime ${site.uptime.toFixed(1)}%`} variant="ok" size="sm" />
+                  <StatusPill label={`Reliab. ${site.reliability.toFixed(1)}`} variant="ok" size="sm" />
+                  <StatusPill label={`Cap ${site.capacity.toFixed(1)}%`} variant="warn" size="sm" />
                 </div>
               </div>
             ))}

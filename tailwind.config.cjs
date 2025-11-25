@@ -5,25 +5,33 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        base: {
-          950: '#0A0D12',
-          900: '#0D1117',
-          850: '#11161F',
-          800: '#161B23'
+        surface: {
+          base: '#05070B',
+          soft: '#070A0F',
+          card: '#0B0F16',
+          raised: '#101621'
         },
         text: {
-          primary: '#E6E7EB',
-          secondary: '#9EA3AE',
+          primary: '#E5E7EB',
+          secondary: '#A1A5B0',
           muted: '#6B7280'
         },
         accent: {
-          azure: '#3ECBF8',
-          violet: '#7D8CFF'
+          primary: '#4CB5F5',
+          soft: '#102030',
+          violet: '#8B9BFF',
+          azure: '#4CB5F5'
         },
         status: {
-          ok: '#4CC38A',
-          warn: '#F5A524',
-          danger: '#F33F3F'
+          ok: '#46B37A',
+          warn: '#E2B857',
+          danger: '#E05757'
+        },
+        base: {
+          950: '#05070B',
+          900: '#070A0F',
+          850: '#0B0F16',
+          800: '#101621'
         }
       },
       borderRadius: {

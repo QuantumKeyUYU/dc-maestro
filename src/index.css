@@ -8,20 +8,20 @@
   }
 
   body {
-    @apply bg-base-950 bg-gradient-to-b from-base-950 to-base-900 text-text-primary antialiased;
+    @apply bg-surface-base text-text-primary antialiased;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
-  h1, h2, h3 {
-    @apply text-white tracking-tight;
-  }
-
   h1 {
-    @apply text-2xl font-semibold;
+    @apply text-2xl font-semibold tracking-tight text-text-primary;
   }
 
   h2 {
-    @apply text-xl font-medium;
+    @apply text-xl font-semibold tracking-tight text-text-primary;
+  }
+
+  h3 {
+    @apply text-lg font-medium tracking-tight text-text-primary;
   }
 
   .subtitle {

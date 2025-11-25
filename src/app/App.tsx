@@ -143,20 +143,20 @@ export default function App() {
   const osiToneDisplay = hasOsiData ? osiTone : 'neutral';
 
   return (
-    <div className="min-h-screen bg-base-950 bg-gradient-to-b from-base-950 to-base-900 text-text-primary relative">
+    <div className="min-h-screen bg-gradient-to-b from-surface-base to-surface-soft text-text-primary relative">
       <div className="flex h-screen overflow-hidden relative">
-        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-base-950/95 border-r border-white/5 px-6 py-6 flex flex-col gap-6 backdrop-blur-xl">
+        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-surface-base/95 border-r border-white/5 px-6 py-6 flex flex-col gap-6 backdrop-blur-xl">
           <NavLink
             to="/"
             className={({ isActive }) =>
               clsx(
-                'block -mx-1 px-4 py-3 rounded-xl transition text-left space-y-1 border border-white/5 bg-base-900/70',
-                'hover:bg-base-900 text-white',
-                isActive && 'bg-base-850 text-white border border-base-800'
+                'block -mx-1 px-4 py-3 rounded-xl transition text-left space-y-1 border border-white/5 bg-surface-card/80',
+                'hover:bg-surface-card/90 text-text-primary',
+                isActive && 'bg-surface-card text-text-primary border border-surface-raised/80'
               )
             }
           >
-            <div className="text-xl font-semibold text-white leading-tight">{strings.headers.appTitle}</div>
+            <div className="text-xl font-semibold text-text-primary leading-tight">{strings.headers.appTitle}</div>
           </NavLink>
           <nav className="flex flex-col gap-1.5 text-[15px]">
             {navItems.map((item) => {
@@ -168,10 +168,10 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative flex items-center gap-3 px-3 py-2 rounded-xl font-medium text-sm text-text-secondary transition-colors border border-transparent',
+                      'flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-text-secondary transition-colors',
                       isActive
-                        ? 'bg-base-850 text-white border-base-800'
-                        : 'hover:bg-base-900 hover:text-white'
+                        ? 'bg-surface-card text-text-primary border border-surface-raised/80 relative before:absolute before:left-1 before:top-1 before:bottom-1 before:w-[2px] before:rounded-full before:bg-accent-primary'
+                        : 'hover:bg-surface-soft/70'
                     )
                   }
                 >
@@ -180,7 +180,7 @@ export default function App() {
                       <Icon className="w-[18px] h-[18px] text-current" />
                       <span className="flex-1 min-w-0 text-left leading-tight text-current relative truncate">{item.label}</span>
                       {item.badge ? (
-                        <span className="ml-auto inline-flex items-center justify-center rounded-full bg-accent-azure/10 text-accent-azure text-[11px] px-2 py-[2px] border border-accent-azure/30">
+                        <span className="ml-auto inline-flex items-center justify-center rounded-full bg-accent-primary/10 text-accent-primary text-[11px] px-2 py-[2px] border border-accent-primary/30">
                           {item.badge.value}
                         </span>
                       ) : null}
@@ -193,7 +193,7 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-base-950/85 backdrop-blur border-b border-white/5 px-7 py-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <header className="sticky top-0 z-10 bg-surface-base/85 backdrop-blur border-b border-white/5 px-7 py-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <SectionHeader
               as="h1"
               label={currentPage.label ?? undefined}
@@ -208,13 +208,17 @@ export default function App() {
               className="self-start w-full lg:w-auto"
               resetKey={pathname}
             >
-              <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-base-850/80 px-4 py-3 shadow-luxe-card">
+              <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-surface-card/95 px-4 py-3 shadow-[0_14px_40px_rgba(0,0,0,0.65)]">
                 <div className="space-y-1">
                   <div className="text-xs uppercase tracking-wider text-text-muted">OSI</div>
                   <div className="text-3xl font-semibold text-white leading-none">{osiValueDisplay}</div>
                   <div className="text-sm text-text-secondary">Operational Strain Index</div>
                 </div>
-                <StatusPill label={osiStateDisplay} tone={osiToneDisplay} size="sm" />
+                <StatusPill
+                  label={osiStateDisplay}
+                  variant={osiToneDisplay === 'danger' ? 'danger' : osiToneDisplay === 'warning' ? 'warn' : 'ok'}
+                  size="sm"
+                />
               </div>
             </InfoTooltip>
           </header>
