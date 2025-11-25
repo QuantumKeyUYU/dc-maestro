@@ -7,7 +7,8 @@ import { sites } from '../../shared/data/sites';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
-const COLORS = ['#4CB5F5', '#63C0F7', '#7AD0FA', '#8B9BFF'];
+const COLORS = ['#4CB5F5', '#4CB5F5CC', '#4CB5F599', '#4CB5F566', '#4CB5F533'];
+const LABEL_COLOR = '#B3B9C7';
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -43,7 +44,7 @@ export function FinancePage() {
               <select
                 value={siteFilter}
                 onChange={(e) => setSiteFilter(e.target.value)}
-                className="bg-surface-card/90 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
+                className="bg-[rgba(12,16,24,0.76)] border border-white/8 rounded-xl px-3 py-2 text-sm text-text-primary shadow-[0_12px_30px_rgba(0,0,0,0.4)]"
               >
                 <option value="all">Все площадки</option>
                 {sites.map((site) => (
@@ -56,7 +57,7 @@ export function FinancePage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value as 'all' | 'opex' | 'capex')}
-                className="bg-surface-card/90 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
+                className="bg-[rgba(12,16,24,0.76)] border border-white/8 rounded-xl px-3 py-2 text-sm text-text-primary shadow-[0_12px_30px_rgba(0,0,0,0.4)]"
               >
                 <option value="all">Все</option>
                 <option value="opex">OPEX</option>
@@ -67,7 +68,7 @@ export function FinancePage() {
               value={table.searchQuery}
               onChange={(e) => table.setSearchQuery(e.target.value)}
               placeholder="Поиск по категории или площадке"
-              className="bg-surface-card/90 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30"
+              className="bg-[rgba(12,16,24,0.8)] border border-white/8 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30 shadow-[0_12px_30px_rgba(0,0,0,0.42)]"
             />
           </div>
           <Table framed={false}>
@@ -122,7 +123,7 @@ export function FinancePage() {
                     cornerRadius={8}
                     labelLine={false}
                     label={({ name, x, y }) => (
-                      <text x={x} y={y} fill="#A1A5B0" textAnchor="middle" dominantBaseline="central" fontSize={12}>
+                      <text x={x} y={y} fill={LABEL_COLOR} textAnchor="middle" dominantBaseline="central" fontSize={12}>
                         {name}
                       </text>
                     )}

@@ -12,9 +12,9 @@ module.exports = {
           raised: '#101621'
         },
         text: {
-          primary: '#E5E7EB',
-          secondary: '#A1A5B0',
-          muted: '#6B7280'
+          primary: '#EEF2F7',
+          secondary: '#B3B9C7',
+          muted: '#7A828E'
         },
         accent: {
           primary: '#4CB5F5',
