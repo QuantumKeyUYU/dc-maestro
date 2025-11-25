@@ -124,14 +124,14 @@ export default function App() {
   return (
     <div className="min-h-screen text-text-primary relative bg-[#05070A]">
       <div className="flex h-screen overflow-hidden relative">
-        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[rgba(8,12,18,0.92)] border-r border-[rgba(255,255,255,0.06)] px-6 py-6 flex flex-col gap-6 backdrop-blur-[24px] shadow-[0_30px_90px_rgba(0,0,0,0.65)]">
+        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[rgba(8,12,18,0.94)] border-r border-white/10 px-6 py-6 flex flex-col gap-6 backdrop-blur-2xl shadow-[0_30px_90px_rgba(0,0,0,0.65)]">
           <NavLink
             to="/"
             className={({ isActive }) =>
               clsx(
-                'relative block -mx-1 px-4 py-3 rounded-[16px] transition text-left space-y-1 border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.05)] shadow-[0_18px_48px_rgba(0,0,0,0.5)] backdrop-blur-2xl',
-                'hover:bg-white/[0.08] text-text-primary',
-                isActive && 'bg-white/[0.09] text-text-primary border-white/18'
+                'relative block -mx-1 px-4 py-3 rounded-[16px] transition text-left space-y-1 border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.05)] shadow-[0_18px_48px_rgba(0,0,0,0.45)] backdrop-blur-xl',
+                'hover:bg-white/[0.07] text-text-primary',
+                isActive && 'bg-white/[0.08] text-text-primary border-white/16'
               )
             }
           >
@@ -149,7 +149,7 @@ export default function App() {
                     clsx(
                       'relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors border border-transparent text-white/60 backdrop-blur-[14px]',
                       isActive
-                        ? 'bg-white/[0.06] text-white/95 pl-3 after:absolute after:left-2 after:top-1/2 after:-translate-y-1/2 after:h-8 after:w-[3px] after:rounded-full after:bg-accent-primary/35'
+                        ? 'bg-white/[0.07] text-white/95 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08),0_10px_28px_rgba(0,0,0,0.45)]'
                         : 'hover:bg-white/[0.04]'
                     )
                   }
@@ -159,7 +159,7 @@ export default function App() {
                       <Icon className={clsx('w-[18px] h-[18px]', isActive ? 'text-white/95' : 'text-white/60')} />
                       <span className="flex-1 min-w-0 text-left leading-tight relative truncate">{item.label}</span>
                       {item.badge ? (
-                        <span className="ml-auto inline-flex items-center justify-center rounded-full px-2 py-[2px] text-xs text-white/80 bg-white/5 border border-white/15">
+                        <span className="ml-auto inline-flex items-center justify-center rounded-full px-2 py-[2px] text-xs text-white/85 bg-white/6 border border-[rgba(255,255,255,0.18)]">
                           {item.badge.value}
                         </span>
                       ) : null}
@@ -171,7 +171,7 @@ export default function App() {
           </nav>
         </aside>
 
-        <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent">
+        <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
           <header className="sticky top-0 z-10 bg-[rgba(5,7,10,0.92)] backdrop-blur-[18px] border-b border-[rgba(255,255,255,0.06)] px-7 py-5 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
             <SectionHeader
               as="h1"

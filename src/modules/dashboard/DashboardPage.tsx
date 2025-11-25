@@ -315,7 +315,7 @@ export function DashboardPage() {
                   />
                 </div>
                 {metric.helperText ? <div className="text-sm text-text-secondary">{metric.helperText}</div> : null}
-                <div className="mt-1 h-[2px] w-10 rounded-full bg-accent-primary/70" />
+                <div className="mt-1 h-[2px] w-10 rounded-full bg-white/12" />
               </div>
             </div>
           </button>
@@ -359,14 +359,7 @@ export function DashboardPage() {
                   <TableRow
                     key={`${alert.type}-${alert.id}`}
                     row={alert}
-                    className={clsx(
-                      'border-b border-white/5',
-                      tone === 'danger'
-                        ? 'border-l-2 border-status-danger'
-                        : tone === 'warning'
-                          ? 'border-l-2 border-status-warn'
-                          : 'border-l border-transparent'
-                    )}
+                    className="border-b border-white/6"
                   >
                     <td className="pr-4 font-medium text-white">{alert.type}</td>
                     <td className="pr-4 text-text-primary">{alert.description}</td>
@@ -414,10 +407,10 @@ export function DashboardPage() {
 
       <div className="grid gap-6 xl:grid-cols-[2fr,1fr] items-start">
         <Card className="xl:col-span-1" title="Состояние сети" subtitle="Uptime по площадкам">
-          <div className="h-80 bg-[rgba(255,255,255,0.03)] rounded-[18px] border border-[rgba(255,255,255,0.08)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-[18px]">
+          <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={18}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
                 <XAxis dataKey="name" tick={{ fill: '#C7D4E9', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} />
                 <YAxis tick={{ fill: '#C7D4E9', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} />
                 <Tooltip
@@ -430,7 +423,7 @@ export function DashboardPage() {
                   }}
                   cursor={{ fill: 'rgba(255,255,255,0.04)' }}
                 />
-                <Bar dataKey="uptime" fill="#4CB8FF" stroke="#4CB8FF" strokeWidth={2} radius={[10, 10, 6, 6]} />
+                <Bar dataKey="uptime" fill="#4FB4FF" stroke="#4FB4FF" strokeWidth={2} radius={[10, 10, 6, 6]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

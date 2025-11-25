@@ -12,13 +12,13 @@ export function Table<T = unknown>({ children, className, onRowClick, isRowClick
         className={clsx(
           'overflow-x-auto scrollbar-thin rounded-2xl',
           framed
-            ? 'border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.03)] px-3 py-3 shadow-[0_20px_60px_rgba(0,0,0,0.55)] backdrop-blur-[20px]'
+            ? 'border border-[rgba(255,255,255,0.08)] bg-[rgba(7,10,16,0.96)] px-3 py-3 shadow-[0_20px_50px_rgba(0,0,0,0.65)] backdrop-blur-[18px]'
             : 'px-3 py-3',
           className
         )}
       >
         <table
-          className="min-w-full text-[13px] text-text-primary border-collapse [&>thead>tr>th]:py-3 [&>thead>tr>th]:px-4 [&>thead>tr>th]:text-[11px] [&>thead>tr>th]:font-semibold [&>thead>tr>th]:uppercase [&>thead>tr>th]:tracking-[0.14em] [&>thead>tr>th]:text-white/70 [&>thead]:bg-white/[0.03] [&>thead]:border-b [&>thead]:border-white/10 [&>tbody>tr]:border-b [&>tbody>tr]:border-white/5 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-3 [&>tbody>tr>td]:px-4 [&>tbody>tr>td]:align-middle [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-white/[0.03]"
+          className="min-w-full text-[13px] text-text-primary border-collapse [&>thead>tr>th]:py-3 [&>thead>tr>th]:px-4 [&>thead>tr>th]:text-[11px] [&>thead>tr>th]:font-semibold [&>thead>tr>th]:uppercase [&>thead>tr>th]:tracking-[0.14em] [&>thead>tr>th]:text-white/70 [&>thead]:bg-white/[0.02] [&>thead]:border-b [&>thead]:border-white/12 [&>tbody>tr]:border-b [&>tbody>tr]:border-white/6 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-3 [&>tbody>tr>td]:px-4 [&>tbody>tr>td]:align-middle [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-white/[0.04]"
         >
           {children}
         </table>
@@ -37,8 +37,8 @@ export function TableRow<T = unknown>({ row, className, children }: TableRowProp
     <tr
       onClick={() => clickable && onRowClick?.(row)}
       className={clsx(
-        'group transition-all duration-150 border-l-2 border-transparent',
-        clickable ? 'cursor-pointer hover:bg-white/[0.04]' : 'hover:bg-white/[0.03]',
+        'group transition-colors duration-150',
+        clickable ? 'cursor-pointer hover:bg-white/[0.05]' : 'hover:bg-white/[0.04]',
         className
       )}
     >

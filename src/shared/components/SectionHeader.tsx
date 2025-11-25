@@ -27,7 +27,7 @@ export function SectionHeader({
       className={clsx(
         'flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between',
         framed &&
-          "relative overflow-hidden rounded-[18px] border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.03)] px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.55)] backdrop-blur-[20px] before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-[rgba(255,255,255,0.08)] before:content-['']",
+          "relative overflow-hidden rounded-[18px] border border-[rgba(255,255,255,0.08)] bg-[rgba(7,10,16,0.96)] px-5 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.65)] backdrop-blur-[18px] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_18%_-8%,rgba(255,255,255,0.08),transparent_48%)] before:opacity-80 before:content-['']",
         className
       )}
     >

@@ -9,13 +9,13 @@ interface StatusPillProps {
 
 export function StatusPill({ label, tone = 'neutral', variant, size = 'md' }: StatusPillProps) {
   const base =
-    'inline-flex items-center rounded-full border backdrop-blur-[16px] font-semibold uppercase tracking-[0.14em] text-[10px] bg-[rgba(255,255,255,0.06)] shadow-[0_10px_28px_rgba(0,0,0,0.35)]';
+    'inline-flex items-center h-[26px] rounded-full border backdrop-blur-xl font-semibold uppercase tracking-[0.08em] text-[11px] bg-[rgba(255,255,255,0.02)] shadow-[0_12px_32px_rgba(0,0,0,0.35)]';
 
   const variants = {
-    ok: 'text-status-ok border-status-ok/60',
-    warn: 'text-status-warn border-status-warn/60',
-    danger: 'text-status-danger border-status-danger/60',
-    neutral: 'text-text-secondary border-white/30'
+    ok: 'text-[rgba(217,255,242,0.95)] border-[rgba(59,216,161,0.65)]',
+    warn: 'text-[rgba(255,235,210,0.95)] border-[rgba(242,192,99,0.7)]',
+    danger: 'text-[rgba(255,208,214,0.95)] border-[rgba(255,92,103,0.65)]',
+    neutral: 'text-white/70 border-white/12'
   } as const;
 
   const toneToVariant: Record<NonNullable<StatusPillProps['tone']>, keyof typeof variants> = {
@@ -28,7 +28,7 @@ export function StatusPill({ label, tone = 'neutral', variant, size = 'md' }: St
 
   const resolvedVariant: keyof typeof variants = variant ?? toneToVariant[tone];
 
-  const sizeClass = size === 'sm' ? 'h-[22px] px-3 text-[9px]' : 'h-[26px] px-3.5 text-[10px]';
+  const sizeClass = size === 'sm' ? 'h-[22px] px-2.5 text-[10px]' : 'px-3';
 
   return (
     <span className={clsx(base, variants[resolvedVariant], sizeClass)}>
