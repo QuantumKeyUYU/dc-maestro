@@ -65,15 +65,15 @@ export function SitesDetailPage() {
 
   return (
     <div className="space-y-8">
-      <div className="text-sm text-neutral-500 flex items-center gap-2">
+      <div className="text-sm text-text-muted flex items-center gap-2">
         <button
           onClick={() => navigate('/sites')}
-          className="hover:text-accent transition inline-flex items-center gap-1"
+          className="hover:text-accent-azure transition inline-flex items-center gap-1"
         >
           Площадки ЦОД
         </button>
-        <span className="text-neutral-500">/</span>
-        <span className="text-neutral-100">{site.name}</span>
+        <span className="text-text-muted">/</span>
+        <span className="text-text-primary">{site.name}</span>
       </div>
       <SectionHeader
         title={`${site.name}: детализация`}
@@ -81,7 +81,7 @@ export function SitesDetailPage() {
         action={
           <button
             onClick={() => navigate('/sites')}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-neutral-100 hover:border-accent/60 backdrop-blur"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-text-primary hover:border-accent-azure/60 backdrop-blur"
           >
             ← Назад к списку
           </button>
@@ -91,8 +91,8 @@ export function SitesDetailPage() {
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="text-2xl font-semibold text-neutral-100 drop-shadow-sm">{site.name}</div>
-            <div className="text-sm text-neutral-400">{site.region}</div>
+            <div className="text-2xl font-semibold text-white drop-shadow-sm">{site.name}</div>
+            <div className="text-sm text-text-secondary">{site.region}</div>
           </div>
           <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} />
         </div>
@@ -103,8 +103,8 @@ export function SitesDetailPage() {
               onClick={() => setTab(t.key)}
               className={`px-4 py-2 rounded-xl text-sm border transition backdrop-blur ${
                 tab === t.key
-                  ? 'border-accent/60 bg-accent/10 text-neutral-100 shadow-glow'
-                  : 'border-white/10 bg-white/5 text-neutral-400 hover:border-accent/40'
+                  ? 'border-accent-azure/60 bg-accent-azure/10 text-white shadow-glow'
+                  : 'border-white/10 bg-white/5 text-text-secondary hover:border-accent-azure/40'
               }`}
             >
               {t.label}

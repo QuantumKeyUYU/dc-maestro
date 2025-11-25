@@ -7,7 +7,7 @@ import { sites } from '../../shared/data/sites';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
-const COLORS = ['#38bdf8', '#22c55e', '#f97316', '#a855f7', '#eab308', '#f43f5e'];
+const COLORS = ['#3ECBF8', '#7D8CFF', '#4CC38A', '#F5A524', '#F33F3F'];
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -43,7 +43,7 @@ export function FinancePage() {
               <select
                 value={siteFilter}
                 onChange={(e) => setSiteFilter(e.target.value)}
-                className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-neutral-100"
+                className="bg-base-850/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
               >
                 <option value="all">Все площадки</option>
                 {sites.map((site) => (
@@ -56,7 +56,7 @@ export function FinancePage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value as 'all' | 'opex' | 'capex')}
-                className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-neutral-100"
+                className="bg-base-850/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
               >
                 <option value="all">Все</option>
                 <option value="opex">OPEX</option>
@@ -67,11 +67,11 @@ export function FinancePage() {
               value={table.searchQuery}
               onChange={(e) => table.setSearchQuery(e.target.value)}
               placeholder="Поиск по категории или площадке"
-              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-accent/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)]"
+              className="bg-base-850/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-azure/60 focus:ring-1 focus:ring-accent-azure/30"
             />
           </div>
           <Table framed={false}>
-            <thead className="text-xs uppercase text-gray-400">
+            <thead className="text-xs uppercase text-text-secondary">
               <tr>
                 <th className="text-left py-2 cursor-pointer" onClick={() => table.requestSort('date')}>
                   Дата {table.sortConfig.key === 'date' ? (table.sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
@@ -88,12 +88,12 @@ export function FinancePage() {
             </thead>
             <tbody>
               {table.sortedAndFiltered.map((record) => (
-                <tr key={record.id} className="border-t border-gray-800">
-                  <td className="py-2 pr-4">{new Date(record.date).toLocaleDateString('ru-RU')}</td>
-                  <td className="py-2 pr-4 text-gray-300">{record.type}</td>
-                  <td className="py-2 pr-4 text-gray-300">{record.category}</td>
-                  <td className="py-2 pr-4">{record.siteId ?? '—'}</td>
-                  <td className="py-2 pr-4">{record.amountRub.toLocaleString('ru-RU')} ₽</td>
+                <tr key={record.id} className="border-t border-base-800">
+                  <td className="py-2 pr-4 text-text-primary">{new Date(record.date).toLocaleDateString('ru-RU')}</td>
+                  <td className="py-2 pr-4 text-text-secondary">{record.type}</td>
+                  <td className="py-2 pr-4 text-text-secondary">{record.category}</td>
+                  <td className="py-2 pr-4 text-text-primary">{record.siteId ?? '—'}</td>
+                  <td className="py-2 pr-4 text-text-primary">{record.amountRub.toLocaleString('ru-RU')} ₽</td>
                 </tr>
               ))}
             </tbody>
@@ -102,22 +102,40 @@ export function FinancePage() {
         <Card title="Сводка">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 text-sm">Total OPEX</span>
-              <span className="text-lg font-semibold">{totalOpex.toLocaleString('ru-RU')} ₽</span>
+              <span className="text-text-secondary text-sm">Total OPEX</span>
+              <span className="text-lg font-semibold text-white">{totalOpex.toLocaleString('ru-RU')} ₽</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 text-sm">Total CAPEX</span>
-              <span className="text-lg font-semibold">{totalCapex.toLocaleString('ru-RU')} ₽</span>
+              <span className="text-text-secondary text-sm">Total CAPEX</span>
+              <span className="text-lg font-semibold text-white">{totalCapex.toLocaleString('ru-RU')} ₽</span>
             </div>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie dataKey="value" data={pieData} cx="50%" cy="50%" outerRadius={90} label>
+                  <Pie
+                    dataKey="value"
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={90}
+                    innerRadius={48}
+                    strokeWidth={2}
+                    cornerRadius={8}
+                    labelLine={false}
+                    label={({ name }) => name}
+                  >
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} stroke={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip contentStyle={{ background: '#111827', border: '1px solid #1f2937' }} />
+                  <Tooltip
+                    contentStyle={{
+                      background: '#0D1117',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: 12,
+                      color: '#E6E7EB'
+                    }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>

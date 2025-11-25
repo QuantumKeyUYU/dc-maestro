@@ -9,33 +9,33 @@ interface KpiBadgeProps {
 }
 
 const toneSurface: Record<NonNullable<KpiBadgeProps['tone']>, string> = {
-  neutral: 'border-white/5 bg-ink-900/90',
-  success: 'border-status-ok/30 bg-status-ok/5',
-  warning: 'border-status-warn/30 bg-status-warn/6',
-  danger: 'border-status-danger/30 bg-status-danger/6',
-  info: 'border-accent/25 bg-accent-soft/30'
+  neutral: 'border-white/5 bg-base-850/80',
+  success: 'border-status-ok/30 bg-status-ok/10',
+  warning: 'border-status-warn/30 bg-status-warn/10',
+  danger: 'border-status-danger/30 bg-status-danger/10',
+  info: 'border-accent-azure/30 bg-accent-azure/10'
 };
 
 const toneValue: Record<NonNullable<KpiBadgeProps['tone']>, string> = {
-  neutral: 'text-neutral-100',
+  neutral: 'text-white',
   success: 'text-status-ok',
   warning: 'text-status-warn',
   danger: 'text-status-danger',
-  info: 'text-accent'
+  info: 'text-accent-azure'
 };
 
 export function KpiBadge({ label, value, tone = 'neutral', helperText }: KpiBadgeProps) {
   return (
     <Card
       className={clsx(
-        'inline-flex min-w-[180px] flex-col gap-2 px-5 py-4 transition-all hover:-translate-y-[2px] hover:shadow-[0_20px_60px_rgba(0,0,0,0.7)]',
+        'inline-flex min-w-[180px] flex-col gap-2 px-5 py-4 transition-all hover:-translate-y-[2px] hover:shadow-[0_10px_28px_rgba(0,0,0,0.55)]',
         toneSurface[tone]
       )}
     >
       <div className="flex flex-col gap-1 leading-tight">
-        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-neutral-500">{label}</span>
-        <span className={clsx('text-3xl font-semibold tracking-tight', toneValue[tone])}>{value}</span>
-        {helperText ? <span className="text-xs text-neutral-400">{helperText}</span> : null}
+        <span className="text-xs font-semibold uppercase tracking-wider text-text-muted">{label}</span>
+        <span className={clsx('text-3xl font-semibold tracking-tight text-white', toneValue[tone])}>{value}</span>
+        {helperText ? <span className="text-sm text-text-secondary">{helperText}</span> : null}
       </div>
     </Card>
   );

@@ -5,26 +5,25 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ink: {
-          950: '#020617',
-          900: '#02081f',
-          800: '#050b24',
-          700: '#0b1220'
+        base: {
+          950: '#0A0D12',
+          900: '#0D1117',
+          850: '#11161F',
+          800: '#161B23'
+        },
+        text: {
+          primary: '#E6E7EB',
+          secondary: '#9EA3AE',
+          muted: '#6B7280'
         },
         accent: {
-          DEFAULT: '#22d3ee',
-          soft: '#0b3b4a'
-        },
-        neutral: {
-          100: '#e5e7eb',
-          300: '#9ca3af',
-          500: '#6b7280',
-          700: '#4b5563'
+          azure: '#3ECBF8',
+          violet: '#7D8CFF'
         },
         status: {
-          ok: '#22c55e',
-          warn: '#eab308',
-          danger: '#f97316'
+          ok: '#4CC38A',
+          warn: '#F5A524',
+          danger: '#F33F3F'
         }
       },
       borderRadius: {
@@ -32,7 +31,7 @@ module.exports = {
         '2xl': '1.2rem'
       },
       boxShadow: {
-        'luxe-card': '0 18px 45px rgba(0,0,0,0.55)'
+        'luxe-card': '0 8px 24px rgba(0,0,0,0.45)'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif']
