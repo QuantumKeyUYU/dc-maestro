@@ -268,16 +268,16 @@ export function DashboardPage() {
           </div>
         </Card>
         <InfoTooltip label={`Operational Strain Index · ${osiDescriptor}`} triggerArea="container" className="h-full">
-          <div className="relative h-full rounded-[18px] bg-[rgba(255,255,255,0.04)] backdrop-blur-[20px] border border-[rgba(255,255,255,0.08)] px-6 py-5 shadow-[0_22px_60px_rgba(0,0,0,0.55)] overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-accent-primary/40 before:content-['']">
+          <div className="relative h-full rounded-card bg-[radial-gradient(circle_at_0%_0%,rgba(79,180,255,0.18),rgba(9,12,18,0.98))] backdrop-blur-2xl border border-border-strong px-6 py-5 shadow-elevation-card overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/16 before:to-transparent before:opacity-25 before:content-['']">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-2">
-                <div className="text-[11px] uppercase tracking-[0.18em] text-white/50">OSI</div>
-                <div className="text-[32px] font-semibold leading-none text-white">{osi.value.toFixed(1)}</div>
+                <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">OSI</div>
+                <div className="text-[34px] font-semibold leading-none text-text-primary">{osi.value.toFixed(1)}</div>
                 <div className="text-sm text-text-secondary">Operational Strain Index</div>
               </div>
-              <StatusPill label={osiState} variant={osiVariant} />
+              <StatusPill label={osiState} variant={osiVariant} size="sm" />
             </div>
-            <div className="mt-3 text-xs text-white/60">{osiDescriptor}</div>
+            <div className="mt-3 text-sm text-text-secondary">{osiDescriptor}</div>
           </div>
         </InfoTooltip>
       </div>
@@ -292,14 +292,14 @@ export function DashboardPage() {
           >
             <div
               className={clsx(
-                'rounded-[16px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-5 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.5)] transition-transform h-full backdrop-blur-[18px]',
-                metric.onClick && 'group-hover:-translate-y-[1px]'
+                'rounded-card border border-border-soft bg-base-panel px-5 py-5 shadow-elevation-card transition-transform h-full backdrop-blur-2xl',
+                metric.onClick && 'group-hover:scale-[1.01]'
               )}
             >
               <div className="space-y-3">
                 <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">{metric.label}</div>
                 <div className="flex items-center justify-between gap-2">
-                  <div className="text-2xl font-semibold text-text-primary leading-tight">{metric.value}</div>
+                  <div className="text-[30px] font-semibold text-text-primary leading-tight">{metric.value}</div>
                   <StatusPill
                     label={metric.value === 0 ? 'Норма' : 'Внимание'}
                     variant={
@@ -315,7 +315,7 @@ export function DashboardPage() {
                   />
                 </div>
                 {metric.helperText ? <div className="text-sm text-text-secondary">{metric.helperText}</div> : null}
-                <div className="mt-1 h-[2px] w-10 rounded-full bg-white/12" />
+                <div className="mt-1 h-[2px] w-10 rounded-full bg-border-soft" />
               </div>
             </div>
           </button>
@@ -410,20 +410,32 @@ export function DashboardPage() {
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={18}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: '#C7D4E9', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} />
-                <YAxis tick={{ fill: '#C7D4E9', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.05)' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
+                <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.68)', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.35)' }} />
+                <YAxis tick={{ fill: 'rgba(255,255,255,0.68)', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.35)' }} />
                 <Tooltip
                   contentStyle={{
-                    background: 'rgba(8,11,16,0.9)',
-                    border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(7,11,17,0.96)',
+                    border: '1px solid rgba(255,255,255,0.14)',
                     borderRadius: 14,
-                    color: '#EAF1FF',
-                    boxShadow: '0 14px 36px rgba(0,0,0,0.55)'
+                    color: 'rgba(255,255,255,0.94)',
+                    boxShadow: '0 18px 48px rgba(0,0,0,0.55)'
                   }}
-                  cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                  cursor={{ fill: 'rgba(255,255,255,0.02)' }}
                 />
-                <Bar dataKey="uptime" fill="#4FB4FF" stroke="#4FB4FF" strokeWidth={2} radius={[10, 10, 6, 6]} />
+                <Bar
+                  dataKey="uptime"
+                  fill="url(#uptimeGradient)"
+                  stroke="#4FB4FF"
+                  strokeWidth={1.6}
+                  radius={[10, 10, 6, 6]}
+                />
+                <defs>
+                  <linearGradient id="uptimeGradient" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#8CD1FF" />
+                    <stop offset="100%" stopColor="#4FB4FF" stopOpacity={0.9} />
+                  </linearGradient>
+                </defs>
               </BarChart>
             </ResponsiveContainer>
           </div>
