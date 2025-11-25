@@ -20,7 +20,7 @@ export function Table<T = unknown>({ children, className, onRowClick, isRowClick
         )}
       >
         <table
-          className="min-w-full table-auto text-[13px] text-text-primary border-collapse leading-[1.4] [&>thead>tr>th]:py-3.5 [&>thead>tr>th]:px-4 [&>thead>tr>th]:text-[11px] [&>thead>tr>th]:font-semibold [&>thead>tr>th]:uppercase [&>thead>tr>th]:tracking-[0.14em] [&>thead>tr>th]:text-text-secondary [&>thead>tr>th]:whitespace-nowrap [&>thead]:bg-white/[0.03] [&>thead]:border-b [&>thead]:border-b-border-soft [&>tbody>tr]:border-b [&>tbody>tr]:border-border-soft/70 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr>td]:py-3.5 [&>tbody>tr>td]:px-4 [&>tbody>tr>td]:align-middle [&>tbody>tr>td]:text-left [&>tbody>tr>td]:break-normal [&>tbody>tr>td]:whitespace-normal [&>tbody>tr>td]:leading-[1.5] [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-white/[0.02]"
+          className="min-w-full table-auto text-[13px] text-text-primary border-collapse leading-[1.4] [&>thead>tr>th]:py-3.5 [&>thead>tr>th]:px-4 [&>thead>tr>th]:text-[11px] [&>thead>tr>th]:font-semibold [&>thead>tr>th]:uppercase [&>thead>tr>th]:tracking-[0.14em] [&>thead>tr>th]:text-text-secondary [&>thead>tr>th]:whitespace-nowrap [&>thead]:bg-white/[0.03] [&>thead]:border-b [&>thead]:border-b-border-soft [&>tbody>tr]:border-b [&>tbody>tr]:border-border-soft/60 [&>tbody>tr:last-child]:border-b-0 [&>tbody>tr]:min-h-[58px] [&>tbody>tr>td]:py-3.5 [&>tbody>tr>td]:px-4 [&>tbody>tr>td]:align-middle [&>tbody>tr>td]:text-left [&>tbody>tr>td]:break-words [&>tbody>tr>td]:whitespace-normal [&>tbody>tr>td]:leading-[1.5] [&>tbody>tr]:transition-colors [&>tbody>tr]:duration-150 [&>tbody>tr:hover]:bg-white/[0.02]"
         >
           {children}
         </table>

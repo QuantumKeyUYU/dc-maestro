@@ -148,7 +148,7 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'group relative flex items-center gap-3 rounded-[14px] px-3.5 py-3 text-sm transition-colors border text-text-secondary backdrop-blur-xl min-h-[48px]',
+                      'group relative flex items-start gap-3.5 rounded-[14px] px-3.5 py-3.5 text-[15px] transition-colors border text-text-secondary backdrop-blur-xl min-h-[52px]',
                       isActive
                         ? 'bg-white/8 text-text-primary border-border-soft shadow-[0_14px_30px_rgba(0,0,0,0.36)]'
                         : 'bg-transparent border-transparent hover:bg-white/6 hover:border-border-soft'
@@ -158,7 +158,7 @@ export default function App() {
                   {({ isActive }) => (
                     <>
                       <Icon className={clsx('w-[18px] h-[18px]', isActive ? 'text-white' : 'text-text-secondary')} />
-                      <span className="flex-1 min-w-0 text-left leading-snug whitespace-normal break-normal font-medium tracking-[-0.01em]">
+                      <span className="flex-1 text-left leading-[1.35] whitespace-normal break-words font-medium tracking-[-0.01em]">
                         {item.label}
                       </span>
                       {item.badge ? (

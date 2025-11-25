@@ -453,16 +453,16 @@ export function DashboardPage() {
             </thead>
             <tbody>
               {worstSites.map((site) => (
-                <tr key={site.id}>
-                  <td className="pr-4 max-w-[240px]">
-                    <div className="font-medium text-white leading-snug break-words">{site.name}</div>
+                <TableRow key={site.id} row={site} className="align-middle">
+                  <td className="pr-4 max-w-[260px]">
+                    <div className="font-medium text-white leading-[1.35] break-words">{site.name}</div>
                   </td>
-                  <td className="text-center text-text-secondary">{site.region}</td>
+                  <td className="text-center text-text-secondary whitespace-normal break-words">{site.region}</td>
                   <td className="text-right font-semibold">{site.reliability.toFixed(1)}</td>
                   <td className="text-right">
                     <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} size="sm" />
                   </td>
-                </tr>
+                </TableRow>
               ))}
             </tbody>
           </Table>
@@ -498,7 +498,7 @@ export function DashboardPage() {
               return (
                 <div
                   key={site.id}
-                  className="flex items-center justify-between rounded-card border border-border-soft bg-base-panelSoft px-5 py-4 shadow-elevation-card gap-4 min-h-[96px]"
+                  className="flex items-center justify-between rounded-[14px] border border-border-soft/90 bg-base-panelSoft px-5 py-5 shadow-elevation-card gap-4 min-h-[104px]"
                 >
                   <div className="space-y-1 min-w-0">
                     <div className="text-base font-semibold text-white leading-snug break-words">{site.name}</div>
@@ -508,16 +508,16 @@ export function DashboardPage() {
                     {pills.map((pill) => {
                       const toneClass =
                         pill.tone === 'ok'
-                          ? 'bg-emerald-400/14 border-emerald-300/40 text-emerald-50'
+                          ? 'bg-emerald-400/12 border-emerald-300/45 text-emerald-50'
                           : pill.tone === 'warn'
-                            ? 'bg-amber-300/16 border-amber-200/45 text-amber-50'
-                            : 'bg-sky-400/14 border-sky-300/40 text-sky-50';
+                            ? 'bg-amber-300/14 border-amber-200/45 text-amber-50'
+                            : 'bg-cyan-300/14 border-cyan-200/50 text-cyan-50';
 
                       return (
                         <div
                           key={pill.label}
                           className={clsx(
-                            'inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] leading-[1.2] shadow-[0_12px_26px_rgba(0,0,0,0.3)] min-h-[34px]',
+                            'inline-flex h-9 items-center gap-2 rounded-full px-3.5 text-[12px] font-medium leading-none shadow-[0_12px_26px_rgba(0,0,0,0.25)]',
                             toneClass
                           )}
                         >
