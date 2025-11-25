@@ -125,15 +125,15 @@ export default function App() {
   return (
     <div className="min-h-screen text-text-primary relative overflow-hidden bg-[#0b1119]">
       <div className="flex h-screen overflow-hidden relative">
-        <aside className="w-[248px] bg-base-panel border-r border-border-soft px-6 py-7 flex flex-col gap-6 shadow-elevation-card/70 relative z-10">
+        <aside className="w-[248px] bg-base-panel border-r border-border-soft px-6 py-6 flex flex-col gap-6 shadow-elevation-card/70 relative z-10">
           <NavLink to="/" className="group block">
             <div className="px-4 py-4 rounded-card border border-border-soft bg-base-panelSoft shadow-elevation-card flex items-center justify-between gap-3">
-              <div>
-                <div className="text-lg sm:text-xl font-semibold text-text-primary leading-tight">{strings.headers.appTitle}</div>
-                <p className="text-[12px] text-text-muted mt-1">Системный контроль объектов</p>
+              <div className="space-y-1">
+                <div className="text-lg sm:text-xl font-semibold text-text-primary leading-snug tracking-[-0.01em]">{strings.headers.appTitle}</div>
+                <p className="text-[12px] leading-snug text-text-muted">Системный контроль объектов</p>
               </div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-border-soft bg-white/5 px-2.5 py-1 text-[11px] font-medium text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)]">
-                <span className="h-[6px] w-[6px] rounded-full bg-emerald-300" />
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/40 bg-emerald-400/10 px-2.5 py-1 text-[11px] font-medium text-emerald-50 shadow-[0_6px_14px_rgba(0,0,0,0.3)]">
+                <span className="h-[7px] w-[7px] rounded-full bg-emerald-300" />
                 Live
               </div>
             </div>
@@ -148,10 +148,10 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'group relative flex items-center gap-3 rounded-card px-3.5 py-2.5 text-sm transition-colors border text-text-secondary backdrop-blur-xl',
+                      'group relative flex items-center gap-3 rounded-[14px] px-3.5 py-2.5 text-sm transition-colors border text-text-secondary backdrop-blur-xl',
                       isActive
-                        ? 'bg-white/8 text-text-primary border-border-soft shadow-elevation-card'
-                        : 'bg-transparent border-transparent hover:bg-white/5 hover:border-border-soft'
+                        ? 'bg-white/8 text-text-primary border-border-soft shadow-[0_14px_30px_rgba(0,0,0,0.36)]'
+                        : 'bg-transparent border-transparent hover:bg-white/6 hover:border-border-soft'
                     )
                   }
                 >

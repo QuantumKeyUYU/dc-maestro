@@ -21,14 +21,14 @@ export function KpiBadge({ label, value, helperText, tone = 'neutral' }: KpiBadg
   return (
     <Card
       className={clsx(
-        'relative flex flex-col gap-2 px-5 py-5 overflow-hidden isolate',
+        'relative flex flex-col gap-2 px-5 py-4 overflow-hidden isolate rounded-[12px] bg-base-panelSoft',
         accentTone === 'ok'
-          ? 'ring-1 ring-emerald-400/30'
+          ? 'border border-emerald-300/35 shadow-[0_14px_32px_rgba(0,0,0,0.34)]'
           : accentTone === 'warn'
-            ? 'ring-1 ring-amber-300/25'
+            ? 'border border-amber-200/35 shadow-[0_14px_32px_rgba(0,0,0,0.34)]'
             : accentTone === 'danger'
-              ? 'ring-1 ring-rose-400/30'
-              : 'ring-1 ring-border-soft/60'
+              ? 'border border-rose-300/35 shadow-[0_14px_32px_rgba(0,0,0,0.34)]'
+              : 'border border-border-soft/80 shadow-[0_14px_32px_rgba(0,0,0,0.3)]'
       )}
     >
       <div className="pt-1 space-y-1">
