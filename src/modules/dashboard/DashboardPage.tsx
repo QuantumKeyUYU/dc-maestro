@@ -441,31 +441,49 @@ export function DashboardPage() {
           </div>
         </Card>
 
-        <Card title={`${strings.dashboard.worstSites} (Reliability)`} subtitle="Площадки, требующие внимания">
-          <Table framed={false}>
-            <thead>
-              <tr>
-                <th className="text-left">Площадка</th>
-                <th className="text-center">Регион</th>
-                <th className="text-right">Reliability</th>
-                <th className="text-right">Статус</th>
-              </tr>
-            </thead>
-            <tbody>
-              {worstSites.map((site) => (
-                <TableRow key={site.id} row={site} className="align-middle">
-                  <td className="pr-4 max-w-[260px]">
-                    <div className="font-medium text-white leading-[1.35] break-words">{site.name}</div>
-                  </td>
-                  <td className="text-center text-text-secondary whitespace-normal break-words">{site.region}</td>
-                  <td className="text-right font-semibold">{site.reliability.toFixed(1)}</td>
-                  <td className="text-right">
-                    <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} size="sm" />
-                  </td>
-                </TableRow>
-              ))}
-            </tbody>
-          </Table>
+        <Card title={`${strings.dashboard.worstSites} (Reliability)`} subtitle="Площадки, требующие внимания" className="overflow-visible">
+          <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 px-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted">
+              <span className="text-left">Площадка</span>
+              <span className="text-center">Reliability</span>
+              <span className="text-right">Статус</span>
+            </div>
+            <div className="max-h-72 overflow-y-auto overflow-x-visible pr-1">
+              <ul className="flex flex-col divide-y divide-white/5">
+                {worstSites.map((site) => {
+                  const tone = getStatusTone(site.status);
+                  const badgeTone =
+                    tone === 'danger'
+                      ? 'bg-rose-500/15 border-rose-400/35 text-rose-50'
+                      : tone === 'warning'
+                        ? 'bg-amber-400/15 border-amber-300/35 text-amber-50'
+                        : tone === 'success'
+                          ? 'bg-emerald-500/15 border-emerald-400/35 text-emerald-50'
+                          : 'bg-white/5 border-white/10 text-text-primary';
+
+                  return (
+                    <li
+                      key={site.id}
+                      className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] items-center gap-3 px-1 py-3"
+                    >
+                      <div className="flex flex-col gap-1">
+                        <span className="text-sm font-semibold text-white leading-snug break-words">{site.name}</span>
+                        <span className="text-sm text-text-secondary leading-snug">{site.region}</span>
+                      </div>
+                      <div className="flex items-center justify-center text-sm font-semibold text-text-primary">
+                        {site.reliability.toFixed(1)}
+                      </div>
+                      <div className="flex items-center justify-end">
+                        <span className={`inline-flex items-center rounded-full border px-3 py-1.5 text-[12px] font-medium leading-[18px] shadow-[0_10px_24px_rgba(0,0,0,0.28)] ${badgeTone}`}>
+                          {getStatusLabel(site.status)}
+                        </span>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
         </Card>
       </div>
 
@@ -486,51 +504,33 @@ export function DashboardPage() {
           </div>
         </Card>
 
-        <Card className="h-full" title="Площадки" subtitle="Uptime, reliability и capacity">
-          <div className="flex flex-col gap-3">
-            {withScores.slice(0, 3).map((site) => {
-              const pills = [
-                { label: `Uptime ${site.uptime.toFixed(1)}%`, color: 'bg-emerald-300', tone: 'ok' as const },
-                { label: `Reliab. ${site.reliability.toFixed(1)}`, color: 'bg-sky-300', tone: 'info' as const },
-                { label: `Cap ${site.capacity.toFixed(1)}%`, color: 'bg-amber-200', tone: 'warn' as const }
-              ];
-
-              return (
-                <div
-                  key={site.id}
-                  className="flex items-center justify-between rounded-[14px] border border-border-soft/90 bg-base-panelSoft px-5 py-5 shadow-elevation-card gap-4 min-h-[104px]"
-                >
-                  <div className="space-y-1 min-w-0">
-                    <div className="text-base font-semibold text-white leading-snug break-words">{site.name}</div>
-                    <div className="text-xs text-text-secondary leading-snug">{site.region}</div>
+        <Card className="h-full overflow-visible" title="Площадки" subtitle="Uptime, reliability и capacity">
+          <ul className="flex flex-col gap-3">
+            {withScores.slice(0, 3).map((site) => (
+              <li key={site.id} className="flex flex-col gap-1 rounded-2xl bg-white/3 px-4 py-3 shadow-[0_12px_26px_rgba(0,0,0,0.28)]">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col gap-1 min-w-0">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-text-muted leading-tight break-words">{site.name}</span>
+                    <span className="text-xs text-text-secondary leading-snug">{site.region}</span>
                   </div>
-                  <div className="flex items-center justify-end gap-2 sm:gap-3 md:flex-nowrap flex-wrap min-w-[240px]">
-                    {pills.map((pill) => {
-                      const toneClass =
-                        pill.tone === 'ok'
-                          ? 'bg-emerald-400/12 border-emerald-300/45 text-emerald-50'
-                          : pill.tone === 'warn'
-                            ? 'bg-amber-300/14 border-amber-200/45 text-amber-50'
-                            : 'bg-cyan-300/14 border-cyan-200/50 text-cyan-50';
-
-                      return (
-                        <div
-                          key={pill.label}
-                          className={clsx(
-                            'inline-flex h-9 items-center gap-2 rounded-full px-3.5 text-[12px] font-medium leading-none shadow-[0_12px_26px_rgba(0,0,0,0.25)]',
-                            toneClass
-                          )}
-                        >
-                          <span className={`h-2.5 w-2.5 rounded-full ${pill.color}`} />
-                          <span className="whitespace-nowrap">{pill.label}</span>
-                        </div>
-                      );
-                    })}
+                  <div className="flex flex-col items-end gap-1 text-xs text-text-secondary">
+                    <div className="flex items-center gap-2 text-text-primary">
+                      <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                      <span>Uptime {site.uptime.toFixed(1)}%</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-text-primary">
+                      <span className="h-2 w-2 rounded-full bg-sky-300" />
+                      <span>Reliab. {site.reliability.toFixed(1)}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-text-primary">
+                      <span className="h-2 w-2 rounded-full bg-amber-300" />
+                      <span>Cap {site.capacity.toFixed(1)}%</span>
+                    </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </li>
+            ))}
+          </ul>
         </Card>
       </div>
     </div>
