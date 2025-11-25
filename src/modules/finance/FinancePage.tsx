@@ -1,7 +1,12 @@
 import { useMemo, useState } from 'react';
-// Импорт PieChart, Pie, Cell, Tooltip больше не нужен, т.к. используется CSS
-// Но для Tooltip для категорий (внизу) Tooltip нужен, оставляем его, но PieChart/Pie убираем.
-import { Tooltip } from 'recharts'; 
+import {
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  Cell,
+  TooltipProps
+} from 'recharts';
 import { Card } from '../../shared/components/Card';
 import { Table } from '../../shared/components/Table';
 import { financialRecords } from '../../shared/data/financialRecords';
@@ -10,10 +15,47 @@ import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
 const CATEGORY_COLORS: Record<string, string> = {
-  energy: '#3b82f6', // Синий
-  maintenance: '#22c1c3', // Бирюзовый
-  staff: '#2563eb', // Более темный синий
+  energy: '#22c1c3',
+  maintenance: '#4f46e5',
+  staff: '#0ea5e9'
 };
+
+const CATEGORY_LABELS: Record<string, string> = {
+  energy: 'Energy',
+  maintenance: 'Maintenance',
+  staff: 'Staff'
+};
+
+function FinancePieTooltip(props: TooltipProps<number, string>) {
+  const { active, payload } = props;
+
+  if (!active || !payload || !payload.length) return null;
+
+  const entry = payload[0];
+  const name = (entry.name ?? entry.payload?.name ?? '') as string;
+  const value = (entry.value ?? entry.payload?.value ?? 0) as number;
+  const color =
+    (entry.payload && CATEGORY_COLORS[entry.payload.name as string]) ??
+    CATEGORY_COLORS[name] ??
+    '#3b82f6';
+
+  const label = CATEGORY_LABELS[name] ?? name;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-[rgba(6,10,20,0.96)] px-3.5 py-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.65)]">
+      <div className="flex items-center gap-2 text-[13px] text-text-primary">
+        <span
+          className="h-2.5 w-2.5 rounded-full"
+          style={{ backgroundColor: color }}
+        />
+        <span className="capitalize">{label}</span>
+        <span className="ml-auto font-medium whitespace-nowrap">
+          {value.toLocaleString('ru-RU')} ₽
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -24,40 +66,35 @@ export function FinancePage() {
       financialRecords.filter(
         (r) =>
           (siteFilter === 'all' || r.siteId === siteFilter) &&
-          (typeFilter === 'all' || r.type === typeFilter),
+          (typeFilter === 'all' || r.type === typeFilter)
       ),
-    [siteFilter, typeFilter],
+    [siteFilter, typeFilter]
   );
 
-  // Сортировка и фильтрация
   const table = useTableSortAndFilter(filtered, ['category', 'type', 'siteId'], 'date');
 
-  // Расчеты
   const totalOpex = filtered
     .filter((r) => r.type === 'opex')
     .reduce((sum, r) => sum + r.amountRub, 0);
+
   const totalCapex = filtered
     .filter((r) => r.type === 'capex')
     .reduce((sum, r) => sum + r.amountRub, 0);
+
   const total = totalOpex + totalCapex;
 
-  // Данные для списка категорий OPEX (справа)
   const pieData = Object.entries(
     filtered.reduce<Record<string, number>>((acc, r) => {
       if (r.type !== 'opex') return acc;
-      // Используем только категории, которые есть в маппинге цветов, или добавляем
-      // логику обработки неизвестных категорий, если нужно.
-      if (r.category && CATEGORY_COLORS[r.category]) {
-        acc[r.category] = (acc[r.category] ?? 0) + r.amountRub;
-      }
+      acc[r.category] = (acc[r.category] ?? 0) + r.amountRub;
       return acc;
-    }, {}),
+    }, {})
   ).map(([name, value]) => ({ name, value }));
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* ЛЕВАЯ ТАБЛИЦА */}
+        {/* Таблица */}
         <Card className="xl:col-span-2" title="Финансовые записи">
           <div className="flex gap-3 mb-4 flex-wrap items-center justify-between">
             <div className="flex gap-2 flex-wrap">
@@ -72,17 +109,13 @@ export function FinancePage() {
                     {site.name}
                   </option>
                 ))}
-                {/* Исправление: если siteId может быть null в данных, 
-                   убедитесь, что 'null' в option корректно обрабатывается. 
-                   В React value={null} преобразуется в пустую строку. 
-                   Если r.siteId === siteFilter в useMemo работает с r.siteId === null 
-                   и siteFilter === 'null', то оставляем так.
-                */}
                 <option value="null">Без привязки</option>
               </select>
               <select
                 value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value as 'all' | 'opex' | 'capex')}
+                onChange={(e) =>
+                  setTypeFilter(e.target.value as 'all' | 'opex' | 'capex')
+                }
                 className="bg-base-panelSoft border border-border-soft rounded-card px-3.5 py-2 text-sm text-text-primary shadow-elevation-card backdrop-blur-xl"
               >
                 <option value="all">Все</option>
@@ -143,8 +176,12 @@ export function FinancePage() {
                   <td className="py-2 pr-4 text-text-primary">
                     {new Date(record.date).toLocaleDateString('ru-RU')}
                   </td>
-                  <td className="py-2 pr-4 text-text-secondary">{record.type}</td>
-                  <td className="py-2 pr-4 text-text-secondary">{record.category}</td>
+                  <td className="py-2 pr-4 text-text-secondary">
+                    {record.type}
+                  </td>
+                  <td className="py-2 pr-4 text-text-secondary">
+                    {record.category}
+                  </td>
                   <td className="py-2 pr-4 text-text-primary">
                     {record.siteId ?? '—'}
                   </td>
@@ -157,94 +194,126 @@ export function FinancePage() {
           </Table>
         </Card>
 
-        {/* ПРАВАЯ КАРТОЧКА: СВОДКА */}
-        <Card
-          title="Сводка"
-          className="overflow-visible border border-transparent bg-base-panelSoft/90 shadow-elevation-card"
-        >
+        {/* Сводка — ВСЕГДА одна колонка внутри карточки */}
+        <Card title="Сводка">
           <div className="space-y-6">
-            <div className="flex flex-col gap-8 md:flex-row">
-              {/* Левая часть — СТИЛИЗОВАННЫЙ КРУГ (CSS) + общая сумма 
-                  Это замена PieChart, чтобы убрать "косяки кривых" и добиться нужного стиля.
-              */}
-              <div className="flex flex-1 flex-col items-center justify-center">
-                <div className="relative w-full max-w-[260px] mx-auto">
-                  <div className="relative h-56 flex items-center justify-center">
-                    {/* Стилизованный круг/пончик для имитации дизайна */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-[160px] h-[160px] bg-blue-600 rounded-full flex items-center justify-center overflow-hidden shadow-2xl shadow-blue-500/30">
-                        {/* Внутренний круг для создания эффекта "пончика" 
-                            Используем цвет фона: #0c1119 (из скриншота/контекста).
-                        */}
-                        <div className="w-[104px] h-[104px] bg-[#0c1119] rounded-full" /> 
-                      </div>
-                    </div>
-                    
-                    {/* Текстовый блок по центру */}
-                    <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center space-y-1">
-                      <div className="text-[11px] uppercase tracking-wide text-white/90 font-medium">
-                        ВСЕГО OPEX + CAPEX
-                      </div>
-                      <div className="text-xl font-semibold text-white leading-tight">
-                        {total.toLocaleString('ru-RU')} ₽
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-[11px] uppercase tracking-[0.14em] text-text-muted">
+                OPEX / CAPEX структура затрат
               </div>
-
-              {/* Правая часть — Total OPEX/CAPEX + категории */}
-              <div className="flex flex-1 flex-col gap-5">
-                <div className="flex flex-col items-end text-right space-y-3">
-                  <div className="w-full space-y-1 text-right">
-                    <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">
-                      Total OPEX
-                    </div>
-                    <div className="text-2xl font-semibold text-text-primary leading-tight">
-                      {totalOpex.toLocaleString('ru-RU')} ₽
-                    </div>
-                  </div>
-                  <div className="w-full space-y-1 text-right">
-                    <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">
-                      Total CAPEX
-                    </div>
-                    <div className="text-2xl font-semibold text-text-primary leading-tight">
-                      {totalCapex.toLocaleString('ru-RU')} ₽
-                    </div>
-                  </div>
-                </div>
-
-                {pieData.length ? (
-                  <div className="flex flex-col gap-2">
-                    {pieData.map((entry) => {
-                      const fill = CATEGORY_COLORS[entry.name] ?? CATEGORY_COLORS.energy; 
-                      return (
-                        <div
-                          key={entry.name}
-                          // Улучшенные стили для чипов-категорий, чтобы они выглядели более "стильно и молодежно"
-                          // Убираем 'shadow-[0_10px_24px_rgba(0,0,0,0.26)] backdrop-blur' с чипов 
-                          // для более чистого современного вида, оставляя только нужные классы.
-                          className="inline-flex items-center justify-between w-full rounded-full bg-white/[0.04] border border-white/5 px-3.5 py-2 text-[13px] text-text-primary"
-                        >
-                          <span className="flex items-center gap-2 min-w-0">
-                            <span
-                              className="h-2 w-2 rounded-full flex-shrink-0"
-                              style={{ backgroundColor: fill }}
-                            />
-                            <span className="capitalize leading-none truncate font-medium">
-                              {entry.name}
-                            </span>
-                          </span>
-                          <span className="ml-4 font-normal whitespace-nowrap text-text-secondary tabular-nums">
-                            {entry.value.toLocaleString('ru-RU')} ₽
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : null}
+              <div className="inline-flex items-center gap-2 rounded-full border border-border-soft/80 bg-base-panelSoft/60 px-3 py-1 text-[11px] text-text-secondary">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span className="uppercase tracking-[0.16em]">
+                  Фильтр: {typeFilter === 'all' ? 'OPEX + CAPEX' : typeFilter.toUpperCase()}
+                </span>
               </div>
             </div>
+
+            {/* Донат по центру */}
+            <div className="flex justify-center">
+              <div className="relative h-64 w-full max-w-xs">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      dataKey="value"
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={96}
+                      innerRadius={70}
+                      stroke="#020617"
+                      strokeWidth={2}
+                      labelLine={false}
+                      paddingAngle={2}
+                    >
+                      {pieData.map((entry) => {
+                        const fill =
+                          CATEGORY_COLORS[entry.name] ?? CATEGORY_COLORS.energy;
+                        return <Cell key={`cell-${entry.name}`} fill={fill} />;
+                      })}
+                    </Pie>
+                    <Tooltip
+                      content={<FinancePieTooltip />}
+                      cursor={{ fill: 'transparent' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+
+                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center space-y-0.5">
+                  <div className="text-[11px] uppercase tracking-[0.18em] text-text-secondary">
+                    ВСЕГО
+                  </div>
+                  <div className="text-lg md:text-xl font-semibold text-text-primary leading-tight">
+                    {total.toLocaleString('ru-RU')} ₽
+                  </div>
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-text-muted">
+                    OPEX + CAPEX
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Общие суммы */}
+            <div className="space-y-2 text-[13px]">
+              <div className="flex items-baseline justify-between">
+                <span className="uppercase tracking-[0.16em] text-text-muted">
+                  Total OPEX
+                </span>
+                <span className="font-semibold text-text-primary">
+                  {totalOpex.toLocaleString('ru-RU')} ₽
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between">
+                <span className="uppercase tracking-[0.16em] text-text-muted">
+                  Total CAPEX
+                </span>
+                <span className="font-semibold text-text-primary">
+                  {totalCapex.toLocaleString('ru-RU')} ₽
+                </span>
+              </div>
+            </div>
+
+            {/* Легенда — тоже на всю ширину, без колонок */}
+            {pieData.length ? (
+              <div className="space-y-2">
+                {pieData.map((entry) => {
+                  const fill =
+                    CATEGORY_COLORS[entry.name] ?? CATEGORY_COLORS.energy;
+                  const label = CATEGORY_LABELS[entry.name] ?? entry.name;
+                  const share =
+                    totalOpex > 0
+                      ? Math.round((entry.value / totalOpex) * 100)
+                      : 0;
+
+                  return (
+                    <div
+                      key={entry.name}
+                      className="flex items-center gap-3 rounded-xl border border-border-soft/70 bg-base-panelSoft/80 px-3.5 py-2 text-[13px] text-text-primary shadow-[0_10px_24px_rgba(0,0,0,0.28)]"
+                    >
+                      <span
+                        className="h-2.5 w-2.5 rounded-full"
+                        style={{ backgroundColor: fill }}
+                      />
+                      <div className="flex flex-col">
+                        <span className="capitalize leading-none">
+                          {label}
+                        </span>
+                        <span className="mt-0.5 text-[11px] text-text-muted">
+                          {share}% OPEX
+                        </span>
+                      </div>
+                      <span className="ml-auto whitespace-nowrap text-text-secondary">
+                        {entry.value.toLocaleString('ru-RU')} ₽
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-[13px] text-text-muted">
+                Нет данных по OPEX для выбранных фильтров.
+              </div>
+            )}
           </div>
         </Card>
       </div>
