@@ -8,10 +8,39 @@ import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
 const FINANCE_SLICE_COLORS = {
-  energy: '#38bdf8',
-  maintenance: '#0ea5e9',
-  staff: '#0369a1'
+  energy: '#4FB4FF',
+  maintenance: '#79C7F3',
+  staff: '#2E7AC2'
 } as const;
+
+type PieLabelProps = {
+  cx?: number;
+  cy?: number;
+  midAngle?: number;
+  outerRadius?: number;
+  name?: string;
+};
+
+const RADIAN = Math.PI / 180;
+
+function renderSliceLabel({ cx = 0, cy = 0, midAngle = 0, outerRadius = 0, name }: PieLabelProps) {
+  const radius = outerRadius + 18;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="rgba(236,242,255,0.88)"
+      textAnchor={x > cx ? 'start' : 'end'}
+      dominantBaseline="central"
+      className="text-[12px] font-medium capitalize"
+    >
+      {name}
+    </text>
+  );
+}
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -120,7 +149,7 @@ export function FinancePage() {
                       stroke="#0c1119"
                       strokeWidth={2}
                       labelLine={false}
-                      label={false}
+                      label={renderSliceLabel}
                       paddingAngle={2}
                     >
                       {pieData.map((entry) => {
@@ -145,24 +174,29 @@ export function FinancePage() {
                   <div className="text-xl font-semibold text-text-primary leading-tight">{total.toLocaleString('ru-RU')} ₽</div>
                 </div>
               </div>
-              <div className="flex flex-col gap-3 text-right md:items-end">
-                <div className="text-xs text-text-muted">Total OPEX</div>
-                <div className="text-2xl font-semibold text-text-primary leading-tight">{totalOpex.toLocaleString('ru-RU')} ₽</div>
-                <div className="text-xs text-text-muted pt-2">Total CAPEX</div>
-                <div className="text-2xl font-semibold text-text-primary leading-tight">{totalCapex.toLocaleString('ru-RU')} ₽</div>
+              <div className="flex flex-col gap-4 text-right md:items-end md:justify-center">
+                <div className="space-y-1 text-right">
+                  <div className="text-[12px] uppercase tracking-[0.1em] text-text-muted">Total OPEX</div>
+                  <div className="text-[22px] font-semibold text-text-primary leading-tight">{totalOpex.toLocaleString('ru-RU')} ₽</div>
+                </div>
+                <div className="space-y-1 text-right">
+                  <div className="text-[12px] uppercase tracking-[0.1em] text-text-muted">Total CAPEX</div>
+                  <div className="text-[22px] font-semibold text-text-primary leading-tight">{totalCapex.toLocaleString('ru-RU')} ₽</div>
+                </div>
               </div>
             </div>
             {pieData.length ? (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap gap-2">
                 {pieData.map((entry) => {
                   const fill = FINANCE_SLICE_COLORS[entry.name as keyof typeof FINANCE_SLICE_COLORS] ?? FINANCE_SLICE_COLORS.energy;
                   return (
-                    <div key={entry.name} className="flex items-center justify-between text-xs text-text-secondary">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: fill }} />
-                        <span className="text-sm text-text-primary leading-tight capitalize">{entry.name}</span>
-                      </div>
-                      <span className="text-sm text-text-secondary">{entry.value.toLocaleString('ru-RU')} ₽</span>
+                    <div
+                      key={entry.name}
+                      className="inline-flex items-center gap-2 rounded-full border border-border-soft/80 bg-base-panelSoft px-3 py-1.5 text-sm text-text-primary shadow-[0_12px_26px_rgba(0,0,0,0.3)]"
+                    >
+                      <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: fill }} />
+                      <span className="capitalize leading-tight">{entry.name}</span>
+                      <span className="text-text-secondary whitespace-nowrap">{entry.value.toLocaleString('ru-RU')} ₽</span>
                     </div>
                   );
                 })}
