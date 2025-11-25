@@ -10,37 +10,8 @@ import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter'
 const CATEGORY_COLORS: Record<string, string> = {
   energy: '#3b82f6',
   maintenance: '#22c1c3',
-  staff: '#2563eb'
+  staff: '#2563eb',
 };
-
-type PieLabelProps = {
-  cx?: number;
-  cy?: number;
-  midAngle?: number;
-  outerRadius?: number;
-  name?: string;
-};
-
-const RADIAN = Math.PI / 180;
-
-function renderSliceLabel({ cx = 0, cy = 0, midAngle = 0, outerRadius = 0, name }: PieLabelProps) {
-  const radius = outerRadius + 18;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="rgba(236,242,255,0.88)"
-      textAnchor={x > cx ? 'start' : 'end'}
-      dominantBaseline="central"
-      className="text-[12px] font-medium capitalize"
-    >
-      {name}
-    </text>
-  );
-}
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -49,15 +20,21 @@ export function FinancePage() {
   const filtered = useMemo(
     () =>
       financialRecords.filter(
-        (r) => (siteFilter === 'all' || r.siteId === siteFilter) && (typeFilter === 'all' || r.type === typeFilter)
+        (r) =>
+          (siteFilter === 'all' || r.siteId === siteFilter) &&
+          (typeFilter === 'all' || r.type === typeFilter),
       ),
-    [siteFilter, typeFilter]
+    [siteFilter, typeFilter],
   );
 
   const table = useTableSortAndFilter(filtered, ['category', 'type', 'siteId'], 'date');
 
-  const totalOpex = filtered.filter((r) => r.type === 'opex').reduce((sum, r) => sum + r.amountRub, 0);
-  const totalCapex = filtered.filter((r) => r.type === 'capex').reduce((sum, r) => sum + r.amountRub, 0);
+  const totalOpex = filtered
+    .filter((r) => r.type === 'opex')
+    .reduce((sum, r) => sum + r.amountRub, 0);
+  const totalCapex = filtered
+    .filter((r) => r.type === 'capex')
+    .reduce((sum, r) => sum + r.amountRub, 0);
   const total = totalOpex + totalCapex;
 
   const pieData = Object.entries(
@@ -65,7 +42,7 @@ export function FinancePage() {
       if (r.type !== 'opex') return acc;
       acc[r.category] = (acc[r.category] ?? 0) + r.amountRub;
       return acc;
-    }, {})
+    }, {}),
   ).map(([name, value]) => ({ name, value }));
 
   return (
@@ -107,35 +84,68 @@ export function FinancePage() {
           <Table framed={false}>
             <thead className="text-xs uppercase text-text-secondary">
               <tr>
-                <th className="text-left py-2 cursor-pointer" onClick={() => table.requestSort('date')}>
-                  Дата {table.sortConfig.key === 'date' ? (table.sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+                <th
+                  className="text-left py-2 cursor-pointer"
+                  onClick={() => table.requestSort('date')}
+                >
+                  Дата{' '}
+                  {table.sortConfig.key === 'date'
+                    ? table.sortConfig.direction === 'asc'
+                      ? '↑'
+                      : '↓'
+                    : ''}
                 </th>
                 <th className="text-left py-2">Тип</th>
-                <th className="text-left py-2 cursor-pointer" onClick={() => table.requestSort('category')}>
-                  Категория {table.sortConfig.key === 'category' ? (table.sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+                <th
+                  className="text-left py-2 cursor-pointer"
+                  onClick={() => table.requestSort('category')}
+                >
+                  Категория{' '}
+                  {table.sortConfig.key === 'category'
+                    ? table.sortConfig.direction === 'asc'
+                      ? '↑'
+                      : '↓'
+                    : ''}
                 </th>
                 <th className="text-left py-2">Площадка</th>
-                <th className="text-left py-2 cursor-pointer" onClick={() => table.requestSort('amountRub')}>
-                  Сумма {table.sortConfig.key === 'amountRub' ? (table.sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+                <th
+                  className="text-left py-2 cursor-pointer"
+                  onClick={() => table.requestSort('amountRub')}
+                >
+                  Сумма{' '}
+                  {table.sortConfig.key === 'amountRub'
+                    ? table.sortConfig.direction === 'asc'
+                      ? '↑'
+                      : '↓'
+                    : ''}
                 </th>
               </tr>
             </thead>
             <tbody>
               {table.sortedAndFiltered.map((record) => (
                 <tr key={record.id} className="border-t border-white/10">
-                  <td className="py-2 pr-4 text-text-primary">{new Date(record.date).toLocaleDateString('ru-RU')}</td>
+                  <td className="py-2 pr-4 text-text-primary">
+                    {new Date(record.date).toLocaleDateString('ru-RU')}
+                  </td>
                   <td className="py-2 pr-4 text-text-secondary">{record.type}</td>
                   <td className="py-2 pr-4 text-text-secondary">{record.category}</td>
-                  <td className="py-2 pr-4 text-text-primary">{record.siteId ?? '—'}</td>
-                  <td className="py-2 pr-4 text-text-primary">{record.amountRub.toLocaleString('ru-RU')} ₽</td>
+                  <td className="py-2 pr-4 text-text-primary">
+                    {record.siteId ?? '—'}
+                  </td>
+                  <td className="py-2 pr-4 text-text-primary">
+                    {record.amountRub.toLocaleString('ru-RU')} ₽
+                  </td>
                 </tr>
               ))}
             </tbody>
           </Table>
         </Card>
+
+        {/* Сводка справа — очищена, без вылезающих подписей и с аккуратными пилюлями */}
         <Card title="Сводка" className="overflow-visible">
           <div className="space-y-6">
             <div className="flex flex-col gap-8 md:flex-row">
+              {/* Левая часть — пай-чарт + общая сумма */}
               <div className="flex flex-1 flex-col items-center justify-center">
                 <div className="relative w-full max-w-[320px]">
                   <div className="relative h-64">
@@ -150,12 +160,11 @@ export function FinancePage() {
                           innerRadius={56}
                           stroke="#0c1119"
                           strokeWidth={2}
-                          labelLine={false}
-                          label={renderSliceLabel}
                           paddingAngle={2}
                         >
                           {pieData.map((entry) => {
-                            const fill = CATEGORY_COLORS[entry.name] ?? CATEGORY_COLORS.energy;
+                            const fill =
+                              CATEGORY_COLORS[entry.name] ?? CATEGORY_COLORS.energy;
                             return <Cell key={`cell-${entry.name}`} fill={fill} />;
                           })}
                         </Pie>
@@ -165,45 +174,71 @@ export function FinancePage() {
                             border: '1px solid rgba(255,255,255,0.08)',
                             borderRadius: 12,
                             color: 'rgba(236,242,255,0.9)',
-                            boxShadow: '0 10px 28px rgba(0,0,0,0.4)'
+                            boxShadow: '0 10px 28px rgba(0,0,0,0.4)',
                           }}
-                          itemStyle={{ color: 'rgba(236,242,255,0.92)', fontSize: 12 }}
+                          itemStyle={{
+                            color: 'rgba(236,242,255,0.92)',
+                            fontSize: 12,
+                          }}
                         />
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center space-y-1">
-                      <div className="text-[11px] uppercase tracking-wide text-text-secondary">Всего OPEX + CAPEX</div>
-                      <div className="text-xl font-semibold text-text-primary leading-tight">{total.toLocaleString('ru-RU')} ₽</div>
+                      <div className="text-[11px] uppercase tracking-wide text-text-secondary">
+                        Всего OPEX + CAPEX
+                      </div>
+                      <div className="text-xl font-semibold text-text-primary leading-tight">
+                        {total.toLocaleString('ru-RU')} ₽
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* Правая часть — Total OPEX/CAPEX + категории */}
               <div className="flex flex-1 flex-col gap-5">
                 <div className="flex flex-col items-end text-right space-y-3">
                   <div className="w-full space-y-1 text-right">
-                    <div className="text-[11px] uppercase tracking-[0.12em] text-text-muted">Total OPEX</div>
-                    <div className="text-2xl font-semibold text-text-primary leading-tight">{totalOpex.toLocaleString('ru-RU')} ₽</div>
+                    <div className="text-[11px] uppercase tracking-[0.12em] text-text-muted">
+                      Total OPEX
+                    </div>
+                    <div className="text-2xl font-semibold text-text-primary leading-tight">
+                      {totalOpex.toLocaleString('ru-RU')} ₽
+                    </div>
                   </div>
                   <div className="w-full space-y-1 text-right">
-                    <div className="text-[11px] uppercase tracking-[0.12em] text-text-muted">Total CAPEX</div>
-                    <div className="text-2xl font-semibold text-text-primary leading-tight">{totalCapex.toLocaleString('ru-RU')} ₽</div>
+                    <div className="text-[11px] uppercase tracking-[0.12em] text-text-muted">
+                      Total CAPEX
+                    </div>
+                    <div className="text-2xl font-semibold text-text-primary leading-tight">
+                      {totalCapex.toLocaleString('ru-RU')} ₽
+                    </div>
                   </div>
                 </div>
+
                 {pieData.length ? (
                   <div className="flex flex-col gap-2">
                     {pieData.map((entry) => {
-                      const fill = CATEGORY_COLORS[entry.name] ?? CATEGORY_COLORS.energy;
+                      const fill =
+                        CATEGORY_COLORS[entry.name] ?? CATEGORY_COLORS.energy;
                       return (
-                        <button
+                        <div
                           key={entry.name}
                           className="inline-flex items-center justify-between w-full rounded-full border border-white/5 bg-white/5 px-3 py-2 text-sm text-text-primary shadow-[0_10px_28px_rgba(0,0,0,0.28)] backdrop-blur"
                         >
                           <span className="flex items-center gap-2">
-                            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: fill }} />
-                            <span className="capitalize leading-none">{entry.name}</span>
+                            <span
+                              className="h-2 w-2 rounded-full"
+                              style={{ backgroundColor: fill }}
+                            />
+                            <span className="capitalize leading-none">
+                              {entry.name}
+                            </span>
                           </span>
-                          <span className="font-medium whitespace-nowrap text-text-secondary">{entry.value.toLocaleString('ru-RU')} ₽</span>
-                        </button>
+                          <span className="font-medium whitespace-nowrap text-text-secondary">
+                            {entry.value.toLocaleString('ru-RU')} ₽
+                          </span>
+                        </div>
                       );
                     })}
                   </div>
