@@ -100,7 +100,7 @@ export function InfoTooltip({ label, children, className, triggerArea = 'icon', 
       className={
         triggerArea === 'container'
           ? clsx('relative', className)
-          : clsx('relative inline-flex items-center gap-2 text-xs text-text-muted', className)
+          : clsx('relative inline-flex items-center gap-2 text-xs text-neutral-400', className)
       }
       onMouseEnter={showTooltip}
       onMouseLeave={scheduleHide}
@@ -113,7 +113,7 @@ export function InfoTooltip({ label, children, className, triggerArea = 'icon', 
       {triggerArea === 'icon' && (
         <button
           type="button"
-          className="inline-flex items-center justify-center w-5 h-5 rounded-[4px] border border-border-subtle bg-bg-surfaceSoft text-text-muted transition hover:text-text-primary hover:border-border-subtle focus:outline-none focus:ring-1 focus:ring-accent-primary/35"
+          className="inline-flex items-center justify-center w-5 h-5 rounded-[4px] border border-white/5 bg-ink-900/80 text-neutral-400 transition hover:text-neutral-100 hover:border-white/10 focus:outline-none focus:ring-1 focus:ring-accent/35"
           aria-label="Пояснение"
           aria-describedby={tooltipId}
         >
@@ -136,7 +136,7 @@ export function InfoTooltip({ label, children, className, triggerArea = 'icon', 
               <div
                 id={tooltipId}
                 role="tooltip"
-                className="max-w-sm rounded-[5px] border border-border-subtle bg-bg-surfaceSoft px-3.5 py-2.5 text-sm text-text-primary shadow-soft"
+                className="max-w-sm rounded-2xl border border-white/6 bg-ink-900/90 px-4 py-3 text-sm text-neutral-100 shadow-luxe-card backdrop-blur-md"
               >
                 <p className="leading-snug">{label}</p>
               </div>

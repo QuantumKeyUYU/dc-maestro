@@ -48,7 +48,7 @@ export function MaintenancePage() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
           <div className="flex gap-3 flex-wrap">
             <select
-              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary"
+              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-neutral-100"
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value as (typeof types)[number])}
             >
@@ -59,7 +59,7 @@ export function MaintenancePage() {
               ))}
             </select>
             <select
-              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary"
+              className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-3 py-2 text-sm text-neutral-100"
               value={critFilter}
               onChange={(e) => setCritFilter((e.target.value === 'all' ? 'all' : Number(e.target.value)) as (typeof criticalities)[number])}
             >
@@ -74,7 +74,7 @@ export function MaintenancePage() {
             value={assetsTable.searchQuery}
             onChange={(e) => assetsTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по названию, типу, площадке"
-            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition"
+            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-accent/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition"
           />
         </div>
         <Table framed={false}>
@@ -95,12 +95,12 @@ export function MaintenancePage() {
           </thead>
           <tbody>
             {assetsTable.sortedAndFiltered.map((asset) => (
-              <tr key={asset.id} className="border-t border-border-subtle/40">
+              <tr key={asset.id} className="border-t border-white/10">
                 <td className="py-2 pr-4">{asset.name}</td>
-                <td className="py-2 pr-4 text-text-muted">{asset.type}</td>
+                <td className="py-2 pr-4 text-neutral-400">{asset.type}</td>
                 <td className="py-2 pr-4">{asset.criticality}</td>
-                <td className="py-2 pr-4 text-text-muted">{asset.siteId}</td>
-                <td className="py-2 pr-4 text-text-muted">
+                <td className="py-2 pr-4 text-neutral-400">{asset.siteId}</td>
+                <td className="py-2 pr-4 text-neutral-400">
                   {asset.nextPlannedMaintenanceDate
                     ? new Date(asset.nextPlannedMaintenanceDate).toLocaleDateString('ru-RU')
                     : '—'}
@@ -115,25 +115,25 @@ export function MaintenancePage() {
         <div className="flex justify-between items-center mb-4" ref={workOrdersRef}>
           {showOverdueOnly ? (
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-text-primary shadow-inner">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-neutral-100 shadow-inner">
                 Фильтр: просроченные заявки
               </span>
               <button
                 type="button"
-                className="text-xs text-accent-primary hover:text-accent-muted transition"
+                className="text-xs text-accent hover:text-accent-muted transition"
                 onClick={() => setShowOverdueOnly(false)}
               >
                 Сбросить
               </button>
             </div>
           ) : (
-            <span className="text-xs text-text-dim">Все активные заявки по умолчанию</span>
+            <span className="text-xs text-neutral-500">Все активные заявки по умолчанию</span>
           )}
           <input
             value={workOrdersTable.searchQuery}
             onChange={(e) => workOrdersTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по ID, типу или площадке"
-            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-primary/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition"
+            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-accent/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)] transition"
           />
         </div>
         <Table framed={false}>
@@ -163,16 +163,16 @@ export function MaintenancePage() {
               .map((wo) => {
               const isOverdue = wo.dueDate && wo.status !== 'done' && wo.dueDate < new Date();
               return (
-                <tr key={wo.id} className={`border-t border-border-subtle/40 ${isOverdue ? 'bg-status-danger/10' : ''}`}>
+                <tr key={wo.id} className={`border-t border-white/10 ${isOverdue ? 'bg-status-danger/10' : ''}`}>
                   <td className="py-2 pr-4">{wo.id}</td>
-                  <td className="py-2 pr-4 text-text-muted">{wo.type}</td>
+                  <td className="py-2 pr-4 text-neutral-400">{wo.type}</td>
                   <td className="py-2 pr-4">
                     <StatusPill label={getStatusLabel(isOverdue ? 'overdue' : wo.status)} tone={getStatusTone(isOverdue ? 'overdue' : wo.status)} />
                   </td>
                   <td className="py-2 pr-4">{wo.priority}</td>
-                  <td className="py-2 pr-4 text-text-muted">{wo.assetId}</td>
-                  <td className="py-2 pr-4 text-text-muted">{wo.siteId}</td>
-                  <td className="py-2 pr-4 text-text-muted">
+                  <td className="py-2 pr-4 text-neutral-400">{wo.assetId}</td>
+                  <td className="py-2 pr-4 text-neutral-400">{wo.siteId}</td>
+                  <td className="py-2 pr-4 text-neutral-400">
                     {wo.dueDate ? new Date(wo.dueDate).toLocaleDateString('ru-RU') : '—'}
                   </td>
                 </tr>

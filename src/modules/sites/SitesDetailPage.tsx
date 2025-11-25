@@ -65,15 +65,15 @@ export function SitesDetailPage() {
 
   return (
     <div className="space-y-8">
-      <div className="text-sm text-text-dim flex items-center gap-2">
+      <div className="text-sm text-neutral-500 flex items-center gap-2">
         <button
           onClick={() => navigate('/sites')}
-          className="hover:text-accent-primary transition inline-flex items-center gap-1"
+          className="hover:text-accent transition inline-flex items-center gap-1"
         >
           Площадки ЦОД
         </button>
-        <span className="text-text-dim">/</span>
-        <span className="text-text-primary">{site.name}</span>
+        <span className="text-neutral-500">/</span>
+        <span className="text-neutral-100">{site.name}</span>
       </div>
       <SectionHeader
         title={`${site.name}: детализация`}
@@ -81,7 +81,7 @@ export function SitesDetailPage() {
         action={
           <button
             onClick={() => navigate('/sites')}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-text-primary hover:border-accent-primary/60 backdrop-blur"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-neutral-100 hover:border-accent/60 backdrop-blur"
           >
             ← Назад к списку
           </button>
@@ -91,8 +91,8 @@ export function SitesDetailPage() {
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="text-2xl font-semibold text-text-primary drop-shadow-sm">{site.name}</div>
-            <div className="text-sm text-text-muted">{site.region}</div>
+            <div className="text-2xl font-semibold text-neutral-100 drop-shadow-sm">{site.name}</div>
+            <div className="text-sm text-neutral-400">{site.region}</div>
           </div>
           <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} />
         </div>
@@ -103,8 +103,8 @@ export function SitesDetailPage() {
               onClick={() => setTab(t.key)}
               className={`px-4 py-2 rounded-xl text-sm border transition backdrop-blur ${
                 tab === t.key
-                  ? 'border-accent-primary/60 bg-accent-primary/10 text-text-primary shadow-glow'
-                  : 'border-white/10 bg-white/5 text-text-muted hover:border-accent-primary/40'
+                  ? 'border-accent/60 bg-accent/10 text-neutral-100 shadow-glow'
+                  : 'border-white/10 bg-white/5 text-neutral-400 hover:border-accent/40'
               }`}
             >
               {t.label}
@@ -161,9 +161,9 @@ export function SitesDetailPage() {
               </Card>
             </div>
 
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-text-primary">
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-neutral-100">
               <Card className="bg-white/5" title="Кратко о площадке" subtitle="Основные параметры">
-                <ul className="space-y-2 text-text-muted">
+                <ul className="space-y-2 text-neutral-400">
                   <li>Регион: {site.region}</li>
                   <li>Всего стоек: {site.totalRacks}, использовано: {site.usedRacks}</li>
                   <li>Мощность: {site.usedCapacityKw} / {site.totalCapacityKw} кВт</li>
@@ -177,20 +177,20 @@ export function SitesDetailPage() {
               {siteIncidents.slice(0, 4).map((incident) => (
                 <div key={incident.id} className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur">
                   <div className="flex items-center justify-between">
-                    <div className="font-medium text-text-primary">{incident.category}</div>
+                    <div className="font-medium text-neutral-100">{incident.category}</div>
                     <StatusPill
                       label={incident.severity === 'critical' ? 'Критично' : incident.severity === 'major' ? 'Важно' : 'Минор'}
                       tone={incident.severity === 'critical' ? 'danger' : incident.severity === 'major' ? 'warning' : 'info'}
                     />
                   </div>
-                  <p className="text-sm text-text-muted mt-1">{incident.description}</p>
-                  <p className="text-xs text-text-dim mt-1">
+                  <p className="text-sm text-neutral-400 mt-1">{incident.description}</p>
+                  <p className="text-xs text-neutral-500 mt-1">
                     {new Date(incident.startedAt).toLocaleString('ru-RU')}
                     {incident.resolvedAt ? ` → ${new Date(incident.resolvedAt).toLocaleString('ru-RU')}` : ' (в работе)'}
                   </p>
                 </div>
               ))}
-              {siteIncidents.length === 0 && <p className="text-sm text-text-muted">Нет инцидентов.</p>}
+              {siteIncidents.length === 0 && <p className="text-sm text-neutral-400">Нет инцидентов.</p>}
             </div>
           </Card>
         </div>
@@ -199,7 +199,7 @@ export function SitesDetailPage() {
       {tab === 'incidents' && (
         <Card title="Инциденты">
           <Table framed={false}>
-            <thead className="text-xs uppercase text-text-muted">
+            <thead className="text-xs uppercase text-neutral-400">
               <tr>
                 <th className="text-left py-2">Категория</th>
                 <th className="text-left py-2">Описание</th>
@@ -211,7 +211,7 @@ export function SitesDetailPage() {
               {siteIncidents.map((incident) => (
                 <tr key={incident.id} className="border-t border-white/5">
                   <td className="py-2 pr-4">{incident.category}</td>
-                  <td className="py-2 pr-4 text-text-muted">{incident.description}</td>
+                  <td className="py-2 pr-4 text-neutral-400">{incident.description}</td>
                   <td className="py-2 pr-4">{new Date(incident.startedAt).toLocaleString('ru-RU')}</td>
                   <td className="py-2 pr-4">
                     <StatusPill
@@ -223,7 +223,7 @@ export function SitesDetailPage() {
               ))}
               {siteIncidents.length === 0 && (
                 <tr>
-                  <td className="py-2 pr-4 text-text-muted" colSpan={4}>
+                  <td className="py-2 pr-4 text-neutral-400" colSpan={4}>
                     Нет инцидентов.
                   </td>
                 </tr>
@@ -237,7 +237,7 @@ export function SitesDetailPage() {
         <div className="space-y-5">
           <Card title="Активы">
             <Table framed={false}>
-              <thead className="text-xs uppercase text-text-muted">
+              <thead className="text-xs uppercase text-neutral-400">
                 <tr>
                   <th className="text-left py-2">Название</th>
                   <th className="text-left py-2">Тип</th>
@@ -249,9 +249,9 @@ export function SitesDetailPage() {
                 {siteAssets.map((asset) => (
                   <tr key={asset.id} className="border-t border-white/5">
                     <td className="py-2 pr-4">{asset.name}</td>
-                    <td className="py-2 pr-4 text-text-muted">{asset.type}</td>
+                    <td className="py-2 pr-4 text-neutral-400">{asset.type}</td>
                     <td className="py-2 pr-4">{asset.criticality}</td>
-                    <td className="py-2 pr-4 text-text-muted">
+                    <td className="py-2 pr-4 text-neutral-400">
                       {asset.nextPlannedMaintenanceDate
                         ? new Date(asset.nextPlannedMaintenanceDate).toLocaleDateString('ru-RU')
                         : '—'}
@@ -260,7 +260,7 @@ export function SitesDetailPage() {
                 ))}
                 {siteAssets.length === 0 && (
                   <tr>
-                    <td className="py-2 pr-4 text-text-muted" colSpan={4}>
+                    <td className="py-2 pr-4 text-neutral-400" colSpan={4}>
                       Нет активов для этой площадки.
                     </td>
                   </tr>
@@ -271,7 +271,7 @@ export function SitesDetailPage() {
 
           <Card title="Заявки на ТО">
             <Table framed={false}>
-              <thead className="text-xs uppercase text-text-muted">
+              <thead className="text-xs uppercase text-neutral-400">
                 <tr>
                   <th className="text-left py-2">ID</th>
                   <th className="text-left py-2">Тип</th>
@@ -286,7 +286,7 @@ export function SitesDetailPage() {
                   return (
                     <tr key={wo.id} className={`border-t border-white/5 ${isOverdue ? 'bg-danger/10' : ''}`}>
                       <td className="py-2 pr-4">{wo.id}</td>
-                      <td className="py-2 pr-4 text-text-muted">{wo.type}</td>
+                      <td className="py-2 pr-4 text-neutral-400">{wo.type}</td>
                       <td className="py-2 pr-4">
                         <StatusPill
                           label={wo.status === 'done' ? 'Завершено' : wo.status === 'in_progress' ? 'В работе' : 'Открыто'}
@@ -296,7 +296,7 @@ export function SitesDetailPage() {
                         />
                       </td>
                       <td className="py-2 pr-4">{wo.priority}</td>
-                      <td className="py-2 pr-4 text-text-muted">
+                      <td className="py-2 pr-4 text-neutral-400">
                         {wo.dueDate ? new Date(wo.dueDate).toLocaleDateString('ru-RU') : '—'}
                       </td>
                     </tr>
@@ -304,7 +304,7 @@ export function SitesDetailPage() {
                 })}
                 {siteWorkOrders.length === 0 && (
                   <tr>
-                    <td className="py-2 pr-4 text-text-muted" colSpan={5}>
+                    <td className="py-2 pr-4 text-neutral-400" colSpan={5}>
                       Нет заявок.
                     </td>
                   </tr>
@@ -319,7 +319,7 @@ export function SitesDetailPage() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           <Card className="xl:col-span-2" title="Финансовые записи">
             <Table framed={false}>
-              <thead className="text-xs uppercase text-text-muted">
+              <thead className="text-xs uppercase text-neutral-400">
                 <tr>
                   <th className="text-left py-2">Дата</th>
                   <th className="text-left py-2">Тип</th>
@@ -331,14 +331,14 @@ export function SitesDetailPage() {
                 {siteFinances.map((record) => (
                   <tr key={record.id} className="border-t border-white/5">
                     <td className="py-2 pr-4">{new Date(record.date).toLocaleDateString('ru-RU')}</td>
-                    <td className="py-2 pr-4 text-text-muted">{record.type.toUpperCase()}</td>
-                    <td className="py-2 pr-4 text-text-muted">{record.category}</td>
+                    <td className="py-2 pr-4 text-neutral-400">{record.type.toUpperCase()}</td>
+                    <td className="py-2 pr-4 text-neutral-400">{record.category}</td>
                     <td className="py-2 pr-4">{record.amountRub.toLocaleString('ru-RU')} ₽</td>
                   </tr>
                 ))}
                 {siteFinances.length === 0 && (
                   <tr>
-                    <td className="py-2 pr-4 text-text-muted" colSpan={4}>
+                    <td className="py-2 pr-4 text-neutral-400" colSpan={4}>
                       Финансовые записи отсутствуют.
                     </td>
                   </tr>
@@ -349,11 +349,11 @@ export function SitesDetailPage() {
           <Card title="Сводка по OPEX/CAPEX">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-text-muted text-sm">OPEX за период</span>
+                <span className="text-neutral-400 text-sm">OPEX за период</span>
                 <span className="text-lg font-semibold">{opexTotal.toLocaleString('ru-RU')} ₽</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-text-muted text-sm">CAPEX за период</span>
+                <span className="text-neutral-400 text-sm">CAPEX за период</span>
                 <span className="text-lg font-semibold">{capexTotal.toLocaleString('ru-RU')} ₽</span>
               </div>
               <div className="h-64">

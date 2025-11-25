@@ -29,19 +29,19 @@ export function SafetyPage() {
         <div className="flex items-center justify-between mb-4" ref={eventsRef}>
           {activeOnly ? (
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-text-primary shadow-inner">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-neutral-100 shadow-inner">
                 Фильтр: в работе и просрочено
               </span>
               <button
                 type="button"
-                className="text-xs text-accent-primary hover:text-accent-muted transition"
+                className="text-xs text-accent hover:text-accent-muted transition"
                 onClick={() => setActiveOnly(false)}
               >
                 Сбросить
               </button>
             </div>
           ) : (
-            <span className="text-xs text-text-dim">Все события по охране труда</span>
+            <span className="text-xs text-neutral-500">Все события по охране труда</span>
           )}
         </div>
         <Table framed={false}>
@@ -59,15 +59,15 @@ export function SafetyPage() {
             {visibleEvents.map((event) => {
               const staff = staffMembers.find((s) => s.id === event.responsibleStaffId);
               return (
-                <tr key={event.id} className="border-t border-border-subtle/40">
-                  <td className="py-2 pr-4 text-text-muted">{event.type}</td>
-                  <td className="py-2 pr-4 text-text-primary">{event.title}</td>
-                  <td className="py-2 pr-4 text-text-muted">{event.siteId ?? 'Общий'}</td>
-                  <td className="py-2 pr-4 text-text-muted">{new Date(event.date).toLocaleDateString('ru-RU')}</td>
+                <tr key={event.id} className="border-t border-white/10">
+                  <td className="py-2 pr-4 text-neutral-400">{event.type}</td>
+                  <td className="py-2 pr-4 text-neutral-100">{event.title}</td>
+                  <td className="py-2 pr-4 text-neutral-400">{event.siteId ?? 'Общий'}</td>
+                  <td className="py-2 pr-4 text-neutral-400">{new Date(event.date).toLocaleDateString('ru-RU')}</td>
                   <td className="py-2 pr-4">
                     <StatusPill label={getStatusLabel(event.status)} tone={getStatusTone(event.status)} />
                   </td>
-                  <td className="py-2 pr-4 text-text-primary">{staff?.fullName ?? '—'}</td>
+                  <td className="py-2 pr-4 text-neutral-100">{staff?.fullName ?? '—'}</td>
                 </tr>
               );
             })}

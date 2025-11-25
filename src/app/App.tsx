@@ -20,6 +20,7 @@ import { AboutPage } from '../modules/about/AboutPage';
 import { Boxes, Briefcase, Cpu, LayoutDashboard, Shield, Users, Wallet, Wrench } from '../shared/icons';
 import { useNavBadges } from '../shared/hooks/useNavBadges';
 import { SectionHeader } from '../shared/components/SectionHeader';
+import { Card } from '../shared/components/Card';
 
 type PageMeta = {
   match: RegExp;
@@ -143,20 +144,20 @@ export default function App() {
   const osiToneDisplay = hasOsiData ? osiTone : 'neutral';
 
   return (
-    <div className="min-h-screen bg-bg-shell text-text-primary relative">
+    <div className="min-h-screen bg-ink-950 text-neutral-100 relative">
       <div className="flex h-screen overflow-hidden relative">
-        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-bg-shell border-r border-border-subtle px-6 py-6 flex flex-col gap-6">
+        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-ink-950 border-r border-white/5 shadow-[inset_-1px_0_0_rgba(255,255,255,0.02)] px-6 py-6 flex flex-col gap-6">
           <NavLink
             to="/"
             className={({ isActive }) =>
               clsx(
-                'block -mx-2 px-3 py-3 rounded-[10px] transition text-left space-y-1 border border-border-subtle bg-bg-surface/80 shadow-soft',
-                'hover:bg-white/[0.04] hover:border-border-subtle cursor-pointer',
-                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary/35 focus-visible:ring-offset-0'
+                'block -mx-1 px-4 py-3 rounded-xl transition text-left space-y-1 border border-white/5 bg-ink-900/80 backdrop-blur-md',
+                'hover:bg-ink-900/90 cursor-pointer',
+                isActive && 'ring-1 ring-accent/20'
               )
             }
           >
-            <div className="text-xl font-semibold text-text-primary leading-tight">{strings.headers.appTitle}</div>
+            <div className="text-xl font-semibold text-neutral-100 leading-tight">{strings.headers.appTitle}</div>
           </NavLink>
           <nav className="flex flex-col gap-1.5 text-[15px]">
             {navItems.map((item) => {
@@ -168,31 +169,19 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative flex items-center gap-3 px-3 py-2.5 rounded-[10px] font-medium transition-colors border border-transparent',
+                      'relative flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-neutral-300 transition-colors before:absolute before:left-2 before:top-1 before:bottom-1 before:w-0.5 before:rounded-full before:content-[\'\']',
                       isActive
-                        ? 'bg-bg-surface/80 text-text-primary border-border-subtle'
-                        : 'text-text-muted hover:bg-white/[0.04] hover:border-border-subtle/70 hover:text-text-primary'
+                        ? 'bg-ink-800 text-neutral-100 before:bg-accent'
+                        : 'hover:bg-ink-900/80 hover:text-neutral-100 before:bg-transparent'
                     )
                   }
                 >
                   {({ isActive }) => (
                     <>
-                      <span
-                        className={clsx(
-                          'absolute left-0 top-2 bottom-2 w-[3px] rounded-full transition',
-                          isActive ? 'bg-accent-primary/70' : 'bg-transparent'
-                        )}
-                        aria-hidden
-                      />
                       <Icon className="w-[18px] h-[18px] text-current" />
                       <span className="flex-1 min-w-0 text-left leading-tight text-current relative truncate">{item.label}</span>
                       {item.badge ? (
-                        <span
-                          className={clsx(
-                            'ml-2 inline-grid h-6 min-w-[26px] shrink-0 place-items-center rounded-[6px] px-2 text-[12px] font-semibold leading-none tracking-tight text-[#c9e7d7] bg-status-ok/12 border border-status-ok/35',
-                            isActive && 'text-[#e4f6eb] bg-status-ok/18 border-status-ok/45'
-                          )}
-                        >
+                        <span className="ml-auto inline-flex items-center justify-center rounded-full bg-accent-soft/60 text-accent text-[11px] px-2 py-[2px]">
                           {item.badge.value}
                         </span>
                       ) : null}
@@ -205,7 +194,7 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-bg-shell/92 backdrop-blur border-b border-border-subtle px-7 py-3.5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <header className="sticky top-0 z-10 bg-ink-950/85 backdrop-blur border-b border-white/5 px-7 py-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <SectionHeader
               as="h1"
               label={currentPage.label ?? undefined}
@@ -220,13 +209,16 @@ export default function App() {
                   className="self-start w-full"
                   resetKey={pathname}
                 >
-                  <div className="relative overflow-hidden rounded-[10px] border border-border-subtle bg-bg-surface px-4 py-3 shadow-soft flex flex-col gap-2">
-                    <div className="text-[11px] uppercase tracking-[0.14em] text-text-dim">Operational Strain Index</div>
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="text-2xl font-semibold text-text-primary">{osiValueDisplay}</div>
-                      <StatusPill label={osiStateDisplay} tone={osiToneDisplay} size="sm" />
-                    </div>
-                    <div className="text-sm text-text-muted leading-snug">{osiDescriptor}</div>
+                  <div className="flex flex-col gap-3">
+                    <Card className="flex flex-col gap-3 px-5 py-4">
+                      <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">Operational Strain Index</div>
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="text-3xl font-semibold text-neutral-100 tracking-tight">{osiValueDisplay}</div>
+                        <StatusPill label={osiStateDisplay} tone={osiToneDisplay} size="sm" />
+                      </div>
+                      <div className="text-xs text-neutral-500">Тренд: стабильно за 7 дней</div>
+                      <div className="text-sm text-neutral-400 leading-snug">{osiDescriptor}</div>
+                    </Card>
                   </div>
                 </InfoTooltip>
               }
