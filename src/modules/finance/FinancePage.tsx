@@ -7,9 +7,9 @@ import { sites } from '../../shared/data/sites';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
-const COLORS = ['#4FB4FF', '#8CD1FF', 'rgba(79,180,255,0.72)', 'rgba(79,180,255,0.48)'];
-const LABEL_COLOR = 'rgba(255,255,255,0.68)';
-const SEGMENT_SEPARATOR = '#0A0F16';
+const COLORS = ['#6FB7F0', '#59C2D5', '#7AC7F0', '#4DA7C1'];
+const LABEL_COLOR = 'rgba(236,242,255,0.78)';
+const SEGMENT_SEPARATOR = 'rgba(10,15,22,0.92)';
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -102,56 +102,77 @@ export function FinancePage() {
           </Table>
         </Card>
         <Card title="Сводка">
-          <div className="space-y-4">
-            <div className="flex flex-col gap-1 text-right">
-              <div className="text-xs text-text-muted">Total OPEX</div>
-              <div className="text-lg font-semibold text-text-primary">{totalOpex.toLocaleString('ru-RU')} ₽</div>
+          <div className="space-y-5">
+            <div className="grid gap-4 md:grid-cols-[1fr,1fr] md:items-center">
+              <div className="flex flex-col gap-2 text-left md:text-right">
+                <div className="text-xs text-text-muted">Total OPEX</div>
+                <div className="text-2xl font-semibold text-text-primary leading-tight">{totalOpex.toLocaleString('ru-RU')} ₽</div>
 
-              <div className="text-xs text-text-muted mt-3">Total CAPEX</div>
-              <div className="text-lg font-semibold text-text-primary">{totalCapex.toLocaleString('ru-RU')} ₽</div>
+                <div className="text-xs text-text-muted pt-2">Total CAPEX</div>
+                <div className="text-2xl font-semibold text-text-primary leading-tight">{totalCapex.toLocaleString('ru-RU')} ₽</div>
+              </div>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      dataKey="value"
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={92}
+                      innerRadius={56}
+                      strokeWidth={3}
+                      cornerRadius={10}
+                      labelLine={false}
+                      paddingAngle={3}
+                      label={({ name, x, y }) => (
+                        <text x={x} y={y} fill={LABEL_COLOR} textAnchor="middle" dominantBaseline="central" fontSize={11}>
+                          {name}
+                        </text>
+                      )}
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${entry.name}`}
+                          fill={COLORS[index % COLORS.length]}
+                          stroke={SEGMENT_SEPARATOR}
+                          strokeWidth={1}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{
+                        background: 'rgba(8,12,19,0.96)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: 14,
+                        color: 'rgba(236,242,255,0.9)',
+                        boxShadow: '0 16px 38px rgba(0,0,0,0.5)'
+                      }}
+                      itemStyle={{ color: 'rgba(236,242,255,0.9)' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             </div>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    dataKey="value"
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={92}
-                    innerRadius={54}
-                    strokeWidth={3}
-                    cornerRadius={8}
-                    labelLine={false}
-                    paddingAngle={2}
-                    label={({ name, x, y }) => (
-                      <text x={x} y={y} fill={LABEL_COLOR} textAnchor="middle" dominantBaseline="central" fontSize={11}>
-                        {name}
-                      </text>
-                    )}
+            {pieData.length ? (
+              <div className="grid gap-2 sm:grid-cols-2">
+                {pieData.map((entry, index) => (
+                  <div
+                    key={entry.name}
+                    className="flex items-center justify-between rounded-[12px] border border-border-soft/70 bg-white/[0.03] px-3 py-2"
                   >
-                    {pieData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${entry.name}`}
-                        fill={COLORS[index % COLORS.length]}
-                        stroke={SEGMENT_SEPARATOR}
-                        strokeWidth={1}
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="h-2.5 w-2.5 rounded-full"
+                        style={{ backgroundColor: COLORS[index % COLORS.length] }}
                       />
-                    ))}
-                  </Pie>
-                <Tooltip
-                  contentStyle={{
-                    background: 'rgba(7,11,17,0.96)',
-                    border: '1px solid rgba(255,255,255,0.14)',
-                    borderRadius: 14,
-                    color: 'rgba(255,255,255,0.94)',
-                    boxShadow: '0 18px 48px rgba(0,0,0,0.55)'
-                  }}
-                  itemStyle={{ color: 'rgba(255,255,255,0.94)' }}
-                />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
+                      <span className="text-sm text-text-primary leading-tight">{entry.name}</span>
+                    </div>
+                    <span className="text-sm text-text-secondary">{entry.value.toLocaleString('ru-RU')} ₽</span>
+                  </div>
+                ))}
+              </div>
+            ) : null}
           </div>
         </Card>
       </div>

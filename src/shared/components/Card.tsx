@@ -7,9 +7,9 @@ export function Card({ children, className, title, subtitle, interactive = false
   return (
     <div
       className={clsx(
-        'relative overflow-hidden rounded-card border border-border-soft bg-base-panel p-5 md:p-6',
-        'shadow-elevation-card transition-transform duration-150 backdrop-blur-xl',
-        interactive && 'hover:translate-y-[-2px] hover:shadow-[0_18px_48px_rgba(0,0,0,0.55)] cursor-pointer',
+        'relative overflow-hidden rounded-[16px] border border-border-soft/80 bg-[#0c1119] px-6 py-5',
+        'shadow-elevation-card transition-transform duration-150 backdrop-blur-lg',
+        interactive && 'hover:translate-y-[-1px] hover:shadow-[0_20px_48px_rgba(0,0,0,0.46)] cursor-pointer',
         className
       )}
     >

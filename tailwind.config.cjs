@@ -31,13 +31,13 @@ module.exports = {
         }
       },
       borderRadius: {
-        card: '18px',
+        card: '16px',
         capsule: '9999px',
         header: '20px'
       },
       boxShadow: {
-        'elevation-card': '0 22px 60px rgba(0,0,0,0.68)',
-        'elevation-shell': '0 30px 80px rgba(0,0,0,0.82)'
+        'elevation-card': '0 18px 46px rgba(0,0,0,0.52)',
+        'elevation-shell': '0 26px 72px rgba(0,0,0,0.78)'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif']

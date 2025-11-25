@@ -475,8 +475,8 @@ export function DashboardPage() {
             {roleShortcuts.map((role) => (
               <div key={role.title} className="flex items-center justify-between rounded-card border border-border-soft bg-base-panelSoft px-5 py-4 shadow-elevation-card">
                 <div className="space-y-1">
-                  <div className="text-sm font-semibold text-white">{role.title}</div>
-                  <p className="text-xs text-text-secondary">{role.metric}</p>
+                  <div className="text-sm font-semibold text-white leading-snug max-w-[260px]">{role.title}</div>
+                  <p className="text-xs text-text-secondary leading-snug max-w-[360px]">{role.metric}</p>
                 </div>
                 <CtaLink to={role.to} icon={<ArrowRight />} size="lg" className="shrink-0">
                   Перейти
@@ -489,12 +489,12 @@ export function DashboardPage() {
         <Card title="Площадки" subtitle="Uptime, reliability и capacity">
           <div className="flex flex-col gap-4">
             {withScores.slice(0, 3).map((site) => (
-              <div key={site.id} className="flex items-center justify-between rounded-card border border-border-soft bg-base-panelSoft px-5 py-4 shadow-elevation-card">
-                <div className="space-y-1">
-                  <div className="text-sm font-semibold text-white">{site.name}</div>
-                  <div className="text-xs text-text-secondary">{site.region}</div>
+              <div key={site.id} className="flex items-center justify-between rounded-card border border-border-soft bg-base-panelSoft px-5 py-4 shadow-elevation-card gap-3">
+                <div className="space-y-1 min-w-0">
+                  <div className="text-sm font-semibold text-white leading-tight max-w-[220px]">{site.name}</div>
+                  <div className="text-xs text-text-secondary leading-snug">{site.region}</div>
                 </div>
-                <div className="flex items-center gap-2 flex-wrap justify-end">
+                <div className="flex items-center gap-2 flex-wrap justify-end min-w-[220px]">
                   <StatusPill label={`Uptime ${site.uptime.toFixed(1)}%`} variant="ok" size="sm" />
                   <StatusPill label={`Reliab. ${site.reliability.toFixed(1)}`} variant="ok" size="sm" />
                   <StatusPill label={`Cap ${site.capacity.toFixed(1)}%`} variant="warn" size="sm" />
