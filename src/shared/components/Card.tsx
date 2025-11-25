@@ -7,11 +7,11 @@ export function Card({ children, className, title, subtitle, interactive = false
   return (
     <div
       className={clsx(
-        'relative overflow-hidden rounded-xl border border-white/10',
-        'bg-[rgba(255,255,255,0.04)] backdrop-blur-xl p-5',
-        'shadow-[0_15px_35px_rgba(0,0,0,0.45)] transition-transform duration-150',
-        'before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-white/10 before:content-[""]',
-        interactive && 'hover:-translate-y-[1px] hover:shadow-[0_20px_48px_rgba(0,0,0,0.55)] cursor-pointer',
+        'relative overflow-hidden rounded-xl border border-white/8',
+        'bg-[rgba(15,20,28,0.96)] backdrop-blur-xl p-6',
+        'shadow-[0_16px_40px_rgba(0,0,0,0.45)] transition-transform duration-150',
+        'before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.07),transparent_55%)] before:content-[""]',
+        interactive && 'hover:-translate-y-[1px] hover:shadow-[0_18px_44px_rgba(0,0,0,0.55)] cursor-pointer',
         className
       )}
     >

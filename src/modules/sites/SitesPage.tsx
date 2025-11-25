@@ -85,7 +85,7 @@ export function SitesPage() {
       </Card>
 
       <Card title="Быстрые показатели" subtitle="Оценка общей доступности, надёжности и загрузки">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <KpiBadge
             label="Средний Uptime"
             value={`${(

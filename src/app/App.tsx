@@ -124,14 +124,14 @@ export default function App() {
   return (
     <div className="min-h-screen text-text-primary relative bg-surface-0 bg-gradient-to-b from-surface-0 to-[#0F141A]">
       <div className="flex h-screen overflow-hidden relative">
-        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[rgba(10,15,20,0.95)] border-r border-white/5 px-6 py-6 flex flex-col gap-6 backdrop-blur-xl shadow-[0_22px_60px_rgba(0,0,0,0.55)]">
+        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[rgba(8,12,18,0.96)] border-r border-white/6 px-6 py-6 flex flex-col gap-6 backdrop-blur-xl shadow-[0_18px_44px_rgba(0,0,0,0.55)]">
           <NavLink
             to="/"
             className={({ isActive }) =>
               clsx(
-                'relative block -mx-1 px-4 py-3 rounded-xl transition text-left space-y-1 border border-white/10 bg-[rgba(255,255,255,0.04)] shadow-[0_18px_48px_rgba(0,0,0,0.45)] before:absolute before:inset-x-4 before:top-2 before:h-[2px] before:rounded-full before:bg-accent-primary/60',
+                'relative block -mx-1 px-4 py-3 rounded-xl transition text-left space-y-1 border border-white/8 bg-[rgba(15,20,28,0.96)] shadow-[0_16px_40px_rgba(0,0,0,0.45)]',
                 'hover:bg-white/[0.05] text-text-primary',
-                isActive && 'bg-white/[0.06] text-text-primary border-white/20'
+                isActive && 'bg-white/[0.06] text-text-primary border-white/12'
               )
             }
           >
@@ -147,19 +147,19 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors border border-transparent',
+                      'relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent text-white/55',
                       isActive
-                        ? 'bg-white/[0.05] text-text-primary border border-white/[0.08] before:absolute before:left-2 before:top-0 before:bottom-0 before:w-[2px] before:bg-accent-primary'
-                        : 'hover:bg-white/[0.03]'
+                        ? 'bg-white/[0.06] text-white/92 border-l-2 border-accent-primary pl-2.5'
+                        : 'hover:bg-white/[0.04]'
                     )
                   }
                 >
                   {({ isActive }) => (
                     <>
-                      <Icon className={clsx('w-[18px] h-[18px] text-current', isActive ? 'text-text-primary' : 'text-text-muted')} />
-                      <span className="flex-1 min-w-0 text-left leading-tight text-current relative truncate">{item.label}</span>
+                      <Icon className={clsx('w-[18px] h-[18px]', isActive ? 'text-white/92' : 'text-white/55')} />
+                      <span className="flex-1 min-w-0 text-left leading-tight relative truncate">{item.label}</span>
                       {item.badge ? (
-                        <span className="ml-auto inline-flex items-center justify-center rounded-full bg-accent-primary/10 text-accent-primary text-[11px] px-2 py-[2px] border border-accent-primary/30 shadow-[0_6px_20px_rgba(76,181,245,0.25)]">
+                        <span className="ml-auto inline-flex items-center justify-center rounded-full px-2 py-[2px] text-xs text-white/80 bg-white/5 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
                           {item.badge.value}
                         </span>
                       ) : null}

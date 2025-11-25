@@ -7,8 +7,8 @@ import { sites } from '../../shared/data/sites';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
-const COLORS = ['#33A7FF', '#33A7FFCC', '#33A7FF99', '#33A7FF66', '#33A7FF33'];
-const LABEL_COLOR = 'rgba(255,255,255,0.6)';
+const COLORS = ['#33A7FF', '#2B8FD9', '#1F6FA7', '#174F78'];
+const LABEL_COLOR = 'rgba(255,255,255,0.7)';
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -37,7 +37,7 @@ export function FinancePage() {
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <Card className="xl:col-span-2" title="Финансовые записи">
           <div className="flex gap-3 mb-4 flex-wrap items-center justify-between">
             <div className="flex gap-2 flex-wrap">
@@ -109,7 +109,7 @@ export function FinancePage() {
               <div className="text-xs text-text-muted mt-3">Total CAPEX</div>
               <div className="text-lg font-semibold text-text-primary">{totalCapex.toLocaleString('ru-RU')} ₽</div>
             </div>
-            <div className="h-64 rounded-xl bg-surface-1/80 border border-white/10 p-3 shadow-[0_15px_35px_rgba(0,0,0,0.45)]">
+            <div className="h-64 rounded-xl bg-[rgba(15,20,28,0.92)] border border-white/8 p-4 shadow-[0_16px_40px_rgba(0,0,0,0.4)] overflow-hidden">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -117,8 +117,8 @@ export function FinancePage() {
                     data={pieData}
                     cx="50%"
                     cy="50%"
-                    outerRadius={90}
-                    innerRadius={48}
+                    outerRadius={92}
+                    innerRadius={52}
                     strokeWidth={2}
                     cornerRadius={8}
                     labelLine={false}
@@ -129,7 +129,7 @@ export function FinancePage() {
                     )}
                   >
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} stroke={COLORS[index % COLORS.length]} />
+                      <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} stroke="#0F141A" />
                     ))}
                   </Pie>
                   <Tooltip
