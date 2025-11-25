@@ -48,6 +48,7 @@ export function FinancePage() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* ЛЕВАЯ ТАБЛИЦА */}
         <Card className="xl:col-span-2" title="Финансовые записи">
           <div className="flex gap-3 mb-4 flex-wrap items-center justify-between">
             <div className="flex gap-2 flex-wrap">
@@ -141,14 +142,17 @@ export function FinancePage() {
           </Table>
         </Card>
 
-        {/* Сводка справа — очищена, без вылезающих подписей и с аккуратными пилюлями */}
-        <Card title="Сводка" className="overflow-visible">
+        {/* ПРАВАЯ КАРТОЧКА: СВОДКА */}
+        <Card
+          title="Сводка"
+          className="overflow-visible border border-transparent bg-base-panelSoft/90 shadow-elevation-card"
+        >
           <div className="space-y-6">
             <div className="flex flex-col gap-8 md:flex-row">
               {/* Левая часть — пай-чарт + общая сумма */}
               <div className="flex flex-1 flex-col items-center justify-center">
-                <div className="relative w-full max-w-[320px]">
-                  <div className="relative h-64">
+                <div className="relative w-full max-w-[260px] mx-auto">
+                  <div className="relative h-56">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -156,11 +160,11 @@ export function FinancePage() {
                           data={pieData}
                           cx="50%"
                           cy="50%"
-                          outerRadius={92}
-                          innerRadius={56}
+                          outerRadius={80}
+                          innerRadius={52}
                           stroke="#0c1119"
                           strokeWidth={2}
-                          paddingAngle={2}
+                          paddingAngle={3}
                         >
                           {pieData.map((entry) => {
                             const fill =
@@ -199,7 +203,7 @@ export function FinancePage() {
               <div className="flex flex-1 flex-col gap-5">
                 <div className="flex flex-col items-end text-right space-y-3">
                   <div className="w-full space-y-1 text-right">
-                    <div className="text-[11px] uppercase tracking-[0.12em] text-text-muted">
+                    <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">
                       Total OPEX
                     </div>
                     <div className="text-2xl font-semibold text-text-primary leading-tight">
@@ -207,7 +211,7 @@ export function FinancePage() {
                     </div>
                   </div>
                   <div className="w-full space-y-1 text-right">
-                    <div className="text-[11px] uppercase tracking-[0.12em] text-text-muted">
+                    <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">
                       Total CAPEX
                     </div>
                     <div className="text-2xl font-semibold text-text-primary leading-tight">
@@ -224,18 +228,18 @@ export function FinancePage() {
                       return (
                         <div
                           key={entry.name}
-                          className="inline-flex items-center justify-between w-full rounded-full border border-white/5 bg-white/5 px-3 py-2 text-sm text-text-primary shadow-[0_10px_28px_rgba(0,0,0,0.28)] backdrop-blur"
+                          className="inline-flex items-center justify-between w-full rounded-full bg-white/[0.04] border border-white/5 px-3.5 py-2 text-[13px] text-text-primary shadow-[0_10px_24px_rgba(0,0,0,0.26)] backdrop-blur"
                         >
-                          <span className="flex items-center gap-2">
+                          <span className="flex items-center gap-2 min-w-0">
                             <span
-                              className="h-2 w-2 rounded-full"
+                              className="h-2 w-2 rounded-full flex-shrink-0"
                               style={{ backgroundColor: fill }}
                             />
-                            <span className="capitalize leading-none">
+                            <span className="capitalize leading-none truncate">
                               {entry.name}
                             </span>
                           </span>
-                          <span className="font-medium whitespace-nowrap text-text-secondary">
+                          <span className="ml-4 font-medium whitespace-nowrap text-text-secondary tabular-nums">
                             {entry.value.toLocaleString('ru-RU')} ₽
                           </span>
                         </div>
