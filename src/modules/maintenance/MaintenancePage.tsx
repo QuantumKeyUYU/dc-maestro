@@ -48,7 +48,7 @@ export function MaintenancePage() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
           <div className="flex gap-3 flex-wrap">
             <select
-              className="bg-base-850/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
+              className="bg-surface-2/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value as (typeof types)[number])}
             >
@@ -59,7 +59,7 @@ export function MaintenancePage() {
               ))}
             </select>
             <select
-              className="bg-base-850/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
+              className="bg-surface-2/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
               value={critFilter}
               onChange={(e) => setCritFilter((e.target.value === 'all' ? 'all' : Number(e.target.value)) as (typeof criticalities)[number])}
             >
@@ -74,7 +74,7 @@ export function MaintenancePage() {
             value={assetsTable.searchQuery}
             onChange={(e) => assetsTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по названию, типу, площадке"
-            className="bg-base-850/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-azure/60 focus:ring-1 focus:ring-accent-azure/30 transition"
+            className="bg-surface-2/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30 transition"
           />
         </div>
         <Table framed={false}>
@@ -95,7 +95,7 @@ export function MaintenancePage() {
           </thead>
           <tbody>
             {assetsTable.sortedAndFiltered.map((asset) => (
-              <tr key={asset.id} className="border-t border-base-800">
+              <tr key={asset.id} className="border-t border-surface-1">
                 <td className="py-2 pr-4 text-text-primary">{asset.name}</td>
                 <td className="py-2 pr-4 text-text-secondary">{asset.type}</td>
                 <td className="py-2 pr-4 text-text-primary">{asset.criticality}</td>
@@ -115,12 +115,12 @@ export function MaintenancePage() {
         <div className="flex justify-between items-center mb-4" ref={workOrdersRef}>
           {showOverdueOnly ? (
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-base-850/80 px-3 py-1 text-xs text-white border border-white/5">
+              <span className="inline-flex items-center gap-2 rounded-full bg-surface-2/80 px-3 py-1 text-xs text-white border border-white/5">
                 Фильтр: просроченные заявки
               </span>
               <button
                 type="button"
-                className="text-xs text-accent-azure hover:text-white transition"
+                className="text-xs text-accent-primary hover:text-white transition"
                 onClick={() => setShowOverdueOnly(false)}
               >
                 Сбросить
@@ -133,7 +133,7 @@ export function MaintenancePage() {
             value={workOrdersTable.searchQuery}
             onChange={(e) => workOrdersTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по ID, типу или площадке"
-            className="bg-base-850/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-azure/60 focus:ring-1 focus:ring-accent-azure/30 transition"
+            className="bg-surface-2/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30 transition"
           />
         </div>
         <Table framed={false}>
@@ -163,7 +163,7 @@ export function MaintenancePage() {
               .map((wo) => {
               const isOverdue = wo.dueDate && wo.status !== 'done' && wo.dueDate < new Date();
               return (
-                <tr key={wo.id} className={`border-t border-base-800 ${isOverdue ? 'bg-base-800/60' : ''}`}>
+                <tr key={wo.id} className={`border-t border-surface-1 ${isOverdue ? 'bg-surface-1/60' : ''}`}>
                   <td className="py-2 pr-4 text-text-primary">{wo.id}</td>
                   <td className="py-2 pr-4 text-text-secondary">{wo.type}</td>
                   <td className="py-2 pr-4">

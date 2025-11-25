@@ -8,13 +8,13 @@ interface StatusPillProps {
 }
 
 export function StatusPill({ label, tone = 'neutral', variant, size = 'md' }: StatusPillProps) {
-  const base = 'inline-flex items-center rounded-full px-3 py-1 text-xs font-medium border backdrop-blur-sm';
+  const base = 'inline-flex items-center rounded-full text-xs font-medium border backdrop-blur-sm';
 
   const variants = {
-    ok: 'bg-status-ok/10 text-status-ok border-status-ok/40',
-    warn: 'bg-status-warn/10 text-status-warn border-status-warn/40',
-    danger: 'bg-status-danger/10 text-status-danger border-status-danger/40',
-    neutral: 'bg-[rgba(255,255,255,0.03)] text-text-secondary border-white/10'
+    ok: 'bg-[rgba(39,196,143,0.12)] text-[#27C48F] border-[#27C48F]/40',
+    warn: 'bg-[rgba(217,166,58,0.14)] text-[#D9A63A] border-[#D9A63A]/40',
+    danger: 'bg-[rgba(201,74,74,0.16)] text-[#C94A4A] border-[#C94A4A]/40',
+    neutral: 'bg-white/5 text-text-secondary border-white/12'
   } as const;
 
   const toneToVariant: Record<NonNullable<StatusPillProps['tone']>, keyof typeof variants> = {

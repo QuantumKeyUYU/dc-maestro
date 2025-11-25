@@ -35,12 +35,12 @@ export function InventoryPage() {
         <div className="flex justify-between items-center mb-4" ref={itemsRef}>
           {lowStockOnly ? (
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-base-850/80 px-3 py-1 text-xs text-white border border-white/5">
+              <span className="inline-flex items-center gap-2 rounded-full bg-surface-2/85 px-3 py-1 text-xs text-white border border-white/10">
                 Фильтр: позиции на минимуме
               </span>
               <button
                 type="button"
-                className="text-xs text-accent-azure hover:text-white transition"
+                className="text-xs text-accent-primary hover:text-white transition"
                 onClick={() => setLowStockOnly(false)}
               >
                 Сбросить
@@ -53,7 +53,7 @@ export function InventoryPage() {
             value={itemsTable.searchQuery}
             onChange={(e) => itemsTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по SKU, названию или площадке"
-            className="bg-base-850/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-azure/60 focus:ring-1 focus:ring-accent-azure/30"
+            className="bg-surface-2/90 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30"
           />
           <div className="text-xs text-text-muted">Клик по заголовку — сортировка</div>
         </div>
@@ -79,7 +79,7 @@ export function InventoryPage() {
               .map((item) => {
               const low = item.quantityOnHand <= item.minThreshold;
               return (
-                <tr key={item.id} className={`border-t border-base-800 ${low ? 'bg-base-800/60' : ''}`}>
+                <tr key={item.id} className={`border-t border-white/5 ${low ? 'bg-accent-warning/5' : ''}`}>
                   <td className="py-2 pr-4 text-text-primary">{item.sku}</td>
                   <td className="py-2 pr-4 text-text-primary">{item.name}</td>
                   <td className="py-2 pr-4 text-text-secondary">{item.category}</td>
@@ -98,7 +98,7 @@ export function InventoryPage() {
             value={poTable.searchQuery}
             onChange={(e) => poTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по поставщику или статусу"
-            className="bg-base-850/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-azure/60 focus:ring-1 focus:ring-accent-azure/30"
+            className="bg-surface-2/90 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30"
           />
           <div className="text-xs text-text-muted">Клик по строке статуса — подсказка</div>
         </div>
@@ -116,7 +116,7 @@ export function InventoryPage() {
           </thead>
           <tbody>
             {poTable.sortedAndFiltered.map((po) => (
-              <tr key={po.id} className="border-t border-base-800">
+              <tr key={po.id} className="border-t border-white/5">
                 <td className="py-2 pr-4 text-text-primary">{po.id}</td>
                 <td className="py-2 pr-4 text-text-primary">{po.supplierName}</td>
                 <td className="py-2 pr-4">
@@ -125,7 +125,7 @@ export function InventoryPage() {
                 <td className="py-2 pr-4 text-text-secondary">{new Date(po.createdAt).toLocaleDateString('ru-RU')}</td>
                 <td className="py-2 pr-4">
                   <button
-                    className="text-accent-azure hover:text-white underline-offset-4 underline transition"
+                    className="text-accent-primary hover:text-white underline-offset-4 underline transition"
                     onClick={() => setShowItems((prev) => ({ ...prev, [po.id]: !prev[po.id] }))}
                   >
                     {showItems[po.id] ? 'Скрыть' : 'Показать'} ({po.items.length})

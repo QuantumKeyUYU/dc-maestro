@@ -6,10 +6,10 @@ module.exports = {
     extend: {
       colors: {
         surface: {
-          base: '#05070B',
-          soft: '#070A0F',
-          card: '#0B0F16',
-          raised: '#101621'
+          0: '#0A0F14',
+          1: '#0F141A',
+          2: '#121820',
+          3: '#1A222C'
         },
         text: {
           primary: '#EEF2F7',
@@ -17,21 +17,16 @@ module.exports = {
           muted: '#7A828E'
         },
         accent: {
-          primary: '#4CB5F5',
-          soft: '#102030',
-          violet: '#8B9BFF',
-          azure: '#4CB5F5'
+          primary: '#33A7FF',
+          secondary: '#6C82FF',
+          positive: '#27C48F',
+          warning: '#D9A63A',
+          danger: '#C94A4A'
         },
         status: {
-          ok: '#46B37A',
-          warn: '#E2B857',
-          danger: '#E05757'
-        },
-        base: {
-          950: '#05070B',
-          900: '#070A0F',
-          850: '#0B0F16',
-          800: '#101621'
+          ok: '#27C48F',
+          warn: '#D9A63A',
+          danger: '#C94A4A'
         }
       },
       borderRadius: {

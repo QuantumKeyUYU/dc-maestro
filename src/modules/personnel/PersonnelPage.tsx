@@ -57,8 +57,8 @@ export function PersonnelPage() {
                 onClick={() => setRoleFilter(role.key)}
                 className={`px-3 py-1.5 rounded-full text-sm border transition ${
                   roleFilter === role.key
-                    ? 'border-accent-azure/50 bg-accent-azure/10 text-accent-azure shadow-focus'
-                    : 'border-white/5 bg-base-850/80 text-text-secondary hover:border-accent-azure/30'
+                    ? 'border-accent-primary/50 bg-accent-primary/10 text-accent-primary shadow-focus'
+                    : 'border-white/5 bg-surface-2/80 text-text-secondary hover:border-accent-primary/30'
                 }`}
               >
                 {role.label}
@@ -69,7 +69,7 @@ export function PersonnelPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по имени, роли, грейду"
-            className="bg-base-850/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-azure/60 focus:ring-1 focus:ring-accent-azure/30 transition"
+            className="bg-surface-2/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30 transition"
           />
         </div>
         <Table framed={false}>
@@ -90,7 +90,7 @@ export function PersonnelPage() {
           </thead>
           <tbody>
             {sortedAndFiltered.map((member) => (
-              <tr key={member.id} className="border-t border-base-800">
+              <tr key={member.id} className="border-t border-surface-1">
                 <td className="py-2 pr-4 text-text-primary">{member.fullName}</td>
                 <td className="py-2 pr-4 text-text-secondary">{member.role}</td>
                 <td className="py-2 pr-4 text-text-primary">{member.grade}</td>
@@ -108,7 +108,7 @@ export function PersonnelPage() {
             <select
               value={selectedSite}
               onChange={(e) => setSelectedSite(e.target.value)}
-              className="bg-base-850/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
+              className="bg-surface-2/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-text-primary"
             >
               {sites.map((siteItem) => (
                 <option key={siteItem.id} value={siteItem.id}>
