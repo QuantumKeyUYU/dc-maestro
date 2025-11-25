@@ -486,21 +486,38 @@ export function DashboardPage() {
           </div>
         </Card>
 
-        <Card title="Площадки" subtitle="Uptime, reliability и capacity">
-          <div className="flex flex-col gap-4">
-            {withScores.slice(0, 3).map((site) => (
-              <div key={site.id} className="flex items-center justify-between rounded-card border border-border-soft bg-base-panelSoft px-5 py-4 shadow-elevation-card gap-3">
-                <div className="space-y-1 min-w-0">
-                  <div className="text-sm font-semibold text-white leading-tight max-w-[220px]">{site.name}</div>
-                  <div className="text-xs text-text-secondary leading-snug">{site.region}</div>
+        <Card className="h-full" title="Площадки" subtitle="Uptime, reliability и capacity">
+          <div className="flex flex-col gap-3">
+            {withScores.slice(0, 3).map((site) => {
+              const pills = [
+                { label: `Uptime ${site.uptime.toFixed(1)}%`, color: 'bg-emerald-400' },
+                { label: `Reliab. ${site.reliability.toFixed(1)}`, color: 'bg-sky-400' },
+                { label: `Cap ${site.capacity.toFixed(1)}%`, color: 'bg-amber-300' }
+              ];
+
+              return (
+                <div
+                  key={site.id}
+                  className="flex items-center justify-between rounded-card border border-border-soft bg-base-panelSoft px-5 py-3 shadow-elevation-card gap-4"
+                >
+                  <div className="space-y-1 min-w-0">
+                    <div className="text-base font-semibold text-white leading-tight truncate">{site.name}</div>
+                    <div className="text-xs text-text-secondary leading-snug">{site.region}</div>
+                  </div>
+                  <div className="flex items-center justify-end gap-2 sm:gap-3 md:flex-nowrap flex-wrap min-w-[240px]">
+                    {pills.map((pill) => (
+                      <div
+                        key={pill.label}
+                        className="flex items-center gap-2 rounded-full border border-border-soft/80 bg-base-panel px-3 py-1.5 text-[11px] text-text-primary"
+                      >
+                        <span className={`h-2 w-2 rounded-full ${pill.color}`} />
+                        <span className="whitespace-nowrap">{pill.label}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 flex-wrap justify-end min-w-[220px]">
-                  <StatusPill label={`Uptime ${site.uptime.toFixed(1)}%`} variant="ok" size="sm" />
-                  <StatusPill label={`Reliab. ${site.reliability.toFixed(1)}`} variant="ok" size="sm" />
-                  <StatusPill label={`Cap ${site.capacity.toFixed(1)}%`} variant="warn" size="sm" />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </Card>
       </div>
