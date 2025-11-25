@@ -7,9 +7,9 @@ import { sites } from '../../shared/data/sites';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
-const COLORS = ['rgba(79,180,255,1)', 'rgba(79,180,255,0.75)', 'rgba(79,180,255,0.5)', 'rgba(79,180,255,0.25)'];
-const LABEL_COLOR = 'rgba(255,255,255,0.7)';
-const SEGMENT_SEPARATOR = 'rgba(7,10,16,0.96)';
+const COLORS = ['#4FB4FF', '#8CD1FF', 'rgba(79,180,255,0.72)', 'rgba(79,180,255,0.48)'];
+const LABEL_COLOR = 'rgba(255,255,255,0.68)';
+const SEGMENT_SEPARATOR = '#0A0F16';
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -45,7 +45,7 @@ export function FinancePage() {
               <select
                 value={siteFilter}
                 onChange={(e) => setSiteFilter(e.target.value)}
-                className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-3.5 py-2 text-sm text-text-primary shadow-[0_18px_48px_rgba(0,0,0,0.45)] backdrop-blur-[16px]"
+                className="bg-base-panelSoft border border-border-soft rounded-card px-3.5 py-2 text-sm text-text-primary shadow-elevation-card backdrop-blur-xl"
               >
                 <option value="all">Все площадки</option>
                 {sites.map((site) => (
@@ -58,7 +58,7 @@ export function FinancePage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value as 'all' | 'opex' | 'capex')}
-                className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-3.5 py-2 text-sm text-text-primary shadow-[0_18px_48px_rgba(0,0,0,0.45)] backdrop-blur-[16px]"
+                className="bg-base-panelSoft border border-border-soft rounded-card px-3.5 py-2 text-sm text-text-primary shadow-elevation-card backdrop-blur-xl"
               >
                 <option value="all">Все</option>
                 <option value="opex">OPEX</option>
@@ -69,7 +69,7 @@ export function FinancePage() {
               value={table.searchQuery}
               onChange={(e) => table.setSearchQuery(e.target.value)}
               placeholder="Поиск по категории или площадке"
-              className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.18)] rounded-[14px] px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/70 focus:ring-1 focus:ring-accent-primary/30 shadow-[0_18px_48px_rgba(0,0,0,0.45)] backdrop-blur-[16px]"
+              className="bg-base-panelSoft border border-border-soft rounded-card px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/30 shadow-elevation-card backdrop-blur-xl"
             />
           </div>
           <Table framed={false}>
@@ -139,15 +139,16 @@ export function FinancePage() {
                       />
                     ))}
                   </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      background: 'rgba(8,11,16,0.92)',
-                      border: '1px solid rgba(255,255,255,0.08)',
-                      borderRadius: 14,
-                      color: '#EAF1FF'
-                    }}
-                    itemStyle={{ color: '#EAF1FF' }}
-                  />
+                <Tooltip
+                  contentStyle={{
+                    background: 'rgba(7,11,17,0.96)',
+                    border: '1px solid rgba(255,255,255,0.14)',
+                    borderRadius: 14,
+                    color: 'rgba(255,255,255,0.94)',
+                    boxShadow: '0 18px 48px rgba(0,0,0,0.55)'
+                  }}
+                  itemStyle={{ color: 'rgba(255,255,255,0.94)' }}
+                />
                 </PieChart>
               </ResponsiveContainer>
             </div>

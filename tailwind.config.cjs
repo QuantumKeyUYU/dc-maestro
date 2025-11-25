@@ -5,32 +5,39 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        surface: {
-          0: '#05070A',
-          1: '#0A0F16',
-          2: '#0D131D',
-          3: '#111A26'
-        },
-        text: {
-          primary: '#EAF1FF',
-          secondary: '#B8C3D9',
-          muted: '#7E8BA7'
+        base: {
+          bg: '#05070B',
+          panel: '#070B11',
+          panelSoft: '#0A0F16'
         },
         accent: {
-          primary: '#4FB4FF'
+          primary: '#4FB4FF',
+          primarySoft: '#8CD1FF',
+          primaryDark: '#2E7AC2'
         },
-        status: {
-          ok: '#3BD8A1',
-          warn: '#F2C063',
-          danger: '#FF5C67'
+        semantic: {
+          danger: '#FF5C67',
+          warning: '#F2C063',
+          success: '#3BD8A1'
+        },
+        text: {
+          primary: 'rgba(255,255,255,0.94)',
+          secondary: 'rgba(255,255,255,0.68)',
+          muted: 'rgba(255,255,255,0.42)'
+        },
+        border: {
+          soft: 'rgba(255,255,255,0.08)',
+          strong: 'rgba(255,255,255,0.14)'
         }
       },
       borderRadius: {
-        xl: '0.9rem',
-        '2xl': '1.2rem'
+        card: '18px',
+        capsule: '9999px',
+        header: '20px'
       },
       boxShadow: {
-        'luxe-card': '0 20px 60px rgba(0,0,0,0.55)'
+        'elevation-card': '0 22px 60px rgba(0,0,0,0.68)',
+        'elevation-shell': '0 30px 80px rgba(0,0,0,0.82)'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif']

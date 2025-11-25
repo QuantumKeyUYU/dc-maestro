@@ -122,20 +122,14 @@ export default function App() {
   }, [currentPage, metaDescriptionByRoute, pathname]);
 
   return (
-    <div className="min-h-screen text-text-primary relative bg-[#05070A]">
+    <div className="min-h-screen text-text-primary relative bg-base-bg">
       <div className="flex h-screen overflow-hidden relative">
-        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[rgba(8,12,18,0.94)] border-r border-white/10 px-6 py-6 flex flex-col gap-6 backdrop-blur-2xl shadow-[0_30px_90px_rgba(0,0,0,0.65)]">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              clsx(
-                'relative block -mx-1 px-4 py-3 rounded-[16px] transition text-left space-y-1 border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.05)] shadow-[0_18px_48px_rgba(0,0,0,0.45)] backdrop-blur-xl',
-                'hover:bg-white/[0.07] text-text-primary',
-                isActive && 'bg-white/[0.08] text-text-primary border-white/16'
-              )
-            }
-          >
-            <div className="text-xl font-semibold text-text-primary leading-tight">{strings.headers.appTitle}</div>
+        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[rgba(6,9,14,0.96)] border-r border-border-soft px-6 py-6 flex flex-col gap-6 backdrop-blur-xl shadow-elevation-shell">
+          <NavLink to="/" className="group block">
+            <div className="relative -mx-1 px-4 py-3 rounded-card border border-border-soft bg-base-panelSoft/80 backdrop-blur-xl shadow-elevation-card overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent opacity-30 pointer-events-none" />
+              <div className="text-xl font-semibold text-text-primary leading-tight relative">{strings.headers.appTitle}</div>
+            </div>
           </NavLink>
           <nav className="flex flex-col gap-2 text-[15px]">
             {navItems.map((item) => {
@@ -147,19 +141,24 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors border border-transparent text-white/60 backdrop-blur-[14px]',
+                      'relative flex items-center gap-3 rounded-capsule px-3.5 py-2 text-sm transition-colors border border-transparent text-text-secondary',
                       isActive
-                        ? 'bg-white/[0.07] text-white/95 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08),0_10px_28px_rgba(0,0,0,0.45)]'
-                        : 'hover:bg-white/[0.04]'
+                        ? 'bg-gradient-to-r from-[rgba(79,180,255,0.22)] to-[rgba(79,180,255,0.08)] text-text-primary border-[rgba(79,180,255,0.45)] shadow-[0_12px_30px_rgba(0,0,0,0.45)]'
+                        : 'hover:bg-white/5 hover:text-white/85'
                     )
                   }
                 >
                   {({ isActive }) => (
                     <>
-                      <Icon className={clsx('w-[18px] h-[18px]', isActive ? 'text-white/95' : 'text-white/60')} />
+                      <Icon
+                        className={clsx(
+                          'w-[18px] h-[18px] drop-shadow-[0_4px_10px_rgba(79,180,255,0.15)]',
+                          isActive ? 'text-text-primary' : 'text-text-secondary'
+                        )}
+                      />
                       <span className="flex-1 min-w-0 text-left leading-tight relative truncate">{item.label}</span>
                       {item.badge ? (
-                        <span className="ml-auto inline-flex items-center justify-center rounded-full px-2 py-[2px] text-xs text-white/85 bg-white/6 border border-[rgba(255,255,255,0.18)]">
+                        <span className="ml-auto inline-flex items-center justify-center rounded-capsule px-2 py-[2px] text-xs text-text-primary bg-white/5 border border-border-soft">
                           {item.badge.value}
                         </span>
                       ) : null}
@@ -172,7 +171,7 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-[rgba(5,7,10,0.92)] backdrop-blur-[18px] border-b border-[rgba(255,255,255,0.06)] px-7 py-5 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
+          <header className="sticky top-0 z-10 bg-[rgba(8,12,18,0.94)] backdrop-blur-2xl border-b border-border-soft px-7 py-5 shadow-elevation-shell">
             <SectionHeader
               as="h1"
               label={currentPage.label ?? undefined}
