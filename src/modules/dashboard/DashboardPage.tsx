@@ -454,8 +454,8 @@ export function DashboardPage() {
             <tbody>
               {worstSites.map((site) => (
                 <tr key={site.id}>
-                  <td className="pr-4">
-                    <div className="font-medium text-white">{site.name}</div>
+                  <td className="pr-4 max-w-[240px]">
+                    <div className="font-medium text-white leading-snug break-words">{site.name}</div>
                   </td>
                   <td className="text-center text-text-secondary">{site.region}</td>
                   <td className="text-right font-semibold">{site.reliability.toFixed(1)}</td>
@@ -490,30 +490,42 @@ export function DashboardPage() {
           <div className="flex flex-col gap-3">
             {withScores.slice(0, 3).map((site) => {
               const pills = [
-                { label: `Uptime ${site.uptime.toFixed(1)}%`, color: 'bg-emerald-400' },
-                { label: `Reliab. ${site.reliability.toFixed(1)}`, color: 'bg-sky-400' },
-                { label: `Cap ${site.capacity.toFixed(1)}%`, color: 'bg-amber-300' }
+                { label: `Uptime ${site.uptime.toFixed(1)}%`, color: 'bg-emerald-300', tone: 'ok' as const },
+                { label: `Reliab. ${site.reliability.toFixed(1)}`, color: 'bg-sky-300', tone: 'info' as const },
+                { label: `Cap ${site.capacity.toFixed(1)}%`, color: 'bg-amber-200', tone: 'warn' as const }
               ];
 
               return (
                 <div
                   key={site.id}
-                  className="flex items-center justify-between rounded-card border border-border-soft bg-base-panelSoft px-5 py-3 shadow-elevation-card gap-4"
+                  className="flex items-center justify-between rounded-card border border-border-soft bg-base-panelSoft px-5 py-4 shadow-elevation-card gap-4 min-h-[96px]"
                 >
                   <div className="space-y-1 min-w-0">
-                    <div className="text-base font-semibold text-white leading-tight truncate">{site.name}</div>
+                    <div className="text-base font-semibold text-white leading-snug break-words">{site.name}</div>
                     <div className="text-xs text-text-secondary leading-snug">{site.region}</div>
                   </div>
                   <div className="flex items-center justify-end gap-2 sm:gap-3 md:flex-nowrap flex-wrap min-w-[240px]">
-                    {pills.map((pill) => (
-                      <div
-                        key={pill.label}
-                        className="flex items-center gap-2 rounded-full border border-border-soft/80 bg-base-panel px-3 py-1.5 text-[11px] text-text-primary"
-                      >
-                        <span className={`h-2 w-2 rounded-full ${pill.color}`} />
-                        <span className="whitespace-nowrap">{pill.label}</span>
-                      </div>
-                    ))}
+                    {pills.map((pill) => {
+                      const toneClass =
+                        pill.tone === 'ok'
+                          ? 'bg-emerald-400/14 border-emerald-300/40 text-emerald-50'
+                          : pill.tone === 'warn'
+                            ? 'bg-amber-300/16 border-amber-200/45 text-amber-50'
+                            : 'bg-sky-400/14 border-sky-300/40 text-sky-50';
+
+                      return (
+                        <div
+                          key={pill.label}
+                          className={clsx(
+                            'inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] leading-[1.2] shadow-[0_12px_26px_rgba(0,0,0,0.3)] min-h-[34px]',
+                            toneClass
+                          )}
+                        >
+                          <span className={`h-2.5 w-2.5 rounded-full ${pill.color}`} />
+                          <span className="whitespace-nowrap">{pill.label}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               );
