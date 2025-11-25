@@ -35,27 +35,27 @@ export function InventoryPage() {
         <div className="flex justify-between items-center mb-4" ref={itemsRef}>
           {lowStockOnly ? (
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-neutral-100 shadow-inner">
+              <span className="inline-flex items-center gap-2 rounded-full bg-base-850/80 px-3 py-1 text-xs text-white border border-white/5">
                 Фильтр: позиции на минимуме
               </span>
               <button
                 type="button"
-                className="text-xs text-accent hover:text-accent-muted transition"
+                className="text-xs text-accent-azure hover:text-white transition"
                 onClick={() => setLowStockOnly(false)}
               >
                 Сбросить
               </button>
             </div>
           ) : (
-            <span className="text-xs text-neutral-500">Показываем весь склад</span>
+            <span className="text-xs text-text-muted">Показываем весь склад</span>
           )}
           <input
             value={itemsTable.searchQuery}
             onChange={(e) => itemsTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по SKU, названию или площадке"
-            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-accent/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)]"
+            className="bg-base-850/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-azure/60 focus:ring-1 focus:ring-accent-azure/30"
           />
-          <div className="text-xs text-neutral-500">Клик по заголовку — сортировка</div>
+          <div className="text-xs text-text-muted">Клик по заголовку — сортировка</div>
         </div>
         <Table framed={false}>
           <thead>
@@ -79,12 +79,12 @@ export function InventoryPage() {
               .map((item) => {
               const low = item.quantityOnHand <= item.minThreshold;
               return (
-                <tr key={item.id} className={`border-t border-white/10 ${low ? 'bg-status-warn/10' : ''}`}>
-                  <td className="py-2 pr-4 text-neutral-100">{item.sku}</td>
-                  <td className="py-2 pr-4 text-neutral-100">{item.name}</td>
-                  <td className="py-2 pr-4 text-neutral-400">{item.category}</td>
-                  <td className="py-2 pr-4 text-neutral-400">{item.siteId ?? 'Центральный склад'}</td>
-                  <td className="py-2 pr-4 text-neutral-100">{item.quantityOnHand} {item.unit}</td>
+                <tr key={item.id} className={`border-t border-base-800 ${low ? 'bg-base-800/60' : ''}`}>
+                  <td className="py-2 pr-4 text-text-primary">{item.sku}</td>
+                  <td className="py-2 pr-4 text-text-primary">{item.name}</td>
+                  <td className="py-2 pr-4 text-text-secondary">{item.category}</td>
+                  <td className="py-2 pr-4 text-text-secondary">{item.siteId ?? 'Центральный склад'}</td>
+                  <td className="py-2 pr-4 text-text-primary">{item.quantityOnHand} {item.unit}</td>
                 </tr>
               );
               })}
@@ -98,9 +98,9 @@ export function InventoryPage() {
             value={poTable.searchQuery}
             onChange={(e) => poTable.setSearchQuery(e.target.value)}
             placeholder="Поиск по поставщику или статусу"
-            className="bg-gradient-to-b from-bg-surface/90 to-bg-surfaceSoft/88 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-accent/60 focus:shadow-[0_0_0_2px_rgba(62,236,226,0.12)]"
+            className="bg-base-850/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-azure/60 focus:ring-1 focus:ring-accent-azure/30"
           />
-          <div className="text-xs text-neutral-500">Клик по строке статуса — подсказка</div>
+          <div className="text-xs text-text-muted">Клик по строке статуса — подсказка</div>
         </div>
         <Table framed={false}>
           <thead>
@@ -116,22 +116,22 @@ export function InventoryPage() {
           </thead>
           <tbody>
             {poTable.sortedAndFiltered.map((po) => (
-              <tr key={po.id} className="border-t border-white/10">
-                <td className="py-2 pr-4 text-neutral-100">{po.id}</td>
-                <td className="py-2 pr-4 text-neutral-100">{po.supplierName}</td>
+              <tr key={po.id} className="border-t border-base-800">
+                <td className="py-2 pr-4 text-text-primary">{po.id}</td>
+                <td className="py-2 pr-4 text-text-primary">{po.supplierName}</td>
                 <td className="py-2 pr-4">
                   <StatusPill label={getStatusLabel(po.status)} tone={getStatusTone(po.status)} />
                 </td>
-                <td className="py-2 pr-4 text-neutral-400">{new Date(po.createdAt).toLocaleDateString('ru-RU')}</td>
+                <td className="py-2 pr-4 text-text-secondary">{new Date(po.createdAt).toLocaleDateString('ru-RU')}</td>
                 <td className="py-2 pr-4">
                   <button
-                    className="text-accent hover:text-accent-muted underline-offset-4 underline transition"
+                    className="text-accent-azure hover:text-white underline-offset-4 underline transition"
                     onClick={() => setShowItems((prev) => ({ ...prev, [po.id]: !prev[po.id] }))}
                   >
                     {showItems[po.id] ? 'Скрыть' : 'Показать'} ({po.items.length})
                   </button>
                   {showItems[po.id] && (
-                    <ul className="text-xs text-neutral-100 mt-2 space-y-1">
+                    <ul className="text-xs text-text-primary mt-2 space-y-1">
                       {po.items.map((item, idx) => (
                         <li key={idx}>
                           {item.inventoryItemId}: {item.quantity} шт × {item.pricePerUnit.toLocaleString('ru-RU')} ₽

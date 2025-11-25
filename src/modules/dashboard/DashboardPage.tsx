@@ -169,6 +169,30 @@ export function DashboardPage() {
       }))
   ];
 
+  type StatusTone = 'neutral' | 'success' | 'warning' | 'danger' | 'info';
+
+  type MetricCard = { label: string; value: string | number; tone?: StatusTone; helperText?: string; onClick?: () => void };
+
+  const metricCards: MetricCard[] = [
+    { label: 'Средний uptime', value: `${networkUptime.toFixed(2)}%`, tone: 'success', helperText: 'SLA по площадкам' },
+    { label: 'Ops load index', value: `${avgOpsLoad.toFixed(1)} / 100`, tone: avgOpsLoad > 60 ? 'warning' : 'info', helperText: 'Загрузка смен' },
+    {
+      label: 'Позиции на минимуме',
+      value: inventoryItems.filter((item) => item.quantityOnHand <= item.minThreshold).length,
+      tone: 'warning',
+      helperText: 'Склад'
+    },
+    {
+      label: 'Просроченная безопасность',
+      value: safetyEvents.filter((e) => e.status === 'overdue').length,
+      tone: 'danger',
+      helperText: 'События'
+    },
+    ...summaryCards
+      .slice(0, 4)
+      .map((card) => ({ label: card.label, value: card.value, tone: card.tone, helperText: 'См. детали', onClick: card.onClick }))
+  ];
+
   const filteredAlerts = useMemo(() => {
     if (!alertFilter) return alerts;
     switch (alertFilter) {
@@ -217,92 +241,69 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-2xl border border-white/5 bg-ink-900/90 p-6 shadow-luxe-card">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-1">
-            <p className="text-[12px] uppercase tracking-[0.12em] text-neutral-500">Дашборд</p>
-            <h1 className="text-3xl font-semibold text-neutral-100 leading-tight">Обзор состояния сети и эксплуатационных рисков</h1>
-            <p className="text-sm text-neutral-400 max-w-3xl">Ключевые сигналы по отказоустойчивости, загрузке и операционным рискам для быстрой реакции.</p>
-          </div>
-          <InfoTooltip label="Операционный индекс нагрузки рассчитывается как взвешенная метрика по инцидентам, загрузке смен и финансовым рискам." triggerArea="container">
-            <div className="flex items-center gap-4 rounded-2xl border border-white/5 bg-ink-900/70 px-5 py-4 shadow-luxe-card min-w-[260px]">
-              <div className="space-y-1">
-                <div className="text-[12px] uppercase tracking-[0.12em] text-neutral-500">OSI</div>
-                <div className="text-4xl font-semibold text-neutral-100">{osi.value.toFixed(1)}</div>
-                <div className="text-xs text-neutral-400">Operational Strain Index</div>
-              </div>
-              <StatusPill label={osiState} tone={osiTone} />
+      <div className="grid gap-4 xl:grid-cols-[1.6fr,1fr] items-start">
+        <Card title="Обзор состояния сети" subtitle="Ключевые сигналы по отказоустойчивости, загрузке и операционным рискам для быстрой реакции.">
+          <div className="space-y-3 text-text-secondary">
+            <p className="text-sm leading-relaxed">
+              Мониторим SLA, загрузку смен, склад и безопасность в единой картине. Фокус на рисках, которые требуют внимания в текущей смене.
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <StatusPill label={networkStatusText.replace('Сеть в целом: ', '')} tone={networkTone} />
+              <span className="text-sm text-text-secondary">Средний uptime: {networkUptime.toFixed(2)}% · Ops load: {avgOpsLoad.toFixed(1)} / 100</span>
             </div>
-          </InfoTooltip>
-        </div>
+          </div>
+        </Card>
+        <Card title="Риски и акценты" subtitle="Обновляется по данным за сутки">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <KpiBadge label="Площадок вне нормы" value={problemSites} helperText="Контроль SLA и инженерии" tone={problemSites === 0 ? 'neutral' : 'warning'} />
+            <KpiBadge label="Просроченные заявки ТО" value={overdueWorkOrders} helperText="Оперативное реагирование" tone={overdueWorkOrders === 0 ? 'neutral' : 'warning'} />
+            <KpiBadge label="Критические инциденты" value={incidents.filter((i) => i.severity === 'critical' && !i.resolvedAt).length} helperText="Live incidents" tone={incidents.some((i) => i.severity === 'critical' && !i.resolvedAt) ? 'danger' : 'neutral'} />
+            <KpiBadge label="Месячный OPEX" value={`₽${monthlyOpex.toLocaleString('ru-RU')}`} helperText="Последние 30 дней" tone="info" />
+          </div>
+        </Card>
       </div>
 
-      <Card title="Состояние сети сейчас" subtitle="Главные индикаторы доступности и риска в текущую смену">
-        <div className="grid gap-6 lg:grid-cols-[1.1fr,1fr] items-start">
-          <div className="space-y-4">
-            <div className="flex flex-col gap-3 rounded-2xl border border-white/5 bg-ink-900/70 px-5 py-4 shadow-luxe-card">
-              <div className="flex items-center justify-between">
-                <span className="text-[12px] uppercase tracking-[0.12em] text-neutral-500">Operational Strain Index</span>
-                <StatusPill label={osiState} tone={osiTone} size="sm" />
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        {metricCards.map((metric, idx) => (
+          <button
+            key={`${metric.label}-${idx}`}
+            type="button"
+            onClick={metric.onClick}
+            className={clsx(
+              'text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-accent-azure/45 rounded-2xl border border-white/5 bg-base-850/80 px-4 py-4 shadow-luxe-card transition',
+              metric.onClick ? 'hover:-translate-y-[2px]' : ''
+            )}
+          >
+            <div className="space-y-2">
+              <div className="text-xs uppercase tracking-wider text-text-muted">{metric.label}</div>
+              <div className="flex items-center justify-between gap-2">
+                <div className="text-2xl font-semibold text-white leading-tight">{metric.value}</div>
+                <StatusPill label={metric.value === 0 ? 'Норма' : 'Внимание'} tone={metric.tone ?? 'neutral'} size="sm" />
               </div>
-              <div className="flex items-baseline gap-3">
-                <span className="text-5xl font-semibold text-neutral-100 leading-none">{osi.value.toFixed(1)}</span>
-                <span className="text-neutral-400">/ 100</span>
-              </div>
-              <p className="text-sm text-neutral-400 leading-snug">Средний аптайм сети: {networkUptime.toFixed(2)}% · Ops load index: {avgOpsLoad.toFixed(1)} / 100</p>
+              {metric.helperText ? <div className="text-sm text-text-secondary">{metric.helperText}</div> : null}
             </div>
-            <div className="rounded-2xl border border-white/5 bg-ink-900/90 px-5 py-4 shadow-luxe-card space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-neutral-400">Площадок вне нормы</span>
-                <StatusPill label={problemSites === 0 ? 'Норма' : 'Требует внимания'} tone={problemSites === 0 ? 'success' : 'warning'} size="sm" />
-              </div>
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-semibold text-neutral-100">{problemSites}</span>
-                <span className="text-sm text-neutral-400">площадок</span>
-              </div>
-              <p className="text-sm text-neutral-400 leading-snug">Просроченных заявок ТО: {overdueWorkOrders}</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {summaryCards.map((card) => (
-              <button
-                key={card.label}
-                type="button"
-                onClick={card.onClick}
-                className="text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/45 rounded-2xl border border-white/5 bg-ink-900/70 px-4 py-3 shadow-luxe-card hover:bg-white/[0.03] transition"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="space-y-1">
-                    <p className="text-[12px] uppercase tracking-wide text-neutral-500">{card.label}</p>
-                    <p className="text-2xl font-semibold text-neutral-100 leading-tight">{card.value}</p>
-                  </div>
-                  <StatusPill label={card.value === 0 ? 'Норма' : 'Внимание'} tone={card.tone === 'danger' ? 'danger' : card.tone === 'warning' ? 'warning' : 'neutral'} size="sm" />
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </Card>
+          </button>
+        ))}
+      </div>
 
       <div ref={warningsRef}>
         <Card title="Текущие предупреждения" subtitle="Инциденты, ТО, склад и безопасность" className="xl:col-span-2">
           <div className="flex items-center justify-between mb-4">
             {alertFilter ? (
               <div className="flex items-center gap-3">
-                <span className="inline-flex items-center gap-2 rounded-[8px] bg-ink-900/70 px-3 py-1.5 text-xs text-neutral-100 border border-white/5">
+                <span className="inline-flex items-center gap-2 rounded-full bg-base-850/80 px-3 py-1.5 text-xs text-white border border-white/5">
                   {alertFilterLabels[alertFilter]}
                 </span>
                 <button
                   type="button"
-                  className="text-xs text-accent hover:text-neutral-100 transition"
+                  className="text-xs text-accent-azure hover:text-white transition"
                   onClick={() => setAlertFilter(null)}
                 >
                   Сбросить
                 </button>
               </div>
             ) : (
-              <span className="text-xs text-neutral-500">Живые предупреждения по всем потокам</span>
+              <span className="text-xs text-text-muted">Живые предупреждения по всем потокам</span>
             )}
           </div>
           <Table<AlertRow> isRowClickable onRowClick={(alert) => alert.link?.()} framed={false}>
@@ -319,14 +320,10 @@ export function DashboardPage() {
               {filteredAlerts.map((alert) => {
                 const tone = alert.priority.includes('Крит') ? 'danger' : alert.priority.includes('Проср') ? 'warning' : 'warning';
                 return (
-                  <TableRow
-                    key={`${alert.type}-${alert.id}`}
-                    row={alert}
-                    className={clsx(tone === 'danger' ? 'bg-status-danger/10' : tone === 'warning' ? 'bg-status-warn/8' : '')}
-                  >
-                    <td className="pr-4 font-medium text-neutral-100">{alert.type}</td>
-                    <td className="pr-4 text-neutral-100">{alert.description}</td>
-                    <td className="pr-4 text-center text-neutral-400">{alert.siteId}</td>
+                  <TableRow key={`${alert.type}-${alert.id}`} row={alert}>
+                    <td className="pr-4 font-medium text-white">{alert.type}</td>
+                    <td className="pr-4 text-text-primary">{alert.description}</td>
+                    <td className="pr-4 text-center text-text-secondary">{alert.siteId}</td>
                     <td className="pr-4">
                       <StatusPill label={alert.priority} tone={tone} size="sm" />
                     </td>
@@ -346,7 +343,7 @@ export function DashboardPage() {
               })}
               {filteredAlerts.length === 0 && (
                 <tr>
-                  <td className="pr-4 text-neutral-400" colSpan={5}>
+                  <td className="pr-4 text-text-secondary" colSpan={5}>
                     Нет предупреждений на сегодня.
                   </td>
                 </tr>
@@ -357,23 +354,26 @@ export function DashboardPage() {
       </div>
 
       <div className="grid gap-7 xl:grid-cols-[2fr,1fr] items-start">
-        <Card className="xl:col-span-1" title="Обзор надёжности и нагрузки сети ЦОД" subtitle="Сигналы SLA и эксплуатационных рисков">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div className="flex flex-col gap-2 rounded-2xl border border-white/5 bg-ink-900/70 p-4">
-              <span className="text-xs uppercase tracking-[0.12em] text-neutral-500">Uptime</span>
-              <span className="text-2xl font-semibold text-neutral-100">{networkUptime.toFixed(2)}%</span>
-              <p className="text-[13px] text-neutral-400 leading-snug">Средний SLA по площадкам</p>
-            </div>
-            <div className="flex flex-col gap-2 rounded-2xl border border-white/5 bg-ink-900/70 p-4">
-              <span className="text-xs uppercase tracking-[0.12em] text-neutral-500">Ops load</span>
-              <span className="text-2xl font-semibold text-neutral-100">{avgOpsLoad.toFixed(1)} / 100</span>
-              <p className="text-[13px] text-neutral-400 leading-snug">Загрузка смен и команд</p>
-            </div>
-            <div className="flex flex-col gap-2 rounded-2xl border border-white/5 bg-ink-900/70 p-4">
-              <span className="text-xs uppercase tracking-[0.12em] text-neutral-500">Статус сети</span>
-              <StatusPill label={networkStatusText.replace('Сеть в целом: ', '')} tone={networkTone} />
-              <p className="text-[13px] text-neutral-400 leading-snug">Контроль нагрузки и рисков</p>
-            </div>
+        <Card className="xl:col-span-1" title="Состояние сети" subtitle="Uptime по площадкам">
+          <div className="h-80 bg-base-850/80 rounded-2xl border border-white/5 p-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} barCategoryGap={18}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(230,231,235,0.08)" vertical={false} />
+                <XAxis dataKey="name" tick={{ fill: '#9EA3AE', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(230,231,235,0.08)' }} />
+                <YAxis tick={{ fill: '#9EA3AE', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(230,231,235,0.08)' }} />
+                <Tooltip
+                  contentStyle={{
+                    background: '#0D1117',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: 12,
+                    color: '#E6E7EB',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.35)'
+                  }}
+                  cursor={{ fill: 'rgba(22,27,35,0.4)' }}
+                />
+                <Bar dataKey="uptime" fill="#3ECBF8" stroke="#3ECBF8" strokeWidth={2} radius={[8, 8, 4, 4]} />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </Card>
 
@@ -391,9 +391,9 @@ export function DashboardPage() {
               {worstSites.map((site) => (
                 <tr key={site.id}>
                   <td className="pr-4">
-                    <div className="font-medium text-neutral-100">{site.name}</div>
+                    <div className="font-medium text-white">{site.name}</div>
                   </td>
-                  <td className="text-center text-neutral-400">{site.region}</td>
+                  <td className="text-center text-text-secondary">{site.region}</td>
                   <td className="text-right font-semibold">{site.reliability.toFixed(1)}</td>
                   <td className="text-right">
                     <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} size="sm" />
@@ -406,36 +406,13 @@ export function DashboardPage() {
       </div>
 
       <div className="grid gap-7 xl:grid-cols-[2fr,1fr] items-start">
-        <Card className="xl:col-span-1" title="Состояние сети" subtitle="Uptime по площадкам">
-          <div className="h-80 bg-ink-900/70 rounded-2xl border border-white/5 p-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} barCategoryGap={16}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: '#b4becf', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
-                <YAxis tick={{ fill: '#b4becf', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.08)' }} />
-                <Tooltip
-                  contentStyle={{
-                    background: '#131c26',
-                    border: '1px solid rgba(255,255,255,0.07)',
-                    borderRadius: 6,
-                    color: '#dfe6f2',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.32)'
-                  }}
-                  cursor={{ fill: 'rgba(255,255,255,0.04)' }}
-                />
-                <Bar dataKey="uptime" fill="#6c88cb" stroke="#6c88cb" strokeWidth={1} radius={[3, 3, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
-
-        <Card title="Быстрый переход по ролям" subtitle="Навигация по ключевым потокам" className="bg-ink-900/90">
+        <Card title="Быстрый переход по ролям" subtitle="Навигация по ключевым потокам">
           <div className="grid grid-cols-1 gap-3">
             {roleShortcuts.map((role) => (
-              <div key={role.title} className="flex items-center justify-between rounded-2xl border border-white/5 bg-ink-900/70 px-4 py-3">
+              <div key={role.title} className="flex items-center justify-between rounded-2xl border border-white/5 bg-base-850/80 px-4 py-3">
                 <div className="space-y-1">
-                  <div className="text-sm font-semibold text-neutral-100">{role.title}</div>
-                  <p className="text-xs text-neutral-400">{role.metric}</p>
+                  <div className="text-sm font-semibold text-white">{role.title}</div>
+                  <p className="text-xs text-text-secondary">{role.metric}</p>
                 </div>
                 <CtaLink to={role.to} icon={<ArrowRight />} size="lg" className="shrink-0">
                   Перейти
@@ -444,31 +421,24 @@ export function DashboardPage() {
             ))}
           </div>
         </Card>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {withScores.map((site) => (
-          <Card key={site.id} interactive>
-            <div className="flex items-start justify-between">
-              <div className="space-y-1">
-                <div className="text-lg font-semibold text-neutral-100">{site.name}</div>
-                <div className="text-sm text-neutral-400">{site.region}</div>
+        <Card title="Площадки" subtitle="Uptime, reliability и capacity">
+          <div className="flex flex-col gap-4">
+            {withScores.slice(0, 3).map((site) => (
+              <div key={site.id} className="flex items-center justify-between rounded-2xl border border-white/5 bg-base-850/70 px-4 py-3">
+                <div className="space-y-1">
+                  <div className="text-sm font-semibold text-white">{site.name}</div>
+                  <div className="text-xs text-text-secondary">{site.region}</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <StatusPill label={`Uptime ${site.uptime.toFixed(1)}%`} tone="info" size="sm" />
+                  <StatusPill label={`Reliab. ${site.reliability.toFixed(1)}`} tone="success" size="sm" />
+                  <StatusPill label={`Cap ${site.capacity.toFixed(1)}%`} tone="warning" size="sm" />
+                </div>
               </div>
-              <StatusPill label={getStatusLabel(site.status)} tone={getStatusTone(site.status)} />
-            </div>
-            <div className="grid grid-cols-3 gap-3 mt-4">
-              <InfoTooltip label="Uptime за период мониторинга площадки">
-                <KpiBadge label="Uptime" value={`${site.uptime.toFixed(2)}%`} tone="info" />
-              </InfoTooltip>
-              <InfoTooltip label="Индекс надёжности: сочетает аптайм и среднее время восстановления. Чем ближе к 100, тем лучше.">
-                <KpiBadge label="Reliability" value={`${site.reliability.toFixed(1)}`} tone="success" />
-              </InfoTooltip>
-              <InfoTooltip label="Индекс загрузки мощностей и стоек">
-                <KpiBadge label="Capacity" value={`${site.capacity.toFixed(1)}%`} tone="warning" />
-              </InfoTooltip>
-            </div>
-          </Card>
-        ))}
+            ))}
+          </div>
+        </Card>
       </div>
     </div>
   );

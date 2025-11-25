@@ -3,14 +3,14 @@ import { MouseEvent, PropsWithChildren, ReactNode } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 const baseClasses =
-  'group inline-flex items-center gap-2 font-medium rounded-xl bg-ink-900/80 border border-white/5 text-neutral-100 transition-all hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/40 focus-visible:ring-offset-0 active:scale-[0.98]';
+  'group inline-flex items-center gap-2 font-medium rounded-xl bg-base-850/80 border border-white/5 text-text-primary transition-all hover:bg-base-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-azure/40 focus-visible:ring-offset-0 active:scale-[0.98]';
 
 const sizeClasses = {
   sm: 'h-8 px-3 text-[13px] leading-none',
   lg: 'h-9 px-4 text-sm'
 };
 
-const iconClasses = 'w-4 h-4 text-neutral-500 group-hover:text-neutral-100 transition';
+const iconClasses = 'w-4 h-4 text-text-muted group-hover:text-white transition';
 
 type ButtonProps = PropsWithChildren<{
   icon?: ReactNode;
