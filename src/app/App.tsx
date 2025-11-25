@@ -125,7 +125,7 @@ export default function App() {
   return (
     <div className="min-h-screen text-text-primary relative overflow-hidden bg-[#0b1119]">
       <div className="flex h-screen overflow-hidden relative">
-        <aside className="w-[248px] bg-base-panel border-r border-border-soft px-6 py-6 flex flex-col gap-6 shadow-elevation-card/70 relative z-10">
+        <aside className="w-[250px] xl:w-[268px] bg-base-panel border-r border-border-soft/80 px-6 py-7 flex flex-col gap-7 shadow-elevation-card/70 relative z-10 backdrop-blur-2xl">
           <NavLink to="/" className="group block">
             <div className="px-4 py-4 rounded-card border border-border-soft bg-base-panelSoft shadow-elevation-card flex items-center justify-between gap-3">
               <div className="space-y-1">
@@ -175,28 +175,30 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-[rgba(10,14,22,0.94)] backdrop-blur-xl border-b border-border-soft px-8 py-4 shadow-[0_16px_36px_rgba(0,0,0,0.45)]">
-            <SectionHeader
-              as="h1"
-              label={currentPage.label ?? undefined}
-              title={currentPage.title}
-              subtitle={currentPage.subtitle}
-              framed={false}
-              className="mb-0 px-0 py-0"
-            />
-            <div className="mt-4 flex flex-wrap gap-3 text-[12px] text-text-secondary">
-              <div className="inline-flex items-center gap-2 rounded-full border border-border-soft bg-white/[0.04] px-3 py-1.5 shadow-[0_12px_24px_rgba(0,0,0,0.25)]">
-                <span className="h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_0_6px_rgba(16,185,129,0.18)]" />
-                Инфраструктура синхронизирована
-              </div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-border-soft bg-white/[0.02] px-3 py-1.5">
-                <span className="h-[6px] w-[6px] rounded-full bg-cyan-300/80" />
-                Последнее обновление: {lastUpdated}
+          <header className="sticky top-0 z-10 bg-[rgba(10,14,22,0.94)] backdrop-blur-xl border-b border-border-soft/80 shadow-[0_16px_36px_rgba(0,0,0,0.45)]">
+            <div className="max-w-7xl mx-auto w-full px-6 sm:px-8 py-4">
+              <SectionHeader
+                as="h1"
+                label={currentPage.label ?? undefined}
+                title={currentPage.title}
+                subtitle={currentPage.subtitle}
+                framed={false}
+                className="mb-0 px-0 py-0"
+              />
+              <div className="mt-4 flex flex-wrap gap-3 text-[13px] text-text-secondary">
+                <div className="inline-flex items-center gap-2 rounded-full border border-border-soft bg-white/[0.04] px-3.5 py-1.5 shadow-[0_12px_24px_rgba(0,0,0,0.25)]">
+                  <span className="h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_0_6px_rgba(16,185,129,0.18)]" />
+                  Инфраструктура синхронизирована
+                </div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-border-soft bg-white/[0.02] px-3.5 py-1.5">
+                  <span className="h-[6px] w-[6px] rounded-full bg-cyan-300/80" />
+                  Последнее обновление: {lastUpdated}
+                </div>
               </div>
             </div>
           </header>
 
-          <div className="relative px-8 pt-8 max-[800px]:pt-7 pb-12 space-y-8">
+          <div className="relative px-6 sm:px-8 pt-8 max-[800px]:pt-7 pb-12 space-y-8 max-w-7xl mx-auto">
             <Routes>
               <Route path="/" element={<DashboardPage />} />
               <Route path="/sites" element={<SitesPage />} />

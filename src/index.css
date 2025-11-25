@@ -18,6 +18,9 @@
     text-rendering: optimizeLegibility;
     position: relative;
     min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
   }
 
   body::before {
@@ -46,15 +49,15 @@
   }
 
   h1 {
-    @apply text-2xl font-semibold tracking-tight text-text-primary;
+    @apply text-[28px] font-semibold tracking-tight text-text-primary leading-tight;
   }
 
   h2 {
-    @apply text-xl font-semibold tracking-tight text-text-primary;
+    @apply text-[22px] font-semibold tracking-tight text-text-primary leading-tight;
   }
 
   h3 {
-    @apply text-lg font-medium tracking-tight text-text-primary;
+    @apply text-lg font-semibold tracking-tight text-text-primary leading-tight;
   }
 
   .subtitle {
@@ -62,7 +65,7 @@
   }
 
   p, span, td, th {
-    @apply text-sm text-text-secondary;
+    @apply text-[15px] text-text-secondary leading-relaxed;
   }
 }
 
