@@ -268,17 +268,17 @@ export function DashboardPage() {
           </div>
         </Card>
         <InfoTooltip label={`Operational Strain Index · ${osiDescriptor}`} triggerArea="container" className="h-full">
-          <div className="relative h-full rounded-card bg-[radial-gradient(circle_at_0%_0%,rgba(79,180,255,0.18),rgba(9,12,18,0.98))] backdrop-blur-2xl border border-border-strong px-6 py-5 shadow-elevation-card overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/16 before:to-transparent before:opacity-25 before:content-['']">
+          <Card className="h-full flex flex-col gap-3 bg-base-panelSoft">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-2">
-                <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">OSI</div>
+                <div className="text-[11px] uppercase tracking-[0.14em] text-text-muted">OSI</div>
                 <div className="text-[34px] font-semibold leading-none text-text-primary">{osi.value.toFixed(1)}</div>
                 <div className="text-sm text-text-secondary">Operational Strain Index</div>
               </div>
               <StatusPill label={osiState} variant={osiVariant} size="sm" />
             </div>
-            <div className="mt-3 text-sm text-text-secondary">{osiDescriptor}</div>
-          </div>
+            <div className="text-sm text-text-secondary leading-relaxed">{osiDescriptor}</div>
+          </Card>
         </InfoTooltip>
       </div>
 
@@ -473,7 +473,7 @@ export function DashboardPage() {
         <Card title="Быстрый переход по ролям" subtitle="Навигация по ключевым потокам">
           <div className="grid grid-cols-1 gap-4">
             {roleShortcuts.map((role) => (
-              <div key={role.title} className="flex items-center justify-between rounded-[14px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-5 py-4 shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur-[16px]">
+              <div key={role.title} className="flex items-center justify-between rounded-card border border-border-soft bg-base-panelSoft px-5 py-4 shadow-elevation-card">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-white">{role.title}</div>
                   <p className="text-xs text-text-secondary">{role.metric}</p>
@@ -489,12 +489,12 @@ export function DashboardPage() {
         <Card title="Площадки" subtitle="Uptime, reliability и capacity">
           <div className="flex flex-col gap-4">
             {withScores.slice(0, 3).map((site) => (
-              <div key={site.id} className="flex items-center justify-between rounded-[14px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-5 py-4 shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur-[16px]">
+              <div key={site.id} className="flex items-center justify-between rounded-card border border-border-soft bg-base-panelSoft px-5 py-4 shadow-elevation-card">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-white">{site.name}</div>
                   <div className="text-xs text-text-secondary">{site.region}</div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap justify-end">
                   <StatusPill label={`Uptime ${site.uptime.toFixed(1)}%`} variant="ok" size="sm" />
                   <StatusPill label={`Reliab. ${site.reliability.toFixed(1)}`} variant="ok" size="sm" />
                   <StatusPill label={`Cap ${site.capacity.toFixed(1)}%`} variant="warn" size="sm" />

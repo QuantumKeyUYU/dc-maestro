@@ -67,16 +67,19 @@ export function AboutPage() {
       <Card title="Зона ответственности" subtitle="Как пункты вакансии ложатся на модули DC Maestro">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {responsibilityItems.map((item) => (
-            <Card key={item.title} interactive>
+            <div
+              key={item.title}
+              className="rounded-card border border-border-soft bg-base-panelSoft p-5 shadow-elevation-card flex flex-col gap-3"
+            >
               <div className="space-y-2">
                 <div className="text-lg font-semibold text-neutral-100">{item.title}</div>
-                <p className="text-sm text-neutral-400">{item.description}</p>
+                <p className="text-sm text-neutral-400 leading-relaxed break-words">{item.description}</p>
                 <p className="text-xs text-text-muted mt-1">{item.label}</p>
               </div>
-              <CtaLink to={item.to} icon={<ArrowRight className="w-4 h-4" aria-hidden />} size="lg" className="mt-3">
+              <CtaLink to={item.to} icon={<ArrowRight className="w-4 h-4" aria-hidden />} size="lg" className="mt-auto">
                 Открыть модуль
               </CtaLink>
-            </Card>
+            </div>
           ))}
         </div>
       </Card>

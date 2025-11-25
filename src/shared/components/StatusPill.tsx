@@ -9,15 +9,13 @@ interface StatusPillProps {
 
 export function StatusPill({ label, tone = 'neutral', variant, size = 'md' }: StatusPillProps) {
   const base =
-    'inline-flex items-center h-[26px] rounded-capsule border backdrop-blur-xl font-semibold uppercase tracking-[0.08em] text-[11px] bg-[rgba(255,255,255,0.02)] shadow-[0_12px_32px_rgba(0,0,0,0.35)]';
+    'inline-flex items-center rounded-full border font-medium text-[12px] leading-none bg-white/5 text-text-primary border-border-soft shadow-[0_8px_22px_rgba(0,0,0,0.35)]';
 
   const variants = {
-    ok: 'text-[rgba(217,255,242,0.95)] border-[rgba(59,216,161,0.65)] bg-[linear-gradient(135deg,rgba(59,216,161,0.24),rgba(59,216,161,0.08))] shadow-[0_0_0_1px_rgba(255,255,255,0.08)_inset]',
-    warn:
-      'text-[rgba(255,235,210,0.95)] border-[rgba(242,192,99,0.7)] bg-[linear-gradient(135deg,rgba(242,192,99,0.24),rgba(242,192,99,0.08))] shadow-[0_0_0_1px_rgba(255,255,255,0.08)_inset]',
-    danger:
-      'text-[rgba(255,208,214,0.95)] border-[rgba(255,92,103,0.65)] bg-[linear-gradient(135deg,rgba(255,92,103,0.26),rgba(255,92,103,0.1))] shadow-[0_0_0_1px_rgba(255,255,255,0.08)_inset]',
-    neutral: 'text-white/70 border-white/12 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] shadow-[0_0_0_1px_rgba(255,255,255,0.08)_inset]'
+    ok: 'bg-emerald-500/15 text-emerald-100 border-emerald-400/50',
+    warn: 'bg-amber-400/15 text-amber-100 border-amber-300/50',
+    danger: 'bg-rose-500/15 text-rose-100 border-rose-400/50',
+    neutral: 'bg-white/5 text-text-primary border-border-soft'
   } as const;
 
   const toneToVariant: Record<NonNullable<StatusPillProps['tone']>, keyof typeof variants> = {
@@ -30,7 +28,7 @@ export function StatusPill({ label, tone = 'neutral', variant, size = 'md' }: St
 
   const resolvedVariant: keyof typeof variants = variant ?? toneToVariant[tone];
 
-  const sizeClass = size === 'sm' ? 'h-[22px] px-2.5 text-[10px]' : 'px-3';
+  const sizeClass = size === 'sm' ? 'h-6 px-2.5 text-[11px]' : 'h-7 px-3.5';
 
   return (
     <span className={clsx(base, variants[resolvedVariant], sizeClass)}>
