@@ -7,8 +7,8 @@ import { sites } from '../../shared/data/sites';
 import { strings } from '../../shared/lib/strings';
 import { useTableSortAndFilter } from '../../shared/hooks/useTableSortAndFilter';
 
-const COLORS = ['#4CB5F5', '#4CB5F5CC', '#4CB5F599', '#4CB5F566', '#4CB5F533'];
-const LABEL_COLOR = '#B3B9C7';
+const COLORS = ['#33A7FF', '#33A7FFCC', '#33A7FF99', '#33A7FF66', '#33A7FF33'];
+const LABEL_COLOR = 'rgba(255,255,255,0.6)';
 
 export function FinancePage() {
   const [siteFilter, setSiteFilter] = useState<string>('all');
@@ -44,7 +44,7 @@ export function FinancePage() {
               <select
                 value={siteFilter}
                 onChange={(e) => setSiteFilter(e.target.value)}
-                className="bg-[rgba(12,16,24,0.76)] border border-white/8 rounded-xl px-3 py-2 text-sm text-text-primary shadow-[0_12px_30px_rgba(0,0,0,0.4)]"
+                className="bg-surface-2/85 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary shadow-[0_15px_35px_rgba(0,0,0,0.45)]"
               >
                 <option value="all">Все площадки</option>
                 {sites.map((site) => (
@@ -57,7 +57,7 @@ export function FinancePage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value as 'all' | 'opex' | 'capex')}
-                className="bg-[rgba(12,16,24,0.76)] border border-white/8 rounded-xl px-3 py-2 text-sm text-text-primary shadow-[0_12px_30px_rgba(0,0,0,0.4)]"
+                className="bg-surface-2/85 border border-white/10 rounded-xl px-3 py-2 text-sm text-text-primary shadow-[0_15px_35px_rgba(0,0,0,0.45)]"
               >
                 <option value="all">Все</option>
                 <option value="opex">OPEX</option>
@@ -68,7 +68,7 @@ export function FinancePage() {
               value={table.searchQuery}
               onChange={(e) => table.setSearchQuery(e.target.value)}
               placeholder="Поиск по категории или площадке"
-              className="bg-[rgba(12,16,24,0.8)] border border-white/8 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30 shadow-[0_12px_30px_rgba(0,0,0,0.42)]"
+              className="bg-surface-2/90 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary/60 focus:ring-1 focus:ring-accent-primary/30 shadow-[0_15px_35px_rgba(0,0,0,0.45)]"
             />
           </div>
           <Table framed={false}>
@@ -89,7 +89,7 @@ export function FinancePage() {
             </thead>
             <tbody>
               {table.sortedAndFiltered.map((record) => (
-                <tr key={record.id} className="border-t border-base-800">
+                <tr key={record.id} className="border-t border-surface-1">
                   <td className="py-2 pr-4 text-text-primary">{new Date(record.date).toLocaleDateString('ru-RU')}</td>
                   <td className="py-2 pr-4 text-text-secondary">{record.type}</td>
                   <td className="py-2 pr-4 text-text-secondary">{record.category}</td>
@@ -109,7 +109,7 @@ export function FinancePage() {
               <div className="text-xs text-text-muted mt-3">Total CAPEX</div>
               <div className="text-lg font-semibold text-text-primary">{totalCapex.toLocaleString('ru-RU')} ₽</div>
             </div>
-            <div className="h-64">
+            <div className="h-64 rounded-xl bg-surface-1/80 border border-white/10 p-3 shadow-[0_15px_35px_rgba(0,0,0,0.45)]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie

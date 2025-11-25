@@ -68,7 +68,7 @@ export function SitesDetailPage() {
       <div className="text-sm text-text-muted flex items-center gap-2">
         <button
           onClick={() => navigate('/sites')}
-          className="hover:text-accent-azure transition inline-flex items-center gap-1"
+          className="hover:text-accent-primary transition inline-flex items-center gap-1"
         >
           Площадки ЦОД
         </button>
@@ -81,7 +81,7 @@ export function SitesDetailPage() {
         action={
           <button
             onClick={() => navigate('/sites')}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-text-primary hover:border-accent-azure/60 backdrop-blur"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-text-primary hover:border-accent-primary/60 backdrop-blur"
           >
             ← Назад к списку
           </button>
@@ -103,8 +103,8 @@ export function SitesDetailPage() {
               onClick={() => setTab(t.key)}
               className={`px-4 py-2 rounded-xl text-sm border transition backdrop-blur ${
                 tab === t.key
-                  ? 'border-accent-azure/60 bg-accent-azure/10 text-white shadow-glow'
-                  : 'border-white/10 bg-white/5 text-text-secondary hover:border-accent-azure/40'
+                  ? 'border-accent-primary/60 bg-accent-primary/10 text-white shadow-glow'
+                  : 'border-white/10 bg-white/5 text-text-secondary hover:border-accent-primary/40'
               }`}
             >
               {t.label}

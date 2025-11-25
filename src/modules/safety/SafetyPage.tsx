@@ -29,12 +29,12 @@ export function SafetyPage() {
         <div className="flex items-center justify-between mb-4" ref={eventsRef}>
           {activeOnly ? (
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-base-850/80 px-3 py-1 text-xs text-white border border-white/5">
+              <span className="inline-flex items-center gap-2 rounded-full bg-surface-2/85 px-3 py-1 text-xs text-white border border-white/10">
                 Фильтр: в работе и просрочено
               </span>
               <button
                 type="button"
-                className="text-xs text-accent-azure hover:text-white transition"
+                className="text-xs text-accent-primary hover:text-white transition"
                 onClick={() => setActiveOnly(false)}
               >
                 Сбросить
@@ -59,7 +59,7 @@ export function SafetyPage() {
             {visibleEvents.map((event) => {
               const staff = staffMembers.find((s) => s.id === event.responsibleStaffId);
               return (
-                <tr key={event.id} className="border-t border-base-800">
+                <tr key={event.id} className="border-t border-white/5">
                   <td className="py-2 pr-4 text-text-secondary">{event.type}</td>
                   <td className="py-2 pr-4 text-text-primary">{event.title}</td>
                   <td className="py-2 pr-4 text-text-secondary">{event.siteId ?? 'Общий'}</td>

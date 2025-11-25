@@ -66,6 +66,12 @@ export function DashboardPage() {
   const osiTone = osi.category === 'critical' ? 'danger' : osi.category === 'watch' ? 'warning' : 'success';
   const osiState = osi.category === 'critical' ? 'Критично' : osi.category === 'watch' ? 'Повышенная нагрузка' : 'Стабильно';
   const osiVariant = osiTone === 'success' ? 'ok' : osiTone === 'warning' ? 'warn' : 'danger';
+  const osiDescriptor =
+    osiTone === 'danger'
+      ? 'Критический диапазон — требуется немедленная реакция'
+      : osiTone === 'warning'
+        ? 'Повышенная нагрузка — усиливаем контроль'
+        : 'Стабильная зона — поддерживаем тренд';
 
   const problemSites = sites.filter((site) => site.status !== 'healthy').length;
 
@@ -244,7 +250,7 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="grid gap-4 xl:grid-cols-[1.6fr,1fr] items-start">
+      <div className="grid gap-4 xl:grid-cols-[1.6fr,1fr] items-stretch">
         <Card className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <div className="text-[11px] uppercase tracking-[0.16em] text-text-muted">Обзор состояния сети</div>
@@ -261,27 +267,32 @@ export function DashboardPage() {
             <span>OSI: {osi.value.toFixed(1)}</span>
           </div>
         </Card>
-        <Card className="flex flex-col gap-3" title="Риски и акценты" subtitle="Обновляется по данным за сутки">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <KpiBadge label="Площадок вне нормы" value={problemSites} helperText="Контроль SLA и инженерии" tone={problemSites === 0 ? 'neutral' : 'warn'} />
-            <KpiBadge label="Просроченные заявки ТО" value={overdueWorkOrders} helperText="Оперативное реагирование" tone={overdueWorkOrders === 0 ? 'neutral' : 'warn'} />
-            <KpiBadge label="Критические инциденты" value={incidents.filter((i) => i.severity === 'critical' && !i.resolvedAt).length} helperText="Live incidents" tone={incidents.some((i) => i.severity === 'critical' && !i.resolvedAt) ? 'danger' : 'neutral'} />
-            <KpiBadge label="Месячный OPEX" value={`₽${monthlyOpex.toLocaleString('ru-RU')}`} helperText="Последние 30 дней" />
+        <InfoTooltip label={`Operational Strain Index · ${osiDescriptor}`} triggerArea="container" className="h-full">
+          <div className="relative h-full rounded-2xl bg-surface-1/90 backdrop-blur-xl border border-white/10 px-6 py-4 shadow-[0_15px_35px_rgba(0,0,0,0.45)] overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-accent-primary/40 before:content-['']">
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-2">
+                <div className="text-[11px] uppercase tracking-[0.18em] text-white/50">OSI</div>
+                <div className="text-[32px] font-semibold leading-none text-white">{osi.value.toFixed(1)}</div>
+                <div className="text-sm text-text-secondary">Operational Strain Index</div>
+              </div>
+              <StatusPill label={osiState} variant={osiVariant} />
+            </div>
+            <div className="mt-3 text-xs text-white/60">{osiDescriptor}</div>
           </div>
-        </Card>
+        </InfoTooltip>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {metricCards.map((metric, idx) => (
           <button
             key={`${metric.label}-${idx}`}
             type="button"
             onClick={metric.onClick}
-            className={clsx('text-left focus:outline-none', metric.onClick && 'group')}
+            className={clsx('text-left focus:outline-none h-full', metric.onClick && 'group')}
           >
             <div
               className={clsx(
-                'rounded-2xl border border-white/5 bg-surface-card/95 px-4 py-4 shadow-[0_10px_28px_rgba(0,0,0,0.6)] transition-transform',
+                'rounded-xl border border-white/10 bg-surface-2/90 px-4 py-4 shadow-[0_15px_35px_rgba(0,0,0,0.45)] transition-transform h-full',
                 metric.onClick && 'group-hover:-translate-y-[1px]'
               )}
             >
@@ -311,17 +322,17 @@ export function DashboardPage() {
         ))}
       </div>
 
-      <div ref={warningsRef}>
+      <div className="grid gap-6 xl:grid-cols-[2fr,1fr] items-start" ref={warningsRef}>
         <Card title="Текущие предупреждения" subtitle="Инциденты, ТО, склад и безопасность" className="xl:col-span-2">
           <div className="flex items-center justify-between mb-4">
             {alertFilter ? (
               <div className="flex items-center gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full bg-base-850/80 px-3 py-1.5 text-xs text-white border border-white/5">
+                <span className="inline-flex items-center gap-2 rounded-full bg-surface-2/80 px-3 py-1.5 text-xs text-white border border-white/10">
                   {alertFilterLabels[alertFilter]}
                 </span>
                 <button
                   type="button"
-                  className="text-xs text-accent-azure hover:text-white transition"
+                  className="text-xs text-accent-primary hover:text-white transition"
                   onClick={() => setAlertFilter(null)}
                 >
                   Сбросить
@@ -351,10 +362,10 @@ export function DashboardPage() {
                     className={clsx(
                       'border-b border-white/5',
                       tone === 'danger'
-                        ? 'border-l-2 border-l-status-danger/80'
+                        ? 'border-l-2 border-accent-danger'
                         : tone === 'warning'
-                          ? 'border-l-2 border-l-status-warn/80'
-                          : undefined
+                          ? 'border-l-2 border-accent-warning'
+                          : 'border-l border-transparent'
                     )}
                   >
                     <td className="pr-4 font-medium text-white">{alert.type}</td>
@@ -391,27 +402,35 @@ export function DashboardPage() {
             </tbody>
           </Table>
         </Card>
+        <Card className="flex flex-col gap-3" title="Риски и акценты" subtitle="Обновляется по данным за сутки">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <KpiBadge label="Площадок вне нормы" value={problemSites} helperText="Контроль SLA и инженерии" tone={problemSites === 0 ? 'neutral' : 'warn'} />
+            <KpiBadge label="Просроченные заявки ТО" value={overdueWorkOrders} helperText="Оперативное реагирование" tone={overdueWorkOrders === 0 ? 'neutral' : 'warn'} />
+            <KpiBadge label="Критические инциденты" value={incidents.filter((i) => i.severity === 'critical' && !i.resolvedAt).length} helperText="Live incidents" tone={incidents.some((i) => i.severity === 'critical' && !i.resolvedAt) ? 'danger' : 'neutral'} />
+            <KpiBadge label="Месячный OPEX" value={`₽${monthlyOpex.toLocaleString('ru-RU')}`} helperText="Последние 30 дней" />
+          </div>
+        </Card>
       </div>
 
       <div className="grid gap-7 xl:grid-cols-[2fr,1fr] items-start">
         <Card className="xl:col-span-1" title="Состояние сети" subtitle="Uptime по площадкам">
-          <div className="h-80 bg-surface-soft/80 rounded-2xl border border-white/5 p-2">
+          <div className="h-80 bg-surface-1/85 rounded-2xl border border-white/8 p-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barCategoryGap={18}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(230,231,235,0.08)" vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: '#9EA3AE', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(230,231,235,0.08)' }} />
-                <YAxis tick={{ fill: '#9EA3AE', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(230,231,235,0.08)' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
+                <XAxis dataKey="name" tick={{ fill: '#C8CFDB', fontSize: 12 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
+                <YAxis tick={{ fill: '#C8CFDB', fontSize: 12 }} domain={[90, 100]} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
                 <Tooltip
                   contentStyle={{
-                    background: '#0D1117',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: '#0F141A',
+                    border: '1px solid rgba(255,255,255,0.08)',
                     borderRadius: 12,
                     color: '#E6E7EB',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.35)'
+                    boxShadow: '0 12px 32px rgba(0,0,0,0.45)'
                   }}
-                  cursor={{ fill: 'rgba(22,27,35,0.4)' }}
+                  cursor={{ fill: 'rgba(26,34,44,0.35)' }}
                 />
-                <Bar dataKey="uptime" fill="#4CB5F5" stroke="#4CB5F5" strokeWidth={2} radius={[8, 8, 4, 4]} />
+                <Bar dataKey="uptime" fill="#33A7FF" stroke="#33A7FF" strokeWidth={2} radius={[8, 8, 4, 4]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -449,7 +468,7 @@ export function DashboardPage() {
         <Card title="Быстрый переход по ролям" subtitle="Навигация по ключевым потокам">
           <div className="grid grid-cols-1 gap-3">
             {roleShortcuts.map((role) => (
-              <div key={role.title} className="flex items-center justify-between rounded-2xl border border-white/5 bg-surface-card/90 px-4 py-3">
+              <div key={role.title} className="flex items-center justify-between rounded-xl border border-white/10 bg-surface-2/90 px-4 py-3 shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-white">{role.title}</div>
                   <p className="text-xs text-text-secondary">{role.metric}</p>
@@ -465,7 +484,7 @@ export function DashboardPage() {
         <Card title="Площадки" subtitle="Uptime, reliability и capacity">
           <div className="flex flex-col gap-4">
             {withScores.slice(0, 3).map((site) => (
-              <div key={site.id} className="flex items-center justify-between rounded-2xl border border-white/5 bg-surface-card/90 px-4 py-3">
+              <div key={site.id} className="flex items-center justify-between rounded-xl border border-white/10 bg-surface-2/90 px-4 py-3 shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-white">{site.name}</div>
                   <div className="text-xs text-text-secondary">{site.region}</div>

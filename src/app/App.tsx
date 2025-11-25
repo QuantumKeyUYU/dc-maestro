@@ -8,13 +8,7 @@ import { MaintenancePage } from '../modules/maintenance/MaintenancePage';
 import { InventoryPage } from '../modules/inventory/InventoryPage';
 import { FinancePage } from '../modules/finance/FinancePage';
 import { SafetyPage } from '../modules/safety/SafetyPage';
-import { globalOperationalStrainIndex } from '../shared/lib/kpi';
-import { sites } from '../shared/data/sites';
-import { shifts } from '../shared/data/shifts';
-import { financialRecords } from '../shared/data/financialRecords';
-import { StatusPill } from '../shared/components/StatusPill';
 import { strings } from '../shared/lib/strings';
-import { InfoTooltip } from '../shared/components/InfoTooltip';
 import { SitesDetailPage } from '../modules/sites/SitesDetailPage';
 import { AboutPage } from '../modules/about/AboutPage';
 import { Boxes, Briefcase, Cpu, LayoutDashboard, Shield, Users, Wallet, Wrench } from '../shared/icons';
@@ -69,7 +63,6 @@ const pageMeta: PageMeta[] = [
 ];
 
 export default function App() {
-  const osi = globalOperationalStrainIndex(sites, shifts, sites, financialRecords);
   const { pathname } = useLocation();
   const navBadges = useNavBadges();
 
@@ -128,31 +121,17 @@ export default function App() {
     }
   }, [currentPage, metaDescriptionByRoute, pathname]);
 
-  const osiTone = osi.category === 'critical' ? 'danger' : osi.category === 'watch' ? 'warning' : 'success';
-  const osiState = osi.category === 'critical' ? 'Критично' : osi.category === 'watch' ? 'Повышенная нагрузка' : 'Стабильно';
-  const osiTrend = osi.category === 'critical' ? 'Требуется реакция' : osi.category === 'watch' ? 'Рост нагрузки' : 'Контроль тренда';
-  const osiDescriptor = `Нагрузка сети · ${osiState} / ${osiTrend}`;
-  const osiRange = osi.category === 'critical' ? 'критического напряжения' : osi.category === 'watch' ? 'повышенной нагрузки' : 'стабильной нагрузки';
-  const osiRisk = osi.category === 'critical' ? 'высокий' : osi.category === 'watch' ? 'умеренный' : 'низкий';
-  const hasOsiData = Number.isFinite(osi.value);
-  const osiValueDisplay = hasOsiData ? osi.value.toFixed(1) : '—';
-  const osiExplainer = hasOsiData
-    ? `${osiValueDisplay} — диапазон ${osiRange}. Риск перегрузки ${osiRisk}.`
-    : 'Нет данных по показателю OSI за выбранный период.';
-  const osiStateDisplay = hasOsiData ? osiState : 'Нет данных';
-  const osiToneDisplay = hasOsiData ? osiTone : 'neutral';
-
   return (
-    <div className="min-h-screen text-text-primary relative">
+    <div className="min-h-screen text-text-primary relative bg-surface-0 bg-gradient-to-b from-surface-0 to-[#0F141A]">
       <div className="flex h-screen overflow-hidden relative">
-        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[rgba(8,10,14,0.92)] border-r border-white/5 px-6 py-6 flex flex-col gap-6 backdrop-blur-xl shadow-[0_22px_60px_rgba(0,0,0,0.55)]">
+        <aside className="w-[260px] lg:w-[252px] md:w-[240px] sm:w-[220px] bg-[rgba(10,15,20,0.95)] border-r border-white/5 px-6 py-6 flex flex-col gap-6 backdrop-blur-xl shadow-[0_22px_60px_rgba(0,0,0,0.55)]">
           <NavLink
             to="/"
             className={({ isActive }) =>
               clsx(
-                'relative block -mx-1 px-4 py-3 rounded-2xl transition text-left space-y-1 border border-white/8 bg-[rgba(12,16,24,0.82)] shadow-[0_18px_48px_rgba(0,0,0,0.45)] before:absolute before:inset-x-4 before:top-2 before:h-[2px] before:rounded-full before:bg-accent-primary/60',
-                'hover:bg-[rgba(12,16,24,0.9)] text-text-primary',
-                isActive && 'bg-[rgba(12,16,24,0.95)] text-text-primary border-white/10'
+                'relative block -mx-1 px-4 py-3 rounded-xl transition text-left space-y-1 border border-white/10 bg-[rgba(255,255,255,0.04)] shadow-[0_18px_48px_rgba(0,0,0,0.45)] before:absolute before:inset-x-4 before:top-2 before:h-[2px] before:rounded-full before:bg-accent-primary/60',
+                'hover:bg-white/[0.05] text-text-primary',
+                isActive && 'bg-white/[0.06] text-text-primary border-white/20'
               )
             }
           >
@@ -168,10 +147,10 @@ export default function App() {
                   title={item.badge?.tooltip ?? item.label}
                   className={({ isActive }) =>
                     clsx(
-                      'relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-text-secondary transition-colors border border-transparent',
+                      'relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors border border-transparent',
                       isActive
-                        ? 'bg-[rgba(255,255,255,0.04)] text-text-primary border border-white/10 before:absolute before:left-2 before:top-0 before:bottom-0 before:w-[2px] before:bg-accent-primary/80'
-                        : 'hover:bg-[rgba(255,255,255,0.02)]'
+                        ? 'bg-white/[0.05] text-text-primary border border-white/[0.08] before:absolute before:left-2 before:top-0 before:bottom-0 before:w-[2px] before:bg-accent-primary'
+                        : 'hover:bg-white/[0.03]'
                     )
                   }
                 >
@@ -193,7 +172,7 @@ export default function App() {
         </aside>
 
         <main className="flex-1 overflow-y-auto scrollbar-thin relative z-0">
-          <header className="sticky top-0 z-10 bg-[rgba(5,7,11,0.9)] backdrop-blur-xl border-b border-white/5 px-7 py-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between shadow-[0_18px_48px_rgba(0,0,0,0.35)]">
+          <header className="sticky top-0 z-10 bg-surface-0/90 backdrop-blur-xl border-b border-white/5 px-7 py-5 shadow-[0_18px_48px_rgba(0,0,0,0.35)]">
             <SectionHeader
               as="h1"
               label={currentPage.label ?? undefined}
@@ -202,25 +181,6 @@ export default function App() {
               framed={false}
               className="mb-0 px-0 py-0"
             />
-            <InfoTooltip
-              label={hasOsiData ? osiExplainer : 'Нет данных по показателю OSI за выбранный период.'}
-              triggerArea="container"
-              className="self-start w-full lg:w-auto"
-              resetKey={pathname}
-            >
-              <div className="relative flex items-center gap-4 rounded-2xl border border-white/8 bg-[rgba(20,28,38,0.75)] px-5 py-4 shadow-[0_18px_48px_rgba(0,0,0,0.55)] backdrop-blur-xl overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-accent-primary/40 before:content-['']">
-                <div className="space-y-1">
-                  <div className="text-xs uppercase tracking-[0.18em] text-text-muted">OSI</div>
-                  <div className="text-[28px] font-semibold tracking-tight text-white leading-none">{osiValueDisplay}</div>
-                  <div className="text-sm text-text-secondary">Operational Strain Index</div>
-                </div>
-                <StatusPill
-                  label={osiStateDisplay}
-                  variant={osiToneDisplay === 'danger' ? 'danger' : osiToneDisplay === 'warning' ? 'warn' : 'ok'}
-                  size="sm"
-                />
-              </div>
-            </InfoTooltip>
           </header>
 
           <div className="px-8 pt-7 max-[800px]:pt-6 pb-12 space-y-10">
