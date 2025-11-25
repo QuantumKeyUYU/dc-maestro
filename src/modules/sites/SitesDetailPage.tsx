@@ -316,7 +316,7 @@ export function SitesDetailPage() {
       )}
 
       {tab === 'finance' && (
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           <Card className="xl:col-span-2" title="Финансовые записи">
             <Table framed={false}>
               <thead className="text-xs uppercase text-neutral-400">

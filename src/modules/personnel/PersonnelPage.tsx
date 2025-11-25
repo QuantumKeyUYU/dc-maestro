@@ -102,7 +102,7 @@ export function PersonnelPage() {
         </Table>
       </Card>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <Card className="xl:col-span-2" title="Смены">
           <div className="flex gap-3 mb-3 flex-wrap">
             <select
