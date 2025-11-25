@@ -208,9 +208,9 @@ export default function App() {
               className="self-start w-full lg:w-auto"
               resetKey={pathname}
             >
-              <div className="relative flex items-center gap-4 rounded-2xl border border-white/8 bg-[rgba(20,28,38,0.75)] px-5 py-4 shadow-[0_18px_48px_rgba(0,0,0,0.55)] backdrop-blur-xl overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-accent-primary/40 before:content-[""]">
+              <div className="relative flex items-center gap-4 rounded-2xl border border-white/8 bg-[rgba(20,28,38,0.75)] px-5 py-4 shadow-[0_18px_48px_rgba(0,0,0,0.55)] backdrop-blur-xl overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-accent-primary/40 before:content-['']">
                 <div className="space-y-1">
-                  <div className="text-[12px] uppercase tracking-[0.18em] text-text-muted">OSI</div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-text-muted">OSI</div>
                   <div className="text-[28px] font-semibold tracking-tight text-white leading-none">{osiValueDisplay}</div>
                   <div className="text-sm text-text-secondary">Operational Strain Index</div>
                 </div>
