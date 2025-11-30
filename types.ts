@@ -25,3 +25,7 @@ export interface NavItem {
   label: string;
   icon: ElementType;
 }
+
+// для настроек UI
+export type ThemeMode = 'dark' | 'light' | 'system';
+export type Language = 'ru' | 'en';

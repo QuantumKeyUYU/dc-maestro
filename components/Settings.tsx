@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+// components/Settings.tsx
+import React from 'react';
 import { Bell, Globe2, Moon, ShieldCheck, Sun } from 'lucide-react';
+import { useUiSettings } from '../UiSettingsContext';
+import type { ThemeMode, Language } from '../types';
 
 const Settings: React.FC = () => {
-  const [theme, setTheme] = useState<'dark' | 'light' | 'system'>('dark');
-  const [language, setLanguage] = useState<'ru' | 'en'>('ru');
-  const [emailAlerts, setEmailAlerts] = useState(true);
-  const [pushAlerts, setPushAlerts] = useState(true);
+  const { theme, language, setTheme, setLanguage } = useUiSettings();
+  const [emailAlerts, setEmailAlerts] = React.useState(true);
+  const [pushAlerts, setPushAlerts] = React.useState(true);
+
+  const handleTheme = (value: ThemeMode) => setTheme(value);
+  const handleLanguage = (value: Language) => setLanguage(value);
 
   return (
     <div className="space-y-6 p-6">
@@ -57,12 +62,12 @@ const Settings: React.FC = () => {
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <div>
                 <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  Тема
+                  ТЕМА
                 </p>
                 <div className="mt-2 flex gap-2">
                   <button
                     type="button"
-                    onClick={() => setTheme('dark')}
+                    onClick={() => handleTheme('dark')}
                     className={`flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-xs ${
                       theme === 'dark'
                         ? 'border-blue-500 bg-blue-500/10 text-blue-100'
@@ -74,7 +79,7 @@ const Settings: React.FC = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setTheme('light')}
+                    onClick={() => handleTheme('light')}
                     className={`flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-xs ${
                       theme === 'light'
                         ? 'border-amber-400 bg-amber-500/10 text-amber-100'
@@ -86,7 +91,7 @@ const Settings: React.FC = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setTheme('system')}
+                    onClick={() => handleTheme('system')}
                     className={`hidden md:flex flex-1 items-center justify-center rounded-lg border px-3 py-2 text-xs ${
                       theme === 'system'
                         ? 'border-emerald-400 bg-emerald-500/10 text-emerald-100'
@@ -97,19 +102,19 @@ const Settings: React.FC = () => {
                   </button>
                 </div>
                 <p className="mt-2 text-xs text-slate-500">
-                  В демо-теме принудительно используется тёмная палитра, чтобы
-                  дашборды выглядели максимально выразительно.
+                  В демо-теме принудительно используется тёмная палитра в
+                  компонентах, но фон страницы меняется, чтобы увидеть эффект.
                 </p>
               </div>
 
               <div>
                 <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  Язык интерфейса
+                  ЯЗЫК ИНТЕРФЕЙСА
                 </p>
                 <div className="mt-2 flex gap-2">
                   <button
                     type="button"
-                    onClick={() => setLanguage('ru')}
+                    onClick={() => handleLanguage('ru')}
                     className={`flex flex-1 items-center justify-center rounded-lg border px-3 py-2 text-xs ${
                       language === 'ru'
                         ? 'border-blue-500 bg-blue-500/10 text-blue-100'
@@ -120,7 +125,7 @@ const Settings: React.FC = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setLanguage('en')}
+                    onClick={() => handleLanguage('en')}
                     className={`flex flex-1 items-center justify-center rounded-lg border px-3 py-2 text-xs ${
                       language === 'en'
                         ? 'border-blue-500 bg-blue-500/10 text-blue-100'
@@ -131,8 +136,8 @@ const Settings: React.FC = () => {
                   </button>
                 </div>
                 <p className="mt-2 text-xs text-slate-500">
-                  Переключение языка в демо не меняет тексты, но показывает,
-                  что интерфейс рассчитан на мультиязычность.
+                  В текущей демо-сборке переведены навигация и верхняя панель,
+                  остальной текст пока только на русском.
                 </p>
               </div>
             </div>
@@ -183,8 +188,8 @@ const Settings: React.FC = () => {
             </div>
 
             <p className="mt-3 text-xs text-slate-500">
-              В боевой системе источником уведомлений могут быть почта, мессенджеры,
-              SMS или интеграция с ITSM-платформой.
+              В боевой системе источником уведомлений могут быть почта,
+              мессенджеры, SMS или интеграция с ITSM-платформой.
             </p>
           </section>
         </div>
@@ -200,7 +205,9 @@ const Settings: React.FC = () => {
             <dl className="mt-4 space-y-2 text-xs">
               <div className="flex justify-between gap-4">
                 <dt className="text-slate-500">Версия интерфейса</dt>
-                <dd className="font-mono text-slate-200">v0.2.4.0 LIVE (demo)</dd>
+                <dd className="font-mono text-slate-200">
+                  v0.2.4.0 LIVE (demo)
+                </dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-slate-500">Среда</dt>

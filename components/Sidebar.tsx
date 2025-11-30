@@ -13,6 +13,7 @@ import {
   LogOut,
 } from 'lucide-react';
 import { ModuleType } from '../types';
+import { useTranslation } from '../i18n';
 
 interface SidebarProps {
   activeModule: ModuleType;
@@ -21,57 +22,27 @@ interface SidebarProps {
 
 interface NavItem {
   id: ModuleType;
-  label: string;
+  labelKey: string;
   icon: React.ReactNode;
 }
 
 const navItems: NavItem[] = [
-  {
-    id: ModuleType.DASHBOARD,
-    label: 'Дашборд',
-    icon: <LayoutDashboard className="w-4 h-4" />,
-  },
-  {
-    id: ModuleType.MONITORING,
-    label: 'Мониторинг (DCIM)',
-    icon: <Server className="w-4 h-4" />,
-  },
-  {
-    id: ModuleType.MAINTENANCE,
-    label: 'ТО и Ремонты',
-    icon: <Wrench className="w-4 h-4" />,
-  },
-  {
-    id: ModuleType.PERSONNEL,
-    label: 'Персонал (WFM)',
-    icon: <Users className="w-4 h-4" />,
-  },
-  {
-    id: ModuleType.WAREHOUSE,
-    label: 'Склад и Закупки',
-    icon: <Package className="w-4 h-4" />,
-  },
-  {
-    id: ModuleType.FINANCE,
-    label: 'Финансы',
-    icon: <PieChart className="w-4 h-4" />,
-  },
-  {
-    id: ModuleType.PROJECTS,
-    label: 'Проекты',
-    icon: <Briefcase className="w-4 h-4" />,
-  },
-  {
-    id: ModuleType.SECURITY,
-    label: 'Безопасность',
-    icon: <ShieldCheck className="w-4 h-4" />,
-  },
+  { id: ModuleType.DASHBOARD, labelKey: 'nav.dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+  { id: ModuleType.MONITORING, labelKey: 'nav.monitoring', icon: <Server className="w-4 h-4" /> },
+  { id: ModuleType.MAINTENANCE, labelKey: 'nav.maintenance', icon: <Wrench className="w-4 h-4" /> },
+  { id: ModuleType.PERSONNEL, labelKey: 'nav.personnel', icon: <Users className="w-4 h-4" /> },
+  { id: ModuleType.WAREHOUSE, labelKey: 'nav.warehouse', icon: <Package className="w-4 h-4" /> },
+  { id: ModuleType.FINANCE, labelKey: 'nav.finance', icon: <PieChart className="w-4 h-4" /> },
+  { id: ModuleType.PROJECTS, labelKey: 'nav.projects', icon: <Briefcase className="w-4 h-4" /> },
+  { id: ModuleType.SECURITY, labelKey: 'nav.security', icon: <ShieldCheck className="w-4 h-4" /> },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ activeModule, onNavClick }) => {
+  const { t } = useTranslation();
+
   return (
     <aside className="flex h-screen w-64 flex-col border-r border-slate-800 bg-slate-950/95">
-      {/* Логотип / кнопка "Домой" */}
+      {/* Логотип / "домой" */}
       <button
         type="button"
         onClick={() => onNavClick(ModuleType.DASHBOARD)}
@@ -90,10 +61,16 @@ const Sidebar: React.FC<SidebarProps> = ({ activeModule, onNavClick }) => {
         </div>
       </button>
 
+      {/* Заголовок секции */}
+      <div className="px-4 pt-4 pb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+        {t('sidebar.main')}
+      </div>
+
       {/* Основное меню */}
-      <nav className="flex-1 space-y-1 px-2 py-4">
+      <nav className="flex-1 space-y-1 px-2 pb-4">
         {navItems.map((item) => {
           const isActive = activeModule === item.id;
+
           return (
             <button
               key={item.id}
@@ -114,13 +91,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeModule, onNavClick }) => {
               >
                 {item.icon}
               </span>
-              <span className="truncate">{item.label}</span>
+              <span className="truncate">{t(item.labelKey)}</span>
             </button>
           );
         })}
       </nav>
 
-      {/* Нижняя панель: настройки / выход */}
+      {/* Нижняя панель */}
       <div className="border-t border-slate-800 bg-slate-950/95 p-4">
         <button
           type="button"

@@ -1,11 +1,32 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Общая высота */
 html,
 body,
 #root {
   height: 100%;
 }
 
+/* Базовая тёмная тема */
 body {
-  @apply bg-slate-950 text-slate-50 antialiased;
+  background-color: #020617; /* slate-950 */
+  color: #f9fafb;            /* slate-50 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Тема через data-theme (чтобы наш контекст мог переключать) */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='light'] body {
+  background-color: #f1f5f9; /* светлый фон */
+  color: #020617;
 }
