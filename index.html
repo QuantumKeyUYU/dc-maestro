@@ -1,76 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru" class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DC Maestro - Data Center Management</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            colors: {
-              slate: {
-                850: '#151f32', // Deep custom background
-                900: '#0f172a',
-                950: '#020617',
-              },
-              primary: {
-                500: '#3b82f6',
-                600: '#2563eb',
-              },
-              accent: {
-                green: '#10b981',
-                red: '#ef4444',
-                amber: '#f59e0b',
-              }
-            },
-            fontFamily: {
-              sans: ['Inter', 'system-ui', 'sans-serif'],
-              mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-            }
-          }
-        }
-      }
-    </script>
+    <title>DC Maestro – Data Center Management</title>
+    <meta
+      name="description"
+      content="Интерфейс управления и мониторинга дата-центра DC Maestro."
+    />
+
+    <!--
+      ВАЖНО:
+      - Tailwind теперь подключается через index.css, который импортируется в index.tsx
+      - Никаких CDN (tailwindcdn, importmap для react и т.п.) здесь больше не нужно
+    -->
+
     <style>
+      /* Базовый фон + шрифты (дополняют tailwind-классы) */
       body {
         background-color: #020617; /* slate-950 */
         color: #f8fafc; /* slate-50 */
-        font-family: 'Inter', sans-serif;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          sans-serif;
       }
-      /* Custom Scrollbar for "Desktop App" feel */
+
+      /* Скроллбар под вид "десктопного приложения" */
       ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #0f172a; 
+        background: #0f172a;
       }
       ::-webkit-scrollbar-thumb {
-        background: #334155; 
+        background: #334155;
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #475569; 
+        background: #475569;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "recharts": "https://aistudiocdn.com/recharts@^3.5.1"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
-</head>
+  </head>
+
   <body>
     <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
+
+    <!-- Входная точка Vite/React -->
+    <script type="module" src="/index.tsx"></script>
+  </body>
 </html>

@@ -1,14 +1,20 @@
-import React from 'react';
-import { 
-  Activity, 
-  Zap, 
-  Thermometer, 
-  Clock, 
-  AlertTriangle,
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import {
+  Activity,
+  Zap,
+  Thermometer,
+  Clock,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
 } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from 'recharts';
 import { StatusLevel } from '../types';
 
 const data = [
@@ -21,7 +27,7 @@ const data = [
   { time: '23:59', power: 245, temp: 21.1 },
 ];
 
-const KPICard: React.FC<{
+type KPICardProps = {
   title: string;
   value: string;
   unit?: string;
@@ -29,8 +35,18 @@ const KPICard: React.FC<{
   icon: React.ElementType;
   colorClass: string;
   status: StatusLevel;
-}> = ({ title, value, unit, trend, icon: Icon, colorClass, status }) => {
-  const statusColors = {
+};
+
+const KPICard: React.FC<KPICardProps> = ({
+  title,
+  value,
+  unit,
+  trend,
+  icon: Icon,
+  colorClass,
+  status,
+}) => {
+  const statusColors: Record<StatusLevel, string> = {
     [StatusLevel.NORMAL]: 'border-slate-800 bg-slate-900',
     [StatusLevel.WARNING]: 'border-amber-500/50 bg-amber-950/10',
     [StatusLevel.CRITICAL]: 'border-rose-500/50 bg-rose-950/10',
@@ -38,146 +54,306 @@ const KPICard: React.FC<{
   };
 
   return (
-    <div className={`rounded-xl border p-5 ${statusColors[status]} transition-all hover:shadow-lg relative overflow-hidden group`}>
-       <div className={`absolute -right-6 -top-6 opacity-5 group-hover:opacity-10 transition-opacity ${colorClass}`}>
-          <Icon className="w-32 h-32" />
-       </div>
-       
-      <div className="flex justify-between items-start mb-4 relative z-10">
-        <div className={`p-2 rounded-lg ${colorClass} bg-opacity-10`}>
-          <Icon className={`w-5 h-5 ${colorClass.replace('text-', '')}`} />
+    <div
+      className={`relative overflow-hidden rounded-xl border p-5 transition-all hover:shadow-lg group ${statusColors[status]}`}
+    >
+      <div
+        className={`pointer-events-none absolute -right-6 -top-6 opacity-5 transition-opacity group-hover:opacity-10 ${colorClass}`}
+      >
+        <Icon className="h-32 w-32" />
+      </div>
+
+      <div className="relative z-10 mb-4 flex items-start justify-between">
+        <div
+          className={`rounded-lg border border-slate-800/60 bg-slate-900/60 p-2 ${colorClass}`}
+        >
+          <Icon className="h-5 w-5" />
         </div>
-        {trend && (
-          <div className={`flex items-center text-xs font-medium px-2 py-1 rounded-full ${trend > 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
-            {trend > 0 ? <ArrowUpRight className="w-3 h-3 mr-1" /> : <ArrowDownRight className="w-3 h-3 mr-1" />}
+
+        {typeof trend === 'number' && (
+          <div
+            className={`flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+              trend > 0
+                ? 'bg-emerald-500/10 text-emerald-400'
+                : 'bg-rose-500/10 text-rose-400'
+            }`}
+          >
+            {trend > 0 ? (
+              <ArrowUpRight className="mr-1 h-3 w-3" />
+            ) : (
+              <ArrowDownRight className="mr-1 h-3 w-3" />
+            )}
             {Math.abs(trend)}%
           </div>
         )}
       </div>
+
       <div className="relative z-10">
-        <h3 className="text-slate-400 text-sm font-medium mb-1">{title}</h3>
+        <h3 className="mb-1 text-sm font-medium text-slate-400">{title}</h3>
         <div className="flex items-baseline gap-1">
-          <span className="text-2xl font-bold text-white tracking-tight">{value}</span>
-          {unit && <span className="text-sm text-slate-500 font-medium">{unit}</span>}
+          <span className="text-2xl font-bold tracking-tight text-white">
+            {value}
+          </span>
+          {unit && (
+            <span className="text-sm font-medium text-slate-500">{unit}</span>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
+// Отдельный компонент, который меряет размер контейнера и рисует график
+const LoadTemperatureChart: React.FC = () => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      setSize({
+        width: rect.width || 0,
+        height: rect.height || 0,
+      });
+    };
+
+    update();
+
+    const observer = new ResizeObserver(() => update());
+    observer.observe(el);
+    window.addEventListener('resize', update);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="h-80 w-full">
+      {size.width > 0 && size.height > 0 && (
+        <AreaChart
+          data={data}
+          width={size.width}
+          height={size.height}
+          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+        >
+          <defs>
+            <linearGradient id="colorPower" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+
+          <CartesianGrid
+            stroke="#1e293b"
+            strokeDasharray="3 3"
+            vertical={false}
+          />
+          <XAxis
+            dataKey="time"
+            stroke="#64748b"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
+          <YAxis
+            stroke="#64748b"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#0f172a',
+              borderColor: '#1e293b',
+              borderRadius: 8,
+            }}
+            itemStyle={{ color: '#e2e8f0' }}
+          />
+          <Area
+            type="monotone"
+            dataKey="power"
+            stroke="#3b82f6"
+            strokeWidth={2}
+            fillOpacity={1}
+            fill="url(#colorPower)"
+            name="Нагрузка, kW"
+          />
+          <Area
+            type="monotone"
+            dataKey="temp"
+            stroke="#10b981"
+            strokeWidth={2}
+            fillOpacity={0}
+            strokeDasharray="5 5"
+            name="Температура, °C"
+          />
+        </AreaChart>
+      )}
+    </div>
+  );
+};
+
 const Dashboard: React.FC = () => {
   return (
-    <div className="p-6 space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="space-y-6 p-6 animate-in fade-in duration-500">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-2xl font-bold text-white">Обзор ЦОД "Север-1"</h1>
-          <p className="text-slate-400 text-sm mt-1">Оперативная сводка за последние 24 часа</p>
+          <h1 className="text-2xl font-bold text-white">
+            Обзор ЦОД &quot;Север-1&quot;
+          </h1>
+          <p className="mt-1 text-sm text-slate-400">
+            Оперативная сводка за последние 24 часа
+          </p>
         </div>
+
         <div className="flex gap-2">
-           <button className="px-4 py-2 bg-slate-800 text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-700 border border-slate-700 transition-colors">
-              Экспорт отчета
-           </button>
-           <button className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-500 shadow-lg shadow-blue-500/20 transition-all">
-              Добавить инцидент
-           </button>
+          <button className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700">
+            Экспорт отчета
+          </button>
+          <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-500">
+            Добавить инцидент
+          </button>
         </div>
       </div>
 
-      {/* KPI Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard 
-          title="Uptime (Аптайм)" 
-          value="99.998" 
-          unit="%" 
-          trend={0.01} 
-          icon={Activity} 
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <KPICard
+          title="Uptime (Аптайм)"
+          value="99.998"
+          unit="%"
+          trend={0.01}
+          icon={Activity}
           colorClass="text-emerald-400"
           status={StatusLevel.NORMAL}
         />
-        <KPICard 
-          title="Общая Мощность" 
-          value="842" 
-          unit="kW" 
-          trend={2.4} 
-          icon={Zap} 
+        <KPICard
+          title="Общая Мощность"
+          value="842"
+          unit="kW"
+          trend={2.4}
+          icon={Zap}
           colorClass="text-amber-400"
           status={StatusLevel.WARNING}
         />
-        <KPICard 
-          title="Средняя T° Зала" 
-          value="22.4" 
-          unit="°C" 
-          trend={-0.5} 
-          icon={Thermometer} 
+        <KPICard
+          title="Средняя T° Зала"
+          value="22.4"
+          unit="°C"
+          trend={-0.5}
+          icon={Thermometer}
           colorClass="text-blue-400"
           status={StatusLevel.NORMAL}
         />
-        <KPICard 
-          title="Активные Заявки" 
-          value="12" 
-          unit="шт" 
-          trend={-15} 
-          icon={Clock} 
+        <KPICard
+          title="Активные Заявки"
+          value="12"
+          unit="шт"
+          trend={-15}
+          icon={Clock}
           colorClass="text-purple-400"
           status={StatusLevel.NORMAL}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Chart */}
-        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-white mb-6">Динамика нагрузки и температуры</h3>
-          <div className="h-80 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorPower" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="time" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', borderRadius: '8px' }}
-                  itemStyle={{ color: '#e2e8f0' }}
-                />
-                <Area type="monotone" dataKey="power" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorPower)" />
-                <Area type="monotone" dataKey="temp" stroke="#10b981" strokeWidth={2} fillOpacity={0} strokeDasharray="5 5" />
-              </AreaChart>
-            </ResponsiveContainer>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-sm lg:col-span-2">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-white">
+                Динамика нагрузки и температуры
+              </h3>
+              <p className="text-xs text-slate-500">
+                За последние 24 часа, шаг 1 час
+              </p>
+            </div>
+            <div className="flex gap-3 text-xs text-slate-400">
+              <span className="flex items-center gap-1">
+                <span className="inline-block h-1.5 w-3 rounded-full bg-blue-400" />
+                Нагрузка
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="inline-block h-1.5 w-3 rounded-full bg-emerald-400" />
+                Температура
+              </span>
+            </div>
           </div>
+
+          <LoadTemperatureChart />
         </div>
 
-        {/* Alerts Feed */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-sm flex flex-col">
-          <div className="flex items-center justify-between mb-4">
-             <h3 className="text-lg font-semibold text-white">Критические Алерты</h3>
-             <span className="text-xs font-mono text-rose-400 bg-rose-950/30 px-2 py-1 rounded">LIVE</span>
+        <div className="flex flex-col rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-sm">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-white">
+              Критические Алерты
+            </h3>
+            <span className="rounded bg-rose-950/30 px-2 py-1 text-xs font-mono text-rose-400">
+              LIVE
+            </span>
           </div>
-          
-          <div className="space-y-4 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+
+          <div className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pr-2">
             {[
-              { id: 1, title: 'Сбой PDU-A2', loc: 'Ряд 4, Стойка 12', time: '10 мин назад', level: StatusLevel.CRITICAL },
-              { id: 2, title: 'Высокая температура', loc: 'Холодный коридор B', time: '25 мин назад', level: StatusLevel.WARNING },
-              { id: 3, title: 'Потеря связи', loc: 'Датчик влажности #4', time: '1 час назад', level: StatusLevel.WARNING },
-              { id: 4, title: 'Доступ в серверную', loc: 'Инженер Иванов И.И.', time: '2 часа назад', level: StatusLevel.NORMAL },
+              {
+                id: 1,
+                title: 'Сбой PDU-A2',
+                loc: 'Ряд 4, Стойка 12',
+                time: '10 мин назад',
+                level: StatusLevel.CRITICAL,
+              },
+              {
+                id: 2,
+                title: 'Высокая температура',
+                loc: 'Холодный коридор B',
+                time: '25 мин назад',
+                level: StatusLevel.WARNING,
+              },
+              {
+                id: 3,
+                title: 'Потеря связи',
+                loc: 'Датчик влажности #4',
+                time: '1 час назад',
+                level: StatusLevel.WARNING,
+              },
+              {
+                id: 4,
+                title: 'Доступ в серверную',
+                loc: 'Инженер Иванов И.И.',
+                time: '2 часа назад',
+                level: StatusLevel.NORMAL,
+              },
             ].map((alert) => (
-              <div key={alert.id} className="flex gap-3 p-3 rounded-lg hover:bg-slate-800/50 transition-colors border border-transparent hover:border-slate-700">
-                <div className={`mt-1 flex-shrink-0 w-2 h-2 rounded-full ${
-                  alert.level === StatusLevel.CRITICAL ? 'bg-rose-500 animate-pulse' : 
-                  alert.level === StatusLevel.WARNING ? 'bg-amber-500' : 'bg-blue-500'
-                }`} />
+              <div
+                key={alert.id}
+                className="flex gap-3 rounded-lg border border-transparent p-3 transition-colors hover:border-slate-700 hover:bg-slate-800/50"
+              >
+                <div
+                  className={`mt-1 h-2.5 w-2.5 flex-shrink-0 rounded-full ${
+                    alert.level === StatusLevel.CRITICAL
+                      ? 'bg-rose-500 animate-pulse'
+                      : alert.level === StatusLevel.WARNING
+                      ? 'bg-amber-500'
+                      : 'bg-blue-500'
+                  }`}
+                />
                 <div className="flex-1">
-                  <h4 className="text-sm font-medium text-slate-200">{alert.title}</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">{alert.loc}</p>
+                  <h4 className="text-sm font-medium text-slate-200">
+                    {alert.title}
+                  </h4>
+                  <p className="mt-0.5 text-xs text-slate-500">{alert.loc}</p>
                 </div>
-                <span className="text-xs text-slate-600 whitespace-nowrap">{alert.time}</span>
+                <span className="whitespace-nowrap text-xs text-slate-600">
+                  {alert.time}
+                </span>
               </div>
             ))}
           </div>
-          <button className="w-full mt-4 text-center text-sm text-blue-400 hover:text-blue-300 py-2 border-t border-slate-800 transition-colors">
+
+          <button className="mt-4 w-full border-t border-slate-800 py-2 text-center text-sm text-blue-400 transition-colors hover:text-blue-300">
             Посмотреть журнал событий
           </button>
         </div>
