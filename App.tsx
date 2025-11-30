@@ -4,10 +4,15 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Monitoring from './components/Monitoring';
 import Maintenance from './components/Maintenance';
+import Settings from './components/Settings';
+import UnderConstruction from './components/UnderConstruction';
+import Projects from './components/Projects';
 import { ModuleType } from './types';
 
 const App: React.FC = () => {
-  const [activeModule, setActiveModule] = useState<ModuleType>(ModuleType.DASHBOARD);
+  const [activeModule, setActiveModule] = useState<ModuleType>(
+    ModuleType.DASHBOARD
+  );
 
   const renderContent = () => {
     switch (activeModule) {
@@ -17,35 +22,52 @@ const App: React.FC = () => {
         return <Monitoring />;
       case ModuleType.MAINTENANCE:
         return <Maintenance />;
-      default:
+      case ModuleType.PERSONNEL:
         return (
-          <div className="flex items-center justify-center h-full flex-col text-slate-500 animate-in fade-in">
-            <div className="w-16 h-16 border-2 border-slate-800 border-dashed rounded-xl mb-4 flex items-center justify-center">
-              <span className="text-2xl font-bold">?</span>
-            </div>
-            <h2 className="text-xl font-semibold text-slate-300">Модуль в разработке</h2>
-            <p className="mt-2">Раздел "{activeModule}" будет доступен в следующем обновлении.</p>
-          </div>
+          <UnderConstruction title="Персонал (WFM)" code="personnel-module" />
         );
+      case ModuleType.WAREHOUSE:
+        return (
+          <UnderConstruction
+            title="Склад и Закупки"
+            code="warehouse-module"
+          />
+        );
+      case ModuleType.FINANCE:
+        return (
+          <UnderConstruction title="Финансы" code="finance-module" />
+        );
+      case ModuleType.PROJECTS:
+        return <Projects />;
+      case ModuleType.SECURITY:
+        return (
+          <UnderConstruction title="Безопасность" code="security-module" />
+        );
+      case ModuleType.SETTINGS:
+        return <Settings />;
+      default:
+        return <Dashboard />;
     }
   };
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-200 font-sans selection:bg-blue-500/30">
-      <Sidebar activeModule={activeModule} onNavigate={setActiveModule} />
-      
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-        {/* Background Grid Pattern for high-tech feel */}
-        <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.03]" 
-             style={{ 
-               backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', 
-               backgroundSize: '40px 40px' 
-             }}>
-        </div>
-        
+    <div className="flex h-screen bg-slate-950 text-slate-50">
+      <Sidebar activeModule={activeModule} onNavClick={setActiveModule} />
+
+      <div className="relative flex flex-1 flex-col overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.18]"
+          aria-hidden="true"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 1px 1px, rgba(30, 64, 175, 0.4) 1px, transparent 0)',
+            backgroundSize: '40px 40px',
+          }}
+        />
+
         <Header />
-        
-        <main className="flex-1 overflow-y-auto relative z-10">
+
+        <main className="relative z-10 flex-1 overflow-y-auto">
           {renderContent()}
         </main>
       </div>
